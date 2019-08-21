@@ -178,6 +178,8 @@
       
         <h2 id="1-安装systemback"><a href="#1-安装systemback" class="headerlink" title="1 安装systemback"></a>1 安装systemback</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:nemh/systemback</span><br><span class="line"></span><br><span class="line">sudo apt-get update</span><br><span class="line"></span><br><span class="line">sudo apt-get install systemback unionfs-fuse</span><br></pre></td></tr></table></figure>
 
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br></pre></td></tr></table></figure>
+
 <h2 id="2-制作当前系统的镜像"><a href="#2-制作当前系统的镜像" class="headerlink" title="2 制作当前系统的镜像"></a>2 制作当前系统的镜像</h2><h4 id="该软件还可以设置还原点，进行系统还原，操作很简单，一键设置一键还原，这里不再介绍"><a href="#该软件还可以设置还原点，进行系统还原，操作很简单，一键设置一键还原，这里不再介绍" class="headerlink" title="该软件还可以设置还原点，进行系统还原，操作很简单，一键设置一键还原，这里不再介绍"></a>该软件还可以设置还原点，进行系统还原，操作很简单，一键设置一键还原，这里不再介绍</h4><ol>
 <li>打开systemback</li>
 <li>输入密码</li>
@@ -402,11 +404,18 @@
       
         <p><strong>网址：<a href="https://github.com/slamtec/rplidar_ros" target="_blank" rel="noopener">https://github.com/slamtec/rplidar_ros</a></strong></p>
 <h2 id="1-下载整个rplidar-ros包"><a href="#1-下载整个rplidar-ros包" class="headerlink" title="1 下载整个rplidar_ros包"></a>1 下载整个rplidar_ros包</h2><ul>
-<li>cd catkin_ws/src    ##到你的工作空间的src</li>
-<li>git clone <a href="https://github.com/Slamtec/rplidar_ros.git" target="_blank" rel="noopener">https://github.com/Slamtec/rplidar_ros.git</a></li>
-<li>cd ..</li>
-<li>catkin_make</li>
-<li>source ./devel/setup.bash</li>
+<li><p>cd catkin_ws/src    ##到你的工作空间的src</p>
+</li>
+<li><p>git clone <a href="https://github.com/Slamtec/rplidar_ros.git" target="_blank" rel="noopener">https://github.com/Slamtec/rplidar_ros.git</a></p>
+</li>
+<li><p>cd ..</p>
+</li>
+<li><p>catkin_make</p>
+</li>
+<li><p>source ./devel/setup.bash</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br></pre></td></tr></table></figure>
+
+</li>
 </ul>
 <h2 id="2-运行rplidar-ros包"><a href="#2-运行rplidar-ros包" class="headerlink" title="2 运行rplidar_ros包"></a>2 运行rplidar_ros包</h2><p>###每次雷达重新连接电脑时，需要进行2.1前的步骤，如果USB口不是USB0，需要改动launch文件中的  <strong>param name=”serial_port” type=”string” value=”/dev/rplidar”/</strong> </p>
 <ul>
@@ -517,8 +526,12 @@
 <li>make</li>
 </ol>
 <h3 id="1-3-交叉编译"><a href="#1-3-交叉编译" class="headerlink" title="1.3 交叉编译"></a>1.3 交叉编译</h3><ul>
-<li>我没有进行这一步骤，因为目前不知道是否需要</li>
-<li>透过交叉编译特性,SDK 的编译系统支持编译产生其他平台/系统的二进制可<br>执行文件。<br>注意: 该功能仅针对使用 Makefile 的环境.<br>交叉编译特性将通过调用 cross_compile.sh 脚本激活。该脚本的调用语法如<br>下:<br>CROSS_COMPILE_PREFIX=<compile_prefix> ./cross_compile.sh<br>例如: CROSS_COMPILE_PREFIX=arm-linux-gnueabihf ./cross_compile.sh</compile_prefix></li>
+<li><p>我没有进行这一步骤，因为目前不知道是否需要</p>
+</li>
+<li><p>透过交叉编译特性,SDK 的编译系统支持编译产生其他平台/系统的二进制可<br>执行文件。<br>注意: 该功能仅针对使用 Makefile 的环境.<br>交叉编译特性将通过调用 cross_compile.sh 脚本激活。该脚本的调用语法如<br>下:<br>CROSS_COMPILE_PREFIX=<compile_prefix> ./cross_compile.sh<br>例如: CROSS_COMPILE_PREFIX=arm-linux-gnueabihf ./cross_compile.sh</compile_prefix></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br></pre></td></tr></table></figure>
+
+</li>
 </ul>
 <h2 id="2-连接雷达和PC"><a href="#2-连接雷达和PC" class="headerlink" title="2. 连接雷达和PC"></a>2. 连接雷达和PC</h2><ul>
 <li>直接接电脑即可</li>
