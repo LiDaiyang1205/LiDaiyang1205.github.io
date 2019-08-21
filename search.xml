@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[Hello World]]></title>
-    <url>%2F2019%2F08%2F21%2Fhello-world%2F</url>
-    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
-  </entry>
-  <entry>
     <title><![CDATA[ubuntu系统备份为ISO文件]]></title>
     <url>%2F2019%2F08%2F21%2Fubuntu%E7%B3%BB%E7%BB%9F%E5%A4%87%E4%BB%BD%E4%B8%BAISO%E6%96%87%E4%BB%B6%2F</url>
     <content type="text"><![CDATA[1 安装systemback12345sudo add-apt-repository ppa:nemh/systembacksudo apt-get updatesudo apt-get install systemback unionfs-fuse 2 制作当前系统的镜像该软件还可以设置还原点，进行系统还原，操作很简单，一键设置一键还原，这里不再介绍 打开systemback 输入密码 选择Live system create 勾选 include the user data files 点击create new 生成备份结束后，选择备份文件，点击Convert to ISO 到你保存的路径下就能看到整体打包的系统ISO文件。 3 问题处理我进行完成2.5后，无法转为ISO文件，原因为系统大小大于4GB，解决办法如下： 创建sblive文件夹并解压通过systemback生成的.sblive 文件至sblive文件夹: 12mkdir sblivetar -xf /home/systemback_live_2019-08-16.sblive -C sblive ## 中间为你创建的镜像 重命名 syslinux 至 isolinux: 12mv sblive/syslinux/syslinux.cfg sblive/syslinux/isolinux.cfgmv sblive/syslinux sblive/isolinux 安装 cdtools 123456789101112sudo apt-get install aria2 aria2c -s 10 https://nchc.dl.sourceforge.net/project/cdrtools/alpha/cdrtools-3.02a07.tar.gz tar -xzvf cdrtools-3.02a07.tar.gz cd /home/hadoop/cdrtools-3.02 make sudo make install 生成 ISO 文件: 123cd ~ /opt/schily/bin/mkisofs -iso-level 3 -r -V sblive -cache-inodes -J -l -b isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -c isolinux/boot.cat -o sblive.iso sblive 等待执行完成，我们便可在主文件夹下看见生成的sblive.iso镜像文件了 该部分来自：本文链接：https://blog.csdn.net/qq_39940390/article/details/94980229 4 系统安装1 虚拟机 VM14虚拟机的安装包和ubuntu16.04的ISO文件在实验室三星U盘里 安装过程可以参考 https://blog.csdn.net/qq_28090573/article/details/82724910，非常详细 我尝试了在虚拟机中安装我自己生成的ISO文件，但是卡在登陆界面无法进入，在网上查了很久尝试了很多方法也没能解决，最后选择了安装原生ubuntu的ISO文件 2 双系统未尝试安装 总结 systemback 的系统还原功能亲测可用，但是还原点会占一定的存储空间，建议只在重大环境安装前后备份使用 systemback 的ISO文件刻录功能亲测可用，但是得到的ISO文件在安装过程中存在问题，目前没有证明得到的ISO文件可以完成安装（虽然网上很多成功的。。。。）]]></content>
@@ -14,6 +9,39 @@
       </categories>
       <tags>
         <tag>系统</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[修改默认打开方式]]></title>
+    <url>%2F2019%2F08%2F21%2F%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%89%93%E5%BC%80%E6%96%B9%E5%BC%8F%2F</url>
+    <content type="text"><![CDATA[刚装上Typaro时markdown文件没有默认用它打开，而且打开方式中也找不到，可以采用以下方法 个人的打开方式保存在~/.local/share/applications/mimeapps.list 1sudo gedit ~/.local/share/applications/mimeapps.list 修改mimeapps.list 文件，在文件末尾添加 1text/markdown=typora.desktop 完成。]]></content>
+      <categories>
+        <category>ubuntu问题</category>
+      </categories>
+      <tags>
+        <tag>系统</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[激光雷达和ROS结合]]></title>
+    <url>%2F2019%2F08%2F21%2F%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE%E5%92%8CROS%E7%BB%93%E5%90%88%2F</url>
+    <content type="text"><![CDATA[网址：https://github.com/slamtec/rplidar_ros 1 下载整个rplidar_ros包 cd catkin_ws/src ##到你的工作空间的src git clone https://github.com/Slamtec/rplidar_ros.git cd .. catkin_make source ./devel/setup.bash 2 运行rplidar_ros包###每次雷达重新连接电脑时，需要进行2.1前的步骤，如果USB口不是USB0，需要改动launch文件中的 param name=”serial_port” type=”string” value=”/dev/rplidar”/ ls -l /dev |grep ttyUSB #检查雷达的USB口 sudo chmod 666 /dev/ttyUSB0 #赋予权限 2.1在rviz中显示 roslaunch rplidar_ros view_rplidar_a3.launch 2.2在终端显示 roslaunch rplidar_ros rplidar_a3.launch #启动雷达 rosrun rplidar_ros rplidarNodeClient #在另外一个终端打开]]></content>
+      <categories>
+        <category>slam</category>
+      </categories>
+      <tags>
+        <tag>硬件</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[激光雷达安装步骤]]></title>
+    <url>%2F2019%2F08%2F21%2F%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4%2F</url>
+    <content type="text"><![CDATA[1. 安装SDK1.1 下载相关文件 网址：http://go.slamtec.com/rplidar/a3/download 我已将相关文件下载至思岚雷达文件夹 后续工作可以按照我的说明，不必去看SDK说明，里面包含Windows、macos等安装，很杂。 1.2 编译SDK 解压SDK压缩包至根目录，重命名为rplidar_sdk cd ~/rplidar_sdk/sdk make 1.3 交叉编译 我没有进行这一步骤，因为目前不知道是否需要 透过交叉编译特性,SDK 的编译系统支持编译产生其他平台/系统的二进制可执行文件。注意: 该功能仅针对使用 Makefile 的环境.交叉编译特性将通过调用 cross_compile.sh 脚本激活。该脚本的调用语法如下:CROSS_COMPILE_PREFIX= ./cross_compile.sh例如: CROSS_COMPILE_PREFIX=arm-linux-gnueabihf ./cross_compile.sh 2. 连接雷达和PC 直接接电脑即可 3. 运行DEMO3.1 ultra_simple 该示例程序演示 PC 通过串口与 RPLIDAR 进行连接，并不断的将 RPLIDAR 扫描数据输出的最简单过程。 ls /dev/ttyUSB* ##这个命令可以检测你的雷达USB编号，看你雷达连上没 cd ~/rplidar_sdk/sdk/output/Linux/Release ./ultra_simple /dev/ttyUSB0 能转起来就说明安装好了]]></content>
+      <categories>
+        <category>slam</category>
+      </categories>
+      <tags>
+        <tag>硬件</tag>
       </tags>
   </entry>
 </search>

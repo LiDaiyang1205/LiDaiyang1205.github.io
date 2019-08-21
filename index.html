@@ -156,81 +156,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/21/hello-world/">Hello World</a>
-    </h1>
-  
-
-        
-        <a href="/2019/08/21/hello-world/" class="archive-article-date">
-  	<time datetime="2019-08-21T07:02:20.265Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/21/hello-world/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-ubuntu系统备份为ISO文件" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -359,6 +284,316 @@
 
 
   
+    <article id="post-修改默认打开方式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/21/修改默认打开方式/">修改默认打开方式</a>
+    </h1>
+  
+
+        
+        <a href="/2019/08/21/修改默认打开方式/" class="archive-article-date">
+  	<time datetime="2019-08-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>刚装上Typaro时markdown文件没有默认用它打开，而且打开方式中也找不到，可以采用以下方法</li>
+<li>个人的打开方式保存在~/.local/share/applications/mimeapps.list</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gedit ~/.local/share/applications/mimeapps.list</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>修改<code>mimeapps.list</code> 文件，在文件末尾添加</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">text/markdown=typora.desktop</span><br></pre></td></tr></table></figure>
+
+<p>完成。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">系统</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/ubuntu问题//" class="article-tag-list-link color4">ubuntu问题</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/08/21/修改默认打开方式/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-激光雷达和ROS结合" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/21/激光雷达和ROS结合/">激光雷达和ROS结合</a>
+    </h1>
+  
+
+        
+        <a href="/2019/08/21/激光雷达和ROS结合/" class="archive-article-date">
+  	<time datetime="2019-08-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>网址：<a href="https://github.com/slamtec/rplidar_ros" target="_blank" rel="noopener">https://github.com/slamtec/rplidar_ros</a></strong></p>
+<h2 id="1-下载整个rplidar-ros包"><a href="#1-下载整个rplidar-ros包" class="headerlink" title="1 下载整个rplidar_ros包"></a>1 下载整个rplidar_ros包</h2><ul>
+<li>cd catkin_ws/src    ##到你的工作空间的src</li>
+<li>git clone <a href="https://github.com/Slamtec/rplidar_ros.git" target="_blank" rel="noopener">https://github.com/Slamtec/rplidar_ros.git</a></li>
+<li>cd ..</li>
+<li>catkin_make</li>
+<li>source ./devel/setup.bash</li>
+</ul>
+<h2 id="2-运行rplidar-ros包"><a href="#2-运行rplidar-ros包" class="headerlink" title="2 运行rplidar_ros包"></a>2 运行rplidar_ros包</h2><p>###每次雷达重新连接电脑时，需要进行2.1前的步骤，如果USB口不是USB0，需要改动launch文件中的  <strong>param name=”serial_port” type=”string” value=”/dev/rplidar”/</strong> </p>
+<ul>
+<li>ls -l /dev |grep ttyUSB   #检查雷达的USB口 </li>
+<li>sudo chmod 666 /dev/ttyUSB0    #赋予权限   </li>
+</ul>
+<h3 id="2-1在rviz中显示"><a href="#2-1在rviz中显示" class="headerlink" title="2.1在rviz中显示"></a>2.1在rviz中显示</h3><ul>
+<li>roslaunch rplidar_ros view_rplidar_a3.launch</li>
+</ul>
+<h3 id="2-2在终端显示"><a href="#2-2在终端显示" class="headerlink" title="2.2在终端显示"></a>2.2在终端显示</h3><ul>
+<li><p>roslaunch rplidar_ros rplidar_a3.launch    #启动雷达</p>
+</li>
+<li><p>rosrun rplidar_ros rplidarNodeClient     #在另外一个终端打开</p>
+</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">硬件</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/08/21/激光雷达和ROS结合/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-激光雷达安装步骤" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/21/激光雷达安装步骤/">激光雷达安装步骤</a>
+    </h1>
+  
+
+        
+        <a href="/2019/08/21/激光雷达安装步骤/" class="archive-article-date">
+  	<time datetime="2019-08-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-安装SDK"><a href="#1-安装SDK" class="headerlink" title="1. 安装SDK"></a>1. 安装SDK</h2><h3 id="1-1-下载相关文件"><a href="#1-1-下载相关文件" class="headerlink" title="1.1 下载相关文件"></a>1.1 下载相关文件</h3><ul>
+<li>网址：<a href="http://go.slamtec.com/rplidar/a3/download" target="_blank" rel="noopener">http://go.slamtec.com/rplidar/a3/download</a></li>
+<li>我已将相关文件下载至<strong>思岚雷达</strong>文件夹</li>
+<li>后续工作可以按照我的说明，不必去看SDK说明，里面包含Windows、macos等安装，很杂。</li>
+</ul>
+<h3 id="1-2-编译SDK"><a href="#1-2-编译SDK" class="headerlink" title="1.2 编译SDK"></a>1.2 编译SDK</h3><ol>
+<li>解压SDK压缩包至根目录，重命名为<strong>rplidar_sdk</strong></li>
+<li>cd ~/rplidar_sdk/sdk</li>
+<li>make</li>
+</ol>
+<h3 id="1-3-交叉编译"><a href="#1-3-交叉编译" class="headerlink" title="1.3 交叉编译"></a>1.3 交叉编译</h3><ul>
+<li>我没有进行这一步骤，因为目前不知道是否需要</li>
+<li>透过交叉编译特性,SDK 的编译系统支持编译产生其他平台/系统的二进制可<br>执行文件。<br>注意: 该功能仅针对使用 Makefile 的环境.<br>交叉编译特性将通过调用 cross_compile.sh 脚本激活。该脚本的调用语法如<br>下:<br>CROSS_COMPILE_PREFIX=<compile_prefix> ./cross_compile.sh<br>例如: CROSS_COMPILE_PREFIX=arm-linux-gnueabihf ./cross_compile.sh</compile_prefix></li>
+</ul>
+<h2 id="2-连接雷达和PC"><a href="#2-连接雷达和PC" class="headerlink" title="2. 连接雷达和PC"></a>2. 连接雷达和PC</h2><ul>
+<li>直接接电脑即可</li>
+</ul>
+<h2 id="3-运行DEMO"><a href="#3-运行DEMO" class="headerlink" title="3. 运行DEMO"></a>3. 运行DEMO</h2><h3 id="3-1-ultra-simple"><a href="#3-1-ultra-simple" class="headerlink" title="3.1 ultra_simple"></a>3.1 ultra_simple</h3><ul>
+<li>该示例程序演示 PC 通过串口与 RPLIDAR 进行连接，并不断的将 RPLIDAR 扫<br>描数据输出的最简单过程。</li>
+<li>ls /dev/ttyUSB*     ##这个命令可以检测你的雷达USB编号，看你雷达连上没</li>
+<li>cd ~/rplidar_sdk/sdk/output/Linux/Release</li>
+<li>./ultra_simple /dev/ttyUSB0</li>
+<li>能转起来就说明安装好了</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">硬件</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/08/21/激光雷达安装步骤/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
   
 
 
@@ -453,6 +688,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">硬件</a>
               </li>
             
             <div class="clearfix"></div>
