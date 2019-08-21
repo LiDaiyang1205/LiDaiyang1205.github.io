@@ -5,4 +5,15 @@
     <url>%2F2019%2F08%2F21%2Fhello-world%2F</url>
     <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
   </entry>
+  <entry>
+    <title><![CDATA[ubuntu系统备份为ISO文件]]></title>
+    <url>%2F2019%2F08%2F21%2Fubuntu%E7%B3%BB%E7%BB%9F%E5%A4%87%E4%BB%BD%E4%B8%BAISO%E6%96%87%E4%BB%B6%2F</url>
+    <content type="text"><![CDATA[1 安装systemback12345sudo add-apt-repository ppa:nemh/systembacksudo apt-get updatesudo apt-get install systemback unionfs-fuse 2 制作当前系统的镜像该软件还可以设置还原点，进行系统还原，操作很简单，一键设置一键还原，这里不再介绍 打开systemback 输入密码 选择Live system create 勾选 include the user data files 点击create new 生成备份结束后，选择备份文件，点击Convert to ISO 到你保存的路径下就能看到整体打包的系统ISO文件。 3 问题处理我进行完成2.5后，无法转为ISO文件，原因为系统大小大于4GB，解决办法如下： 创建sblive文件夹并解压通过systemback生成的.sblive 文件至sblive文件夹: 12mkdir sblivetar -xf /home/systemback_live_2019-08-16.sblive -C sblive ## 中间为你创建的镜像 重命名 syslinux 至 isolinux: 12mv sblive/syslinux/syslinux.cfg sblive/syslinux/isolinux.cfgmv sblive/syslinux sblive/isolinux 安装 cdtools 123456789101112sudo apt-get install aria2 aria2c -s 10 https://nchc.dl.sourceforge.net/project/cdrtools/alpha/cdrtools-3.02a07.tar.gz tar -xzvf cdrtools-3.02a07.tar.gz cd /home/hadoop/cdrtools-3.02 make sudo make install 生成 ISO 文件: 123cd ~ /opt/schily/bin/mkisofs -iso-level 3 -r -V sblive -cache-inodes -J -l -b isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -c isolinux/boot.cat -o sblive.iso sblive 等待执行完成，我们便可在主文件夹下看见生成的sblive.iso镜像文件了 该部分来自：本文链接：https://blog.csdn.net/qq_39940390/article/details/94980229 4 系统安装1 虚拟机 VM14虚拟机的安装包和ubuntu16.04的ISO文件在实验室三星U盘里 安装过程可以参考 https://blog.csdn.net/qq_28090573/article/details/82724910，非常详细 我尝试了在虚拟机中安装我自己生成的ISO文件，但是卡在登陆界面无法进入，在网上查了很久尝试了很多方法也没能解决，最后选择了安装原生ubuntu的ISO文件 2 双系统未尝试安装 总结 systemback 的系统还原功能亲测可用，但是还原点会占一定的存储空间，建议只在重大环境安装前后备份使用 systemback 的ISO文件刻录功能亲测可用，但是得到的ISO文件在安装过程中存在问题，目前没有证明得到的ISO文件可以完成安装（虽然网上很多成功的。。。。）]]></content>
+      <categories>
+        <category>ubuntu问题</category>
+      </categories>
+      <tags>
+        <tag>系统</tag>
+      </tags>
+  </entry>
 </search>
