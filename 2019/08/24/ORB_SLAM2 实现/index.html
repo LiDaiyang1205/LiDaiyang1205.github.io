@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://LiDaiyang1205.github.io">
-  <title>激光雷达安装步骤 | LDY_blog</title>
+  <title>ORB_SLAM2 在ROS中使用KinectV2实现 | LDY_blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1. 安装SDK1.1 下载相关文件 网址：http://go.slamtec.com/rplidar/a3/download 我已将相关文件下载至思岚雷达文件夹 后续工作可以按照我的说明，不必去看SDK说明，里面包含Windows、macos等安装，很杂。  1.2 编译SDK 解压SDK压缩包至根目录，重命名为rplidar_sdk cd ~/rplidar_sdk/sdk make  1.3">
-<meta name="keywords" content="硬件">
+  <meta name="description" content="安装依赖包12345678910111213141516171819202122ssh -T git@github.comsudo apt-get install libboost-all-dev libblas-dev liblapack-dev####  安装 Pangolingit clone git@github.com:stevenlovegrove/Pangolin.gitcd Pan">
+<meta name="keywords" content="算法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="激光雷达安装步骤">
-<meta property="og:url" content="http://LiDaiyang1205.github.io/2019/08/21/激光雷达安装步骤/index.html">
+<meta property="og:title" content="ORB_SLAM2 在ROS中使用KinectV2实现">
+<meta property="og:url" content="http://LiDaiyang1205.github.io/2019/08/24/ORB_SLAM2 实现/index.html">
 <meta property="og:site_name" content="LDY_blog">
-<meta property="og:description" content="1. 安装SDK1.1 下载相关文件 网址：http://go.slamtec.com/rplidar/a3/download 我已将相关文件下载至思岚雷达文件夹 后续工作可以按照我的说明，不必去看SDK说明，里面包含Windows、macos等安装，很杂。  1.2 编译SDK 解压SDK压缩包至根目录，重命名为rplidar_sdk cd ~/rplidar_sdk/sdk make  1.3">
+<meta property="og:description" content="安装依赖包12345678910111213141516171819202122ssh -T git@github.comsudo apt-get install libboost-all-dev libblas-dev liblapack-dev####  安装 Pangolingit clone git@github.com:stevenlovegrove/Pangolin.gitcd Pan">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-08-21T11:30:06.080Z">
+<meta property="og:updated_time" content="2019-08-24T13:36:29.091Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="激光雷达安装步骤">
-<meta name="twitter:description" content="1. 安装SDK1.1 下载相关文件 网址：http://go.slamtec.com/rplidar/a3/download 我已将相关文件下载至思岚雷达文件夹 后续工作可以按照我的说明，不必去看SDK说明，里面包含Windows、macos等安装，很杂。  1.2 编译SDK 解压SDK压缩包至根目录，重命名为rplidar_sdk cd ~/rplidar_sdk/sdk make  1.3">
+<meta name="twitter:title" content="ORB_SLAM2 在ROS中使用KinectV2实现">
+<meta name="twitter:description" content="安装依赖包12345678910111213141516171819202122ssh -T git@github.comsudo apt-get install libboost-all-dev libblas-dev liblapack-dev####  安装 Pangolingit clone git@github.com:stevenlovegrove/Pangolin.gitcd Pan">
   
     <link rel="alternative" href="/atom.xml" title="LDY_blog" type="application/atom+xml">
   
@@ -159,55 +159,96 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-激光雷达安装步骤" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-ORB_SLAM2 实现" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      激光雷达安装步骤
+      ORB_SLAM2 在ROS中使用KinectV2实现
     </h1>
   
 
         
-        <a href="/2019/08/21/激光雷达安装步骤/" class="archive-article-date">
-  	<time datetime="2019-08-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-21</time>
+        <a href="/2019/08/24/ORB_SLAM2 实现/" class="archive-article-date">
+  	<time datetime="2019-08-23T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-24</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="1-安装SDK"><a href="#1-安装SDK" class="headerlink" title="1. 安装SDK"></a>1. 安装SDK</h2><h3 id="1-1-下载相关文件"><a href="#1-1-下载相关文件" class="headerlink" title="1.1 下载相关文件"></a>1.1 下载相关文件</h3><ul>
-<li>网址：<a href="http://go.slamtec.com/rplidar/a3/download" target="_blank" rel="noopener">http://go.slamtec.com/rplidar/a3/download</a></li>
-<li>我已将相关文件下载至<strong>思岚雷达</strong>文件夹</li>
-<li>后续工作可以按照我的说明，不必去看SDK说明，里面包含Windows、macos等安装，很杂。</li>
-</ul>
-<h3 id="1-2-编译SDK"><a href="#1-2-编译SDK" class="headerlink" title="1.2 编译SDK"></a>1.2 编译SDK</h3><ol>
-<li>解压SDK压缩包至根目录，重命名为<strong>rplidar_sdk</strong></li>
-<li>cd ~/rplidar_sdk/sdk</li>
-<li>make</li>
-</ol>
-<h3 id="1-3-交叉编译"><a href="#1-3-交叉编译" class="headerlink" title="1.3 交叉编译"></a>1.3 交叉编译</h3><ul>
-<li><p>我没有进行这一步骤，因为目前不知道是否需要</p>
-</li>
-<li><p>透过交叉编译特性,SDK 的编译系统支持编译产生其他平台/系统的二进制可<br>执行文件。<br>注意: 该功能仅针对使用 Makefile 的环境.<br>交叉编译特性将通过调用 cross_compile.sh 脚本激活。该脚本的调用语法如<br>下:<br>CROSS_COMPILE_PREFIX=<compile_prefix> ./cross_compile.sh<br>例如: CROSS_COMPILE_PREFIX=arm-linux-gnueabihf ./cross_compile.sh</compile_prefix></p>
+        <h2 id="安装依赖包"><a href="#安装依赖包" class="headerlink" title="安装依赖包"></a>安装依赖包</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br><span class="line"></span><br><span class="line">sudo apt-get install libboost-all-dev libblas-dev liblapack-dev</span><br><span class="line"></span><br><span class="line">####  安装 Pangolin</span><br><span class="line">git clone git@github.com:stevenlovegrove/Pangolin.git</span><br><span class="line">cd Pangolin</span><br><span class="line">mkdir build</span><br><span class="line">cd build</span><br><span class="line">cmake ..</span><br><span class="line">cmake --build .</span><br><span class="line"></span><br><span class="line">##### 安装 eigen</span><br><span class="line">http://eigen.tuxfamily.org/index.php?title=Main_Page ### 下载eigen包 解压</span><br><span class="line">cd eigen</span><br><span class="line">mkdir build</span><br><span class="line">cd build</span><br><span class="line">cmake ..</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br><span class="line"></span><br><span class="line">sudo apt-get install libopencv-dev libeigen3-dev libqt4-dev qt4-qmake libqglviewer-dev libsuitesparse-dev libcxsparse3.1.4 libcholmod3.0.6</span><br></pre></td></tr></table></figure>
+
 <a id="more"></a>
 
-</li>
-</ul>
-<h2 id="2-连接雷达和PC"><a href="#2-连接雷达和PC" class="headerlink" title="2. 连接雷达和PC"></a>2. 连接雷达和PC</h2><ul>
-<li>直接接电脑即可</li>
-</ul>
-<h2 id="3-运行DEMO"><a href="#3-运行DEMO" class="headerlink" title="3. 运行DEMO"></a>3. 运行DEMO</h2><h3 id="3-1-ultra-simple"><a href="#3-1-ultra-simple" class="headerlink" title="3.1 ultra_simple"></a>3.1 ultra_simple</h3><ul>
-<li>该示例程序演示 PC 通过串口与 RPLIDAR 进行连接，并不断的将 RPLIDAR 扫<br>描数据输出的最简单过程。</li>
-<li>ls /dev/ttyUSB*     ##这个命令可以检测你的雷达USB编号，看你雷达连上没</li>
-<li>cd ~/rplidar_sdk/sdk/output/Linux/Release</li>
-<li>./ultra_simple /dev/ttyUSB0</li>
-<li>能转起来就说明安装好了</li>
-</ul>
+<h2 id="安装ORB-SLAM2"><a href="#安装ORB-SLAM2" class="headerlink" title="安装ORB_SLAM2"></a>安装ORB_SLAM2</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">git clone git@github.com:raulmur/ORB_SLAM2.git</span><br><span class="line">cd ORB_SLAM2</span><br><span class="line">chmod +x build.sh</span><br><span class="line">gedit ./build.sh</span><br><span class="line">修改最后一行，改为make</span><br><span class="line">./build.sh</span><br><span class="line"></span><br><span class="line">### 若报错 error: ‘usleep’ was not declared</span><br><span class="line">cd ORB_SLAM2/src</span><br><span class="line">gedit System.cc  ### 报错的其他文件一样，不再一一说明，很多，要有耐心 T_T</span><br><span class="line">添加头文件 #include &lt;unistd.h&gt;</span><br></pre></td></tr></table></figure>
 
+<h2 id="配置KINECT"><a href="#配置KINECT" class="headerlink" title="配置KINECT"></a>配置KINECT</h2><ul>
+<li>苏齐光已经整理了一个Kinect配置文件，这里不再赘述。</li>
+</ul>
+<h2 id="KINECT-标定"><a href="#KINECT-标定" class="headerlink" title="KINECT 标定"></a>KINECT 标定</h2><ol>
+<li><p>制作标定板 </p>
+<p><a href="https://github.com/code-iai/iai_kinect2/blob/master/kinect2_calibration/patterns/chess5x7x0.03.pdf" target="_blank" rel="noopener">chess5x7x0.03.pdf</a><br><a href="https://github.com/code-iai/iai_kinect2/blob/master/kinect2_calibration/patterns/chess7x9x0.025.pdf" target="_blank" rel="noopener">chess7x9x0.025.pdf</a><br><a href="https://github.com/code-iai/iai_kinect2/blob/master/kinect2_calibration/patterns/chess9x11x0.02.pdf" target="_blank" rel="noopener">chess9x11x0.02.pdf</a></p>
+<p>这里我选择的是第三个  ！！！这里一定要注意，9x11实际上方格数是10x12 ！！！这里我搞错了耽误了一天。。。</p>
+</li>
+</ol>
+<ol start="2">
+<li><p>建议临时建立个文件夹，以免图片太多看起来很乱</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir ~/kinect_cal_temp</span><br><span class="line">cd kinect_cal_temp</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="3">
+<li><p>标定步骤</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">rosrun kinect2_bridge kinect2_bridge _fps_limit:=2   ### 先运行roscore</span><br><span class="line">### 显示的 [ INFO] [Kinect2Bridge::initDevice] device serial: 019968265047 后面的数为设备串口号</span><br><span class="line">### 在我的/home/catkin_ws/src/iai_kinect2/kinect2_bridge/data的文件夹里建立一个文件夹，取名叫 019968265047</span><br><span class="line"></span><br><span class="line">### 标定彩色摄像头：</span><br><span class="line">rosrun kinect2_calibration kinect2_calibration chess9x11x0.02 record color  ### 按空格保存图片，10+张，后面一样</span><br><span class="line">rosrun kinect2_calibration kinect2_calibration chess9x11x0.02 calibrate color</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="生成calib-color-yaml-文件"><a href="#生成calib-color-yaml-文件" class="headerlink" title="生成calib_color.yaml 文件"></a>生成calib_color.yaml 文件</h3><h3 id="标定红外"><a href="#标定红外" class="headerlink" title="标定红外"></a>标定红外</h3><p>   rosrun kinect2_calibration kinect2_calibration chess9x11x0.02 record ir<br>   rosrun kinect2_calibration kinect2_calibration chess9x11x0.02 calibrate ir</p>
+<h3 id="会生成calib-ir-yaml-文件"><a href="#会生成calib-ir-yaml-文件" class="headerlink" title="会生成calib_ir.yaml 文件"></a>会生成calib_ir.yaml 文件</h3><h3 id="帧同步标定"><a href="#帧同步标定" class="headerlink" title="帧同步标定"></a>帧同步标定</h3><p>   rosrun kinect2_calibration kinect2_calibration chess9x11x0.02 record sync<br>   rosrun kinect2_calibration kinect2_calibration chess9x11x0.02 calibrate sync</p>
+<h3 id="会生成calib-pose-yaml-文件"><a href="#会生成calib-pose-yaml-文件" class="headerlink" title="会生成calib_pose.yaml 文件"></a>会生成calib_pose.yaml 文件</h3><h3 id="深度标定"><a href="#深度标定" class="headerlink" title="深度标定"></a>深度标定</h3><p>   rosrun kinect2_calibration kinect2_calibration chess9x11x0.02 calibrate depth</p>
+<h3 id="会生成calib-depth-yaml-文件"><a href="#会生成calib-depth-yaml-文件" class="headerlink" title="会生成calib_depth.yaml 文件"></a>会生成calib_depth.yaml 文件</h3>   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">   标定后的文件calib_color.yaml calib_ir.yaml calib_pose.yaml calib_depth.yaml  需要放到/home/catkin_ws/src/iai_kinect2/kinect2_bridge/data/019968265047这个文件夹里</span><br><span class="line">   </span><br><span class="line">   标定至此完成！</span><br><span class="line"></span><br><span class="line">## 修改ORB-SLAM2文件</span><br><span class="line"></span><br><span class="line">### 改动 1</span><br><span class="line"></span><br><span class="line">修改/home/zj224/ORB_SLAM2/Examples/ROS/ORB_SLAM2/src 中的 ros_rgbd.cc 文件的 main 函数：</span><br></pre></td></tr></table></figure>
+
+<p>message_filters::Subscriber&lt;sensor_msgs::Image&gt; rgb_sub(nh, “/camera/rgb/image_raw”, 1);<br>message_filters::Subscriber&lt;sensor_msgs::Image&gt; depth_sub(nh,”camera/depth_registered/image_raw”, 1);</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">改为：</span><br></pre></td></tr></table></figure>
+
+<p>message_filters::Subscriber&lt;sensor_msgs::Image&gt; rgb_sub(nh,”/kinect2/qhd/image_color”,1);<br>message_filters::Subscriber&lt;sensor_msgs::Image&gt; depth_sub(nh,”/kinect2/qhd/image_depth_rect”,1);</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 改动 2</span><br><span class="line"></span><br><span class="line">设置标定相机参数，仿照/Examples/RGB-D/TUM1.yaml 根据之前得到的 calib_color.yaml 修改并另存为 kinect2.yaml</span><br></pre></td></tr></table></figure>
+
+<h1 id="Camera-calibration-and-distortion-parameters-OpenCV"><a href="#Camera-calibration-and-distortion-parameters-OpenCV" class="headerlink" title="Camera calibration and distortion parameters (OpenCV)"></a>Camera calibration and distortion parameters (OpenCV)</h1><p>Camera.fx: 1.0679837281443886e+03<br>Camera.fy: 1.0697937777504162e+03<br>Camera.cx: 9.3735357113460532e+02<br>Camera.cy: 5.5068347235162321e+02</p>
+<p>Camera.k1: 8.4529458178805153e-02<br>Camera.k2: -1.3472803452135898e-01<br>Camera.p1: 2.4226930973738920e-03<br>Camera.p2: -3.1065128414445530e-03<br>Camera.k3: 3.3625687689377249e-03</p>
+<p>Camera.width: 1920<br>Camera.height: 1080</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 改动 3</span><br></pre></td></tr></table></figure>
+
+<p>sudo gedit ~/.bashrc<br>添加 export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:/home/zj224/ORB_SLAM2/Examples/ROS<br>source ~/.bashrc</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 再次编译 ORB_SLAM2</span><br></pre></td></tr></table></figure>
+
+<p>cd ~/ORB_SLAM2<br>chmod +x build.sh<br>./build.sh </p>
+<p>source /opt/ros/kinetic/setup.sh</p>
+<p>chmod +x build_ros.sh<br>./build_ros.sh</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">报错 [rosbuild] rospack found package &quot;ORB_SLAM2&quot; at &quot;&quot;, but the current   directory is &quot;/home/zj224/ORB_SLAM2/Examples/ROS/ORB_SLAM2&quot;. 运行：</span><br></pre></td></tr></table></figure>
+
+<p>sudo ln -s /home/ORB_SLAM2/Examples/ROS/ORB_SLAM2 /opt/ros/kinetic/share/ORB_SLAM2<br>source ~/.bashrc</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">报错 CMakeFiles/RGBD.dir/src/ros_rgbd.cc.o: undefined reference to symbol &apos;_ZN5boost6system15system_categoryEv&apos; </span><br><span class="line"></span><br><span class="line">将 </span><br><span class="line">/usr/lib/x86_64-linux-gnu/libboost_system.so</span><br><span class="line">/usr/lib/x86_64-linux-gnu/libboost_filesystem.so</span><br><span class="line">两个文件复制到 ORB_SLAM2 / lib</span><br><span class="line">修改/home/zj224/ORB_SLAM2/Examples/ROS/ORB_SLAM2 中的 CMakeLists.txt  </span><br><span class="line">修改前：</span><br></pre></td></tr></table></figure>
+
+<p>set(LIBS<br>${OpenCV_LIBS}<br>${EIGEN3_LIBS}<br>${Pangolin_LIBRARIES}<br>${PROJECT_SOURCE_DIR}/../../../Thirdparty/DBoW2/lib/libDBoW2.so<br>${PROJECT_SOURCE_DIR}/../../../Thirdparty/g2o/lib/libg2o.so<br>${PROJECT_SOURCE_DIR}/../../../lib/libORB_SLAM2.so<br>)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">修改后：</span><br></pre></td></tr></table></figure>
+
+<p>set(LIBS<br>${OpenCV_LIBS}<br>${EIGEN3_LIBS}<br>${Pangolin_LIBRARIES}<br>${PROJECT_SOURCE_DIR}/../../../Thirdparty/DBoW2/lib/libDBoW2.so<br>${PROJECT_SOURCE_DIR}/../../../Thirdparty/g2o/lib/libg2o.so<br>${PROJECT_SOURCE_DIR}/../../../lib/libORB_SLAM2.so<br>-lboost_system<br>)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## 运行程序</span><br></pre></td></tr></table></figure>
+
+<p>roscore</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">新建一个终端</span><br></pre></td></tr></table></figure>
+
+<p>roslaunch kinect2_bridge kinect2_bridge.launch</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">新建一个终端</span><br></pre></td></tr></table></figure>
+
+<p>cd ~/ORB_SLAM2/Examples/ROS/ORB_SLAM2<br>rosrun ORB_SLAM2 RGBD /home/zj224/ORB_SLAM2/Vocabulary/ORBvoc.txt /home/zj224/ORB_SLAM2/Examples/RGB-D/kinect2.yaml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
       
 
       
@@ -241,7 +282,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">硬件</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
         		</li>
       		
 		</ul>
@@ -271,15 +312,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/08/21/激光雷达和ROS结合/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          激光雷达和ROS结合
-        
-      </div>
-    </a>
   
+    <a href="/2019/08/22/20190822-回环检测/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">回环检测</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
@@ -316,7 +353,7 @@
 <script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
 var gitment = new Gitment({
-  id: "http://LiDaiyang1205.github.io/2019/08/21/激光雷达安装步骤/",
+  id: "http://LiDaiyang1205.github.io/2019/08/24/ORB_SLAM2 实现/",
   owner: 'LiDaiyang1205',
   repo: 'lidaiyang1205.github.io',
   oauth: {

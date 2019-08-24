@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://LiDaiyang1205.github.io">
-  <title>激光雷达安装步骤 | LDY_blog</title>
+  <title>回环检测 | LDY_blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1. 安装SDK1.1 下载相关文件 网址：http://go.slamtec.com/rplidar/a3/download 我已将相关文件下载至思岚雷达文件夹 后续工作可以按照我的说明，不必去看SDK说明，里面包含Windows、macos等安装，很杂。  1.2 编译SDK 解压SDK压缩包至根目录，重命名为rplidar_sdk cd ~/rplidar_sdk/sdk make  1.3">
-<meta name="keywords" content="硬件">
+  <meta name="description" content="1 什么是回环检测？在视觉slam问题中，位姿的估计往往是一个递推的过程，即由上一帧位姿解算当前帧位姿，因此其中的误差便这样一帧一帧的传递下去，也就是我们所说的累计误差。 我们的位姿约束都是与上一帧建立的，第五帧的位姿误差中便已经积累了前面四个约束中的误差。但如果我们发现第五帧位姿不一定要由第四帧推出来，还可以由第二帧推算出来，显然这样计算误差会小很多，因为只存在两个约束的误差了。像这样与之前的某">
+<meta name="keywords" content="算法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="激光雷达安装步骤">
-<meta property="og:url" content="http://LiDaiyang1205.github.io/2019/08/21/激光雷达安装步骤/index.html">
+<meta property="og:title" content="回环检测">
+<meta property="og:url" content="http://LiDaiyang1205.github.io/2019/08/22/20190822-回环检测/index.html">
 <meta property="og:site_name" content="LDY_blog">
-<meta property="og:description" content="1. 安装SDK1.1 下载相关文件 网址：http://go.slamtec.com/rplidar/a3/download 我已将相关文件下载至思岚雷达文件夹 后续工作可以按照我的说明，不必去看SDK说明，里面包含Windows、macos等安装，很杂。  1.2 编译SDK 解压SDK压缩包至根目录，重命名为rplidar_sdk cd ~/rplidar_sdk/sdk make  1.3">
+<meta property="og:description" content="1 什么是回环检测？在视觉slam问题中，位姿的估计往往是一个递推的过程，即由上一帧位姿解算当前帧位姿，因此其中的误差便这样一帧一帧的传递下去，也就是我们所说的累计误差。 我们的位姿约束都是与上一帧建立的，第五帧的位姿误差中便已经积累了前面四个约束中的误差。但如果我们发现第五帧位姿不一定要由第四帧推出来，还可以由第二帧推算出来，显然这样计算误差会小很多，因为只存在两个约束的误差了。像这样与之前的某">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-08-21T11:30:06.080Z">
+<meta property="og:updated_time" content="2019-08-24T13:36:48.900Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="激光雷达安装步骤">
-<meta name="twitter:description" content="1. 安装SDK1.1 下载相关文件 网址：http://go.slamtec.com/rplidar/a3/download 我已将相关文件下载至思岚雷达文件夹 后续工作可以按照我的说明，不必去看SDK说明，里面包含Windows、macos等安装，很杂。  1.2 编译SDK 解压SDK压缩包至根目录，重命名为rplidar_sdk cd ~/rplidar_sdk/sdk make  1.3">
+<meta name="twitter:title" content="回环检测">
+<meta name="twitter:description" content="1 什么是回环检测？在视觉slam问题中，位姿的估计往往是一个递推的过程，即由上一帧位姿解算当前帧位姿，因此其中的误差便这样一帧一帧的传递下去，也就是我们所说的累计误差。 我们的位姿约束都是与上一帧建立的，第五帧的位姿误差中便已经积累了前面四个约束中的误差。但如果我们发现第五帧位姿不一定要由第四帧推出来，还可以由第二帧推算出来，显然这样计算误差会小很多，因为只存在两个约束的误差了。像这样与之前的某">
   
     <link rel="alternative" href="/atom.xml" title="LDY_blog" type="application/atom+xml">
   
@@ -159,54 +159,56 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-激光雷达安装步骤" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-20190822-回环检测" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      激光雷达安装步骤
+      回环检测
     </h1>
   
 
         
-        <a href="/2019/08/21/激光雷达安装步骤/" class="archive-article-date">
-  	<time datetime="2019-08-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-21</time>
+        <a href="/2019/08/22/20190822-回环检测/" class="archive-article-date">
+  	<time datetime="2019-08-21T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-22</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="1-安装SDK"><a href="#1-安装SDK" class="headerlink" title="1. 安装SDK"></a>1. 安装SDK</h2><h3 id="1-1-下载相关文件"><a href="#1-1-下载相关文件" class="headerlink" title="1.1 下载相关文件"></a>1.1 下载相关文件</h3><ul>
-<li>网址：<a href="http://go.slamtec.com/rplidar/a3/download" target="_blank" rel="noopener">http://go.slamtec.com/rplidar/a3/download</a></li>
-<li>我已将相关文件下载至<strong>思岚雷达</strong>文件夹</li>
-<li>后续工作可以按照我的说明，不必去看SDK说明，里面包含Windows、macos等安装，很杂。</li>
-</ul>
-<h3 id="1-2-编译SDK"><a href="#1-2-编译SDK" class="headerlink" title="1.2 编译SDK"></a>1.2 编译SDK</h3><ol>
-<li>解压SDK压缩包至根目录，重命名为<strong>rplidar_sdk</strong></li>
-<li>cd ~/rplidar_sdk/sdk</li>
-<li>make</li>
-</ol>
-<h3 id="1-3-交叉编译"><a href="#1-3-交叉编译" class="headerlink" title="1.3 交叉编译"></a>1.3 交叉编译</h3><ul>
-<li><p>我没有进行这一步骤，因为目前不知道是否需要</p>
-</li>
-<li><p>透过交叉编译特性,SDK 的编译系统支持编译产生其他平台/系统的二进制可<br>执行文件。<br>注意: 该功能仅针对使用 Makefile 的环境.<br>交叉编译特性将通过调用 cross_compile.sh 脚本激活。该脚本的调用语法如<br>下:<br>CROSS_COMPILE_PREFIX=<compile_prefix> ./cross_compile.sh<br>例如: CROSS_COMPILE_PREFIX=arm-linux-gnueabihf ./cross_compile.sh</compile_prefix></p>
+        <h2 id="1-什么是回环检测？"><a href="#1-什么是回环检测？" class="headerlink" title="1 什么是回环检测？"></a><strong>1 什么是回环检测？</strong></h2><p>在视觉slam问题中，位姿的估计往往是一个递推的过程，即由上一帧位姿解算当前帧位姿，因此其中的误差便这样一帧一帧的传递下去，也就是我们所说的累计误差。</p>
+<p>我们的位姿约束都是与上一帧建立的，第五帧的位姿误差中便已经积累了前面四个约束中的误差。但如果我们发现第五帧位姿不一定要由第四帧推出来，还可以由第二帧推算出来，显然这样计算误差会小很多，因为只存在两个约束的误差了。像这样与之前的某一帧建立位姿约束关系就叫做回环。回环通过减少约束数，起到了减小累计误差的作用。</p>
+<p>那么我们怎么知道可以由第二帧推算第五帧位姿呢？也许第一帧、第三帧也可以呢。确实，我们之所以用前一帧递推下一帧位姿，因为这两帧足够近，肯定可以建立两帧的约束，但是距离较远的两帧就不一定可以建立这样的约束关系了。找出可以建立这种位姿约束的历史帧，就是回环检测。</p>
+<p><a href="https://www.cnblogs.com/slamtec/p/9837877.html" target="_blank" rel="noopener">https://www.cnblogs.com/slamtec/p/9837877.html</a></p>
 <a id="more"></a>
 
+
+
+<h2 id="2-回环检测的意义"><a href="#2-回环检测的意义" class="headerlink" title="2 回环检测的意义"></a>2 回环检测的意义</h2><ul>
+<li>举例来说，假设我们在前端提取了特征，然后忽略掉特征点,在后端使用 Pose Graph优化整个轨迹，如图 12-1(a) 所示。由于前端给出的只是局部的位姿间约束，比方说，可能是$x_1 − x_2$， $x_ 2 − x _3 $等等。但是，由于 $x _1$ 的估计存在误差,而 $x_2 $是根据 $x _1$ 决定的,$x_3$是由$x_2 $决定的。以此类推，误差就会被累积起来，使得后端优化的结果如图 12-1 (b)所示，慢慢地趋向不准确。而回环检测则可以消除这种累积误差，如图12-1 (c)所示。</li>
+</ul>
+<p>![2019-08-22 10-10-19屏幕截图](/home/ldy/图片/2019-08-22 10-10-19屏幕截图.png)</p>
+<ul>
+<li><p>回环检测对于 SLAM 系统意义重大。它关系到我们估计的轨迹和地图在长时间下的正确性。另一方面，由于回环检测提供了当前数据与所有历史数据的关联，在跟踪算法丢失之后，我们还可以利用回环检测进行重定位。因此，回环检测对整个 SLAM 系统精度与鲁棒性的提升，是非常明显的。甚至在某些时候，我们把仅有前端和局部后端的系统称为VO，而把带有回环检测和全局后端的称为 SLAM。</p>
+<p>视觉slam十四讲_高翔</p>
 </li>
 </ul>
-<h2 id="2-连接雷达和PC"><a href="#2-连接雷达和PC" class="headerlink" title="2. 连接雷达和PC"></a>2. 连接雷达和PC</h2><ul>
-<li>直接接电脑即可</li>
+<h2 id="3-回环检测的方法"><a href="#3-回环检测的方法" class="headerlink" title="3 回环检测的方法"></a>3 回环检测的方法</h2><ul>
+<li>回环检测的方法有很多种。因为大多方法实现效果很差，这里只讲最主流的基于外观的回环检测方法的实现。</li>
 </ul>
-<h2 id="3-运行DEMO"><a href="#3-运行DEMO" class="headerlink" title="3. 运行DEMO"></a>3. 运行DEMO</h2><h3 id="3-1-ultra-simple"><a href="#3-1-ultra-simple" class="headerlink" title="3.1 ultra_simple"></a>3.1 ultra_simple</h3><ul>
-<li>该示例程序演示 PC 通过串口与 RPLIDAR 进行连接，并不断的将 RPLIDAR 扫<br>描数据输出的最简单过程。</li>
-<li>ls /dev/ttyUSB*     ##这个命令可以检测你的雷达USB编号，看你雷达连上没</li>
-<li>cd ~/rplidar_sdk/sdk/output/Linux/Release</li>
-<li>./ultra_simple /dev/ttyUSB0</li>
-<li>能转起来就说明安装好了</li>
+<h3 id="3-1-准确率和召回率-Precision-amp-Recall"><a href="#3-1-准确率和召回率-Precision-amp-Recall" class="headerlink" title="3.1 准确率和召回率(Precision &amp; Recall)"></a>3.1 准确率和召回率(Precision &amp; Recall)</h3><p>![屏幕截图 2019-08-22 10:45:15](/home/ldy/图片/屏幕截图 2019-08-22 10:45:15.png)<br>$$<br>Precision = TP/(TP+FP)  ,  Recall = TP/(TP+FN)<br>$$</p>
+<ul>
+<li><p><strong>准确率</strong>描述的是，算法提取的所有回环中，确实是真实回环的概率。</p>
+</li>
+<li><p><strong>召回率</strong>则是说，在所有真实回环中，被正确检测出来的概率。</p>
+</li>
+<li><p>在 SLAM 中，我们对<strong>准确率</strong>要求更<strong>高</strong>，而对<strong>召回率</strong>则相对<strong>宽容</strong>一些。</p>
+</li>
 </ul>
+<h3 id="3-2-回环检测的实现"><a href="#3-2-回环检测的实现" class="headerlink" title="3.2 回环检测的实现"></a>3.2 回环检测的实现</h3><p>待更新</p>
 
       
 
@@ -241,7 +243,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">硬件</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
         		</li>
       		
 		</ul>
@@ -271,15 +273,20 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/08/21/激光雷达和ROS结合/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/08/24/ORB_SLAM2 实现/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          激光雷达和ROS结合
+          ORB_SLAM2 在ROS中使用KinectV2实现
         
       </div>
     </a>
   
+  
+    <a href="/2019/08/21/ubuntu系统备份为ISO文件/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">ubuntu系统备份为ISO文件</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
@@ -316,7 +323,7 @@
 <script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
 var gitment = new Gitment({
-  id: "http://LiDaiyang1205.github.io/2019/08/21/激光雷达安装步骤/",
+  id: "http://LiDaiyang1205.github.io/2019/08/22/20190822-回环检测/",
   owner: 'LiDaiyang1205',
   repo: 'lidaiyang1205.github.io',
   oauth: {
