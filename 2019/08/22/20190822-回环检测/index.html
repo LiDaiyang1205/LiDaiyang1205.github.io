@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="LDY_blog">
 <meta property="og:description" content="1 什么是回环检测？在视觉slam问题中，位姿的估计往往是一个递推的过程，即由上一帧位姿解算当前帧位姿，因此其中的误差便这样一帧一帧的传递下去，也就是我们所说的累计误差。 我们的位姿约束都是与上一帧建立的，第五帧的位姿误差中便已经积累了前面四个约束中的误差。但如果我们发现第五帧位姿不一定要由第四帧推出来，还可以由第二帧推算出来，显然这样计算误差会小很多，因为只存在两个约束的误差了。像这样与之前的某">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-08-24T13:36:48.900Z">
+<meta property="og:updated_time" content="2019-08-25T08:49:51.974Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="回环检测">
 <meta name="twitter:description" content="1 什么是回环检测？在视觉slam问题中，位姿的估计往往是一个递推的过程，即由上一帧位姿解算当前帧位姿，因此其中的误差便这样一帧一帧的传递下去，也就是我们所说的累计误差。 我们的位姿约束都是与上一帧建立的，第五帧的位姿误差中便已经积累了前面四个约束中的误差。但如果我们发现第五帧位姿不一定要由第四帧推出来，还可以由第二帧推算出来，显然这样计算误差会小很多，因为只存在两个约束的误差了。像这样与之前的某">
@@ -182,7 +182,6 @@
         <h2 id="1-什么是回环检测？"><a href="#1-什么是回环检测？" class="headerlink" title="1 什么是回环检测？"></a><strong>1 什么是回环检测？</strong></h2><p>在视觉slam问题中，位姿的估计往往是一个递推的过程，即由上一帧位姿解算当前帧位姿，因此其中的误差便这样一帧一帧的传递下去，也就是我们所说的累计误差。</p>
 <p>我们的位姿约束都是与上一帧建立的，第五帧的位姿误差中便已经积累了前面四个约束中的误差。但如果我们发现第五帧位姿不一定要由第四帧推出来，还可以由第二帧推算出来，显然这样计算误差会小很多，因为只存在两个约束的误差了。像这样与之前的某一帧建立位姿约束关系就叫做回环。回环通过减少约束数，起到了减小累计误差的作用。</p>
 <p>那么我们怎么知道可以由第二帧推算第五帧位姿呢？也许第一帧、第三帧也可以呢。确实，我们之所以用前一帧递推下一帧位姿，因为这两帧足够近，肯定可以建立两帧的约束，但是距离较远的两帧就不一定可以建立这样的约束关系了。找出可以建立这种位姿约束的历史帧，就是回环检测。</p>
-<p><a href="https://www.cnblogs.com/slamtec/p/9837877.html" target="_blank" rel="noopener">https://www.cnblogs.com/slamtec/p/9837877.html</a></p>
 <a id="more"></a>
 
 
@@ -192,12 +191,11 @@
 </ul>
 <p>![2019-08-22 10-10-19屏幕截图](/home/ldy/图片/2019-08-22 10-10-19屏幕截图.png)</p>
 <ul>
-<li><p>回环检测对于 SLAM 系统意义重大。它关系到我们估计的轨迹和地图在长时间下的正确性。另一方面，由于回环检测提供了当前数据与所有历史数据的关联，在跟踪算法丢失之后，我们还可以利用回环检测进行重定位。因此，回环检测对整个 SLAM 系统精度与鲁棒性的提升，是非常明显的。甚至在某些时候，我们把仅有前端和局部后端的系统称为VO，而把带有回环检测和全局后端的称为 SLAM。</p>
-<p>视觉slam十四讲_高翔</p>
-</li>
+<li>回环检测对于 SLAM 系统意义重大。它关系到我们估计的轨迹和地图在长时间下的正确性。另一方面，由于回环检测提供了当前数据与所有历史数据的关联，在跟踪算法丢失之后，我们还可以利用回环检测进行重定位。因此，回环检测对整个 SLAM 系统精度与鲁棒性的提升，是非常明显的。甚至在某些时候，我们把仅有前端和局部后端的系统称为VO，而把带有回环检测和全局后端的称为 SLAM。</li>
 </ul>
 <h2 id="3-回环检测的方法"><a href="#3-回环检测的方法" class="headerlink" title="3 回环检测的方法"></a>3 回环检测的方法</h2><ul>
-<li>回环检测的方法有很多种。因为大多方法实现效果很差，这里只讲最主流的基于外观的回环检测方法的实现。</li>
+<li>回环检测的方法有很多种。因为大多方法实现效果很差，这里只讲最主流的基于外观的回环检测方法。</li>
+<li>它和前端后端的估计都无关，仅根据<strong>两张图像的相似性</strong>确定回环检测关系。这种做法摆脱了累计误差，使回环检测模块成为 SLAM 系统中一个相对独立的模块（当然前端可以为它提供特征点）。</li>
 </ul>
 <h3 id="3-1-准确率和召回率-Precision-amp-Recall"><a href="#3-1-准确率和召回率-Precision-amp-Recall" class="headerlink" title="3.1 准确率和召回率(Precision &amp; Recall)"></a>3.1 准确率和召回率(Precision &amp; Recall)</h3><p>![屏幕截图 2019-08-22 10:45:15](/home/ldy/图片/屏幕截图 2019-08-22 10:45:15.png)<br>$$<br>Precision = TP/(TP+FP)  ,  Recall = TP/(TP+FN)<br>$$</p>
 <ul>
@@ -208,7 +206,56 @@
 <li><p>在 SLAM 中，我们对<strong>准确率</strong>要求更<strong>高</strong>，而对<strong>召回率</strong>则相对<strong>宽容</strong>一些。</p>
 </li>
 </ul>
-<h3 id="3-2-回环检测的实现"><a href="#3-2-回环检测的实现" class="headerlink" title="3.2 回环检测的实现"></a>3.2 回环检测的实现</h3><p>待更新</p>
+<h3 id="3-2-词袋模型"><a href="#3-2-词袋模型" class="headerlink" title="3.2 词袋模型"></a>3.2 词袋模型</h3><ul>
+<li>在基于外观的回环检测算法中，核心问题是<strong>如何计算图像间的相似性</strong>。</li>
+<li>最为直观的想法就是直接对比两个图像的矩阵，将两个图像相减，但是由于灰度是一种不稳定的测量值，严重受环境光照和相机曝光的影响，此外如果相机视角发生少量变化，同样的物体，同样的光照，像素发生了位移就会导致灰度值产生巨大差异。</li>
+<li>词袋，也就是 Bag-of-Words（BoW），目的是用”图像上有哪几种特征“来描述一个图像。例如，如果某个照片，我们说里面有一个人、一辆车；而另一张则有两个人、一只狗。根据这样的描述，可以度量这两个图像的相似性。</li>
+<li>”人、车、狗“就是<strong>单词</strong>（Word）；许多单词放在一起组成<strong>字典</strong>（dictionary）。</li>
+<li>“人”、“车”、“狗”都是记录在字典中的单词，我们不妨记为 $w_1,w_2,w_3$ 。然后,对于任意图像 A，根据它们含有的单词，可记为: $A=1\times w_1+1\times w_2+0\times w_3$ （即，$[1,1,0]^T$）来表示图像A中有一个“人”，一辆“车”，没有“狗”。这种方式只考虑<strong>有没有</strong>，不考虑<strong>在哪儿</strong>，能保证相机发生少量运动时，描述向量不发生变化。</li>
+</ul>
+<h3 id="3-3-字典"><a href="#3-3-字典" class="headerlink" title="3.3 字典"></a>3.3 字典</h3><ul>
+<li><p>按照前面的介绍，字典由很多单词组成，而每一个单词代表了一个概念。一个单词与一个单独的特征点不同，它不是从单个图像上提取出来的，而是某一类特征的组合。所以，字典生成问题类似于一个聚类(Clustering)问题。</p>
+</li>
+<li><p>聚类问题是无监督机器学习(Unsupervised ML)中一个特别常见的问题，而K-means 是一个非常简单有效的方法。当我们有 N 个数据，想要归成 k 个类，K-means的步骤为：</p>
+<ol>
+<li>随机选取 k 个中心点：$c_1 , . . . , c_k $；</li>
+<li>对每一个样本，计算与每个中心点之间的距离，取最小的作为它的归类；</li>
+<li>重新计算每个类的中心点。</li>
+<li>如果每个中心点都变化很小，则算法收敛，退出；否则返回 1。</li>
+</ol>
+</li>
+<li><p>考虑到字典的通用性 ，,我们通常会使用一个较大规模的字典。这就需要使用k叉树来表达字典了。假定我们有 N 个特征点，希望构建一个深度为 d，每次分叉为 k 的树，那么做法如下：（如图12-4）</p>
+<ol>
+<li>在根节点，用 k-means 把所有样本聚成 k 类。这样得到了第一层。</li>
+<li>对第一层的每个节点，把属于该节点的样本再聚成 k 类，得到下一层。</li>
+<li>依此类推，最后得到叶子层。叶子层即为所谓的 Words。</li>
+</ol>
+</li>
+</ul>
+<p>![屏幕截图 2019-08-25 15:59:35](/home/ldy/图片/屏幕截图 2019-08-25 15:59:35.png)</p>
+<h3 id="3-4-相似度计算"><a href="#3-4-相似度计算" class="headerlink" title="3.4 相似度计算"></a>3.4 相似度计算</h3><ul>
+<li><p>当我们建立了<strong>字典</strong>，并对两个图片分析特征点得到他们的<strong>词袋</strong>后，如何计算它们的相似的便成为一个非常关键的问题。考虑到，不同的单词在区分性上的重要性并不相同。例如“的”、“是”这样的字可能在许许多多的句子中出现，我们无法根据它们判别句子的类型；但如果有“文档”、“足球”这样的单词，对判别句子的作用就更大一些，可以说它们提供了更多信息。所以概括的话，我们希望对单词的区分性或重要性加以评估，给它们不同的权值以起到更好的效果。</p>
+</li>
+<li><p>在文本检索中，常用的一种做法称为 TF-IDF（Term Frequency–Inverse Document Frequency）。TF 部分的思想是，某单词在一个<strong>图像中经常出现</strong>，它的<strong>区分度就高</strong>。另一方面，IDF 的思想是，某单词在<strong>字典中出现的频率越低</strong>，则分类图像时<strong>区分度越高</strong>。</p>
+</li>
+<li><p>我们统计某个叶子节点 $w_i$ 中的特征数量相对于所有特征数量的比例，作为 <strong>IDF 部分</strong>。假设所有特征数量为 $n$，$w_i $数量为$n_i$ ，那么该单词的 IDF 为：$IDF_i=log\frac{n}{n_i}$</p>
+</li>
+<li><p>另一方面，<strong>TF 部分</strong>则是指某个特征在单个图像中出现的频率。假设图像 A 中，单词$w_i $出现了$n_i$ 次，而一共出现的单词次数为$n$，那么 TF 为：$TF_i=\frac{n_i}{n}$</p>
+</li>
+<li><p><strong>单词$w_i $的权重</strong>等于：$\eta_i=TF_i\times IDF_i$</p>
+</li>
+<li><p>考虑权重以后，对于某个图像 A，它的特征点可对应到许多个单词，组成它的 Bag-of-Words:</p>
+<p>$$A=[(w_1,\eta_1),(w_2,\eta_2),\cdots,(w_N,\eta_N)]=v_A$$</p>
+</li>
+<li><p>给定 $v_A$和 $v_B$<strong>计算差异</strong>：$s(v_A-v_B)=2\sum_{i=1}^{N}{|v_{Ai}|+|v_{Bi}|-|v_{Ai}-v_{Bi}|}$</p>
+</li>
+</ul>
+<h2 id="4-回环检测的实现"><a href="#4-回环检测的实现" class="headerlink" title="4 回环检测的实现"></a>4 回环检测的实现</h2><h3 id="主要使用的库"><a href="#主要使用的库" class="headerlink" title="主要使用的库"></a>主要使用的库</h3><p>基础库：DBoW3    <a href="https://github.com/rmsalinas/DBow3" target="_blank" rel="noopener">https://github.com/rmsalinas/DBow3</a></p>
+<p>slam方法库：ORB_SLAM2  <a href="https://github.com/raulmur/ORB_SLAM2" target="_blank" rel="noopener">https://github.com/raulmur/ORB_SLAM2</a></p>
+<p>改进参考： <a href="https://github.com/Ewenwan/ORB_SLAM2_SSD_Semantic" target="_blank" rel="noopener">https://github.com/Ewenwan/ORB_SLAM2_SSD_Semantic</a></p>
+<p>参考资料：</p>
+<p><a href="https://www.cnblogs.com/slamtec/p/9837877.html" target="_blank" rel="noopener">https://www.cnblogs.com/slamtec/p/9837877.html</a></p>
+<p>视觉slam十四讲_高翔</p>
 
       
 
