@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://LiDaiyang1205.github.io">
-  <title>LDY_blog</title>
+  <title>ORB_SLAM2地图保存与加载（1） | LDY_blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="LDY_blog">
-<meta property="og:url" content="http://LiDaiyang1205.github.io/index.html">
+  <meta name="description" content="本文记录了ORB_SLAM2中地图保存的过程。参考博客：https://blog.csdn.net/qq_34254510/article/details/79969046http://www.cnblogs.com/mafuqiang/p/6972841.htmlhttps://blog.csdn.net/felaim/article/details/79667635https://blog.c">
+<meta name="keywords" content="算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ORB_SLAM2地图保存与加载（1）">
+<meta property="og:url" content="http://LiDaiyang1205.github.io/2019/08/26/ORB_SLAM2地图保存与加载（1）/index.html">
 <meta property="og:site_name" content="LDY_blog">
+<meta property="og:description" content="本文记录了ORB_SLAM2中地图保存的过程。参考博客：https://blog.csdn.net/qq_34254510/article/details/79969046http://www.cnblogs.com/mafuqiang/p/6972841.htmlhttps://blog.csdn.net/felaim/article/details/79667635https://blog.c">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-08-26T12:24:53.155Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LDY_blog">
+<meta name="twitter:title" content="ORB_SLAM2地图保存与加载（1）">
+<meta name="twitter:description" content="本文记录了ORB_SLAM2中地图保存的过程。参考博客：https://blog.csdn.net/qq_34254510/article/details/79969046http://www.cnblogs.com/mafuqiang/p/6972841.htmlhttps://blog.csdn.net/felaim/article/details/79667635https://blog.c">
   
     <link rel="alternative" href="/atom.xml" title="LDY_blog" type="application/atom+xml">
   
@@ -154,16 +159,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-ORB_SLAM2地图保存与加载（1）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-ORB_SLAM2地图保存与加载（1）" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/26/ORB_SLAM2地图保存与加载（1）/">ORB_SLAM2地图保存与加载（1）</a>
+    <h1 class="article-title" itemprop="name">
+      ORB_SLAM2地图保存与加载（1）
     </h1>
   
 
@@ -181,11 +184,74 @@
 <p>另一方面，关键帧也是一个抽象的概念（一个类），我们看看具体包含什么（其实都在关键帧类里面了），关键帧是从普通帧来的，所以得到视频帧后首先需要做的就是检测特征点，计算描述符，还有当前帧的相机位姿。成为关键帧之后需要有对应的ID编号，以及特征点进行三角化之后的3D地图点等。</p>
 <p>关于3D地图点需要保存的就只有世界坐标了，至于其它的关联关系可以从关键帧获得。需要单独说的是在关键帧类中包含了特征点和描述符，所以BoW向量是不需要保存的（也没办法保存），只需要在加载了关键帧之后利用特征描述符重新计算即可。</p>
 <p>所以现在需要保存的东西包括<strong>关键帧</strong>、<strong>3D地图点</strong>、<strong>共视图</strong>、<strong>生长树</strong>。</p>
-        
-          <a class="article-more-a" href="/2019/08/26/ORB_SLAM2地图保存与加载（1）/#more">more >></a>
-        
+<a id="more"></a>
+
+<h3 id="1-2-源码修改"><a href="#1-2-源码修改" class="headerlink" title="1.2 源码修改"></a>1.2 源码修改</h3><p>SLAM对地图维护的操作均在Map.cc这个函数类中，所以要保存地图，我们需要在这个文件中添加相应代码。</p>
+<h4 id="（1）修改Map-h头文件"><a href="#（1）修改Map-h头文件" class="headerlink" title="（1）修改Map.h头文件"></a>（1）修改Map.h头文件</h4><p>在/ORB_SLAM2/include/Map.h文件中的Map类中添加如下函数：</p>
+<p><strong>在Map.h的头文件中要添加Converter.h</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">//保存地图信息</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Save</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span> &amp;filename)</span></span>;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="comment">//保存地图点和关键帧 </span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">SaveMapPoint</span><span class="params">(ofstream &amp;f,MapPoint* mp)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">SaveKeyFrame</span><span class="params">(ofstream &amp;f,KeyFrame* kf)</span></span>;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">map</span>&lt;MapPoint*, <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">int</span>&gt; mmpnMapPointsIdx;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">GetMapPointsIdx</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h4 id="（2）修改Map-cc文件"><a href="#（2）修改Map-cc文件" class="headerlink" title="（2）修改Map.cc文件"></a>（2）修改Map.cc文件</h4><p>在/ORB_SLAM2/src/Map.cc文件中添加第一步中函数的实现。</p>
+<p>Save()函数的实现过程：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//保存地图信息</span></span><br><span class="line"><span class="keyword">void</span> Map::Save ( <span class="keyword">const</span> <span class="built_in">string</span>&amp; filename )</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//Print the information of the saving map</span></span><br><span class="line">    <span class="built_in">cerr</span>&lt;&lt;<span class="string">"Map.cc :: Map Saving to "</span>&lt;&lt;filename &lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    ofstream f;</span><br><span class="line">    f.open(filename.c_str(), ios_base::out|ios::binary);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Number of MapPoints</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">int</span> nMapPoints = mspMapPoints.size();</span><br><span class="line">    f.write((<span class="keyword">char</span>*)&amp;nMapPoints, <span class="keyword">sizeof</span>(nMapPoints) );</span><br><span class="line">    <span class="comment">//Save MapPoint sequentially</span></span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">auto</span> mp: mspMapPoints )&#123;</span><br><span class="line">        <span class="comment">//Save MapPoint</span></span><br><span class="line">        SaveMapPoint( f, mp );</span><br><span class="line">        <span class="comment">// cerr &lt;&lt; "Map.cc :: Saving map point number: " &lt;&lt; mp-&gt;mnId &lt;&lt; endl;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Print The number of MapPoints</span></span><br><span class="line">    <span class="built_in">cerr</span> &lt;&lt; <span class="string">"Map.cc :: The number of MapPoints is :"</span>&lt;&lt;mspMapPoints.size()&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">    <span class="comment">//Grab the index of each MapPoint, count from 0, in which we initialized mmpnMapPointsIdx  </span></span><br><span class="line">    GetMapPointsIdx(); </span><br><span class="line"></span><br><span class="line">    <span class="comment">//Print the number of KeyFrames</span></span><br><span class="line">    <span class="built_in">cerr</span> &lt;&lt;<span class="string">"Map.cc :: The number of KeyFrames:"</span>&lt;&lt;mspKeyFrames.size()&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="comment">//Number of KeyFrames</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">int</span> nKeyFrames = mspKeyFrames.size();</span><br><span class="line">    f.write((<span class="keyword">char</span>*)&amp;nKeyFrames, <span class="keyword">sizeof</span>(nKeyFrames));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Save KeyFrames sequentially</span></span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">auto</span> kf: mspKeyFrames )</span><br><span class="line">        SaveKeyFrame( f, kf );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> kf:mspKeyFrames )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//Get parent of current KeyFrame and save the ID of this parent</span></span><br><span class="line">        KeyFrame* parent = kf-&gt;GetParent();</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">int</span> parent_id = ULONG_MAX;</span><br><span class="line">        <span class="keyword">if</span> ( parent )</span><br><span class="line">            parent_id = parent-&gt;mnId;</span><br><span class="line">        f.write((<span class="keyword">char</span>*)&amp;parent_id, <span class="keyword">sizeof</span>(parent_id));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//Get the size of the Connected KeyFrames of the current KeyFrames</span></span><br><span class="line">        <span class="comment">//and then save the ID and weight of the Connected KeyFrames</span></span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">int</span> nb_con = kf-&gt;GetConnectedKeyFrames().size();</span><br><span class="line">        f.write((<span class="keyword">char</span>*)&amp;nb_con, <span class="keyword">sizeof</span>(nb_con));</span><br><span class="line">        <span class="keyword">for</span> ( <span class="keyword">auto</span> ckf: kf-&gt;GetConnectedKeyFrames())</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> weight = kf-&gt;GetWeight(ckf);</span><br><span class="line">            f.write((<span class="keyword">char</span>*)&amp;ckf-&gt;mnId, <span class="keyword">sizeof</span>(ckf-&gt;mnId));</span><br><span class="line">            f.write((<span class="keyword">char</span>*)&amp;weight, <span class="keyword">sizeof</span>(weight));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Save last Frame ID</span></span><br><span class="line">    <span class="comment">// SaveFrameID(f);</span></span><br><span class="line"></span><br><span class="line">    f.close();</span><br><span class="line">    <span class="built_in">cerr</span>&lt;&lt;<span class="string">"Map.cc :: Map Saving Finished!"</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>存储地图点函数——SaveMapPoint()函数的实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> Map::SaveMapPoint( ofstream&amp; f, MapPoint* mp)</span><br><span class="line">&#123;   </span><br><span class="line">    <span class="comment">//Save ID and the x,y,z coordinates of the current MapPoint</span></span><br><span class="line">    f.write((<span class="keyword">char</span>*)&amp;mp-&gt;mnId, <span class="keyword">sizeof</span>(mp-&gt;mnId));</span><br><span class="line">    cv::Mat mpWorldPos = mp-&gt;GetWorldPos();</span><br><span class="line">    f.write((<span class="keyword">char</span>*)&amp; mpWorldPos.at&lt;<span class="keyword">float</span>&gt;(<span class="number">0</span>),<span class="keyword">sizeof</span>(<span class="keyword">float</span>));</span><br><span class="line">    f.write((<span class="keyword">char</span>*)&amp; mpWorldPos.at&lt;<span class="keyword">float</span>&gt;(<span class="number">1</span>),<span class="keyword">sizeof</span>(<span class="keyword">float</span>));</span><br><span class="line">    f.write((<span class="keyword">char</span>*)&amp; mpWorldPos.at&lt;<span class="keyword">float</span>&gt;(<span class="number">2</span>),<span class="keyword">sizeof</span>(<span class="keyword">float</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>存储关键帧函数——SaveKeyFrame()函数的实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> Map::SaveKeyFrame( ofstream &amp;f, KeyFrame* kf )</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//Save the ID and timesteps of current KeyFrame</span></span><br><span class="line">    f.write((<span class="keyword">char</span>*)&amp;kf-&gt;mnId, <span class="keyword">sizeof</span>(kf-&gt;mnId));</span><br><span class="line">    <span class="comment">// cout &lt;&lt; "saving kf-&gt;mnId = " &lt;&lt; kf-&gt;mnId &lt;&lt;endl;</span></span><br><span class="line">    f.write((<span class="keyword">char</span>*)&amp;kf-&gt;mTimeStamp, <span class="keyword">sizeof</span>(kf-&gt;mTimeStamp));</span><br><span class="line">    <span class="comment">//Save the Pose Matrix of current KeyFrame</span></span><br><span class="line">    cv::Mat Tcw = kf-&gt;GetPose();</span><br><span class="line"></span><br><span class="line">    <span class="comment">////Save the rotation matrix</span></span><br><span class="line">    <span class="comment">// for ( int i = 0; i &lt; Tcw.rows; i ++ )</span></span><br><span class="line">    <span class="comment">// &#123;</span></span><br><span class="line">    <span class="comment">//     for ( int j = 0; j &lt; Tcw.cols; j ++ )</span></span><br><span class="line">    <span class="comment">//     &#123;</span></span><br><span class="line">    <span class="comment">//         f.write((char*)&amp;Tcw.at&lt;float&gt;(i,j), sizeof(float));</span></span><br><span class="line">    <span class="comment">//         //cerr&lt;&lt;"Tcw.at&lt;float&gt;("&lt;&lt;i&lt;&lt;","&lt;&lt;j&lt;&lt;"):"&lt;&lt;Tcw.at&lt;float&gt;(i,j)&lt;&lt;endl;</span></span><br><span class="line">    <span class="comment">//     &#125;</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//Save the rotation matrix in Quaternion</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">float</span>&gt; Quat = Converter::toQuaternion(Tcw);</span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i ++ )</span><br><span class="line">        f.write((<span class="keyword">char</span>*)&amp;Quat[i],<span class="keyword">sizeof</span>(<span class="keyword">float</span>));</span><br><span class="line">    <span class="comment">//Save the translation matrix</span></span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i ++ )</span><br><span class="line">        f.write((<span class="keyword">char</span>*)&amp;Tcw.at&lt;<span class="keyword">float</span>&gt;(i,<span class="number">3</span>),<span class="keyword">sizeof</span>(<span class="keyword">float</span>));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//Save the size of the ORB features current KeyFrame</span></span><br><span class="line">    <span class="comment">//cerr&lt;&lt;"kf-&gt;N:"&lt;&lt;kf-&gt;N&lt;&lt;endl;</span></span><br><span class="line">    f.write((<span class="keyword">char</span>*)&amp;kf-&gt;N, <span class="keyword">sizeof</span>(kf-&gt;N));</span><br><span class="line">    <span class="comment">//Save each ORB features</span></span><br><span class="line">    <span class="keyword">for</span>( <span class="keyword">int</span> i = <span class="number">0</span>; i &lt; kf-&gt;N; i ++ )</span><br><span class="line">    &#123;</span><br><span class="line">        cv::KeyPoint kp = kf-&gt;mvKeys[i];</span><br><span class="line">        f.write((<span class="keyword">char</span>*)&amp;kp.pt.x, <span class="keyword">sizeof</span>(kp.pt.x));</span><br><span class="line">        f.write((<span class="keyword">char</span>*)&amp;kp.pt.y, <span class="keyword">sizeof</span>(kp.pt.y));</span><br><span class="line">        f.write((<span class="keyword">char</span>*)&amp;kp.size, <span class="keyword">sizeof</span>(kp.size));</span><br><span class="line">        f.write((<span class="keyword">char</span>*)&amp;kp.angle,<span class="keyword">sizeof</span>(kp.angle));</span><br><span class="line">        f.write((<span class="keyword">char</span>*)&amp;kp.response, <span class="keyword">sizeof</span>(kp.response));</span><br><span class="line">        f.write((<span class="keyword">char</span>*)&amp;kp.octave, <span class="keyword">sizeof</span>(kp.octave));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//Save the Descriptors of current ORB features</span></span><br><span class="line">        f.write((<span class="keyword">char</span>*)&amp;kf-&gt;mDescriptors.cols, <span class="keyword">sizeof</span>(kf-&gt;mDescriptors.cols)); <span class="comment">//kf-&gt;mDescriptors.cols is always 32 here.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; kf-&gt;mDescriptors.cols; j ++ )</span><br><span class="line">            f.write((<span class="keyword">char</span>*)&amp;kf-&gt;mDescriptors.at&lt;<span class="keyword">unsigned</span> <span class="keyword">char</span>&gt;(i,j), <span class="keyword">sizeof</span>(<span class="keyword">char</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//Save the index of MapPoints that corresponds to current ORB features</span></span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">int</span> mnIdx;</span><br><span class="line">        MapPoint* mp = kf-&gt;GetMapPoint(i);</span><br><span class="line">        <span class="keyword">if</span> (mp == <span class="literal">NULL</span>  )</span><br><span class="line">            mnIdx = ULONG_MAX;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            mnIdx = mmpnMapPointsIdx[mp];</span><br><span class="line"></span><br><span class="line">        f.write((<span class="keyword">char</span>*)&amp;mnIdx, <span class="keyword">sizeof</span>(mnIdx));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Save BoW for relocalization.</span></span><br><span class="line">    <span class="comment">// f.write((char*)&amp;kf-&gt;mBowVec, sizeof(kf-&gt;mBowVec));</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>GetMapPointsIdx()函数的实现过程为：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> Map::GetMapPointsIdx()</span><br><span class="line">&#123;</span><br><span class="line">    unique_lock&lt;mutex&gt; lock(mMutexMap);</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">auto</span> mp: mspMapPoints )</span><br><span class="line">    &#123;</span><br><span class="line">        mmpnMapPointsIdx[mp] = i;</span><br><span class="line">        i += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="（3）修改Converter相关文件"><a href="#（3）修改Converter相关文件" class="headerlink" title="（3）修改Converter相关文件"></a>（3）修改Converter相关文件</h4><p>关于旋转矩阵的存储可以通过四元数或矩阵的形式存储，如果使用四元数需要自定义一个矩阵和四元数相互转换的函数，在Converter.cc类里面添加如下函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cv::Mat Converter::toCvMat(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">float</span>&gt;&amp; v)</span><br><span class="line">&#123;</span><br><span class="line">    Eigen::Quaterniond q;</span><br><span class="line">    q.x() = v[<span class="number">0</span>];</span><br><span class="line">    q.y() = v[<span class="number">1</span>];</span><br><span class="line">    q.z() = v[<span class="number">2</span>];</span><br><span class="line">    q.w() = v[<span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">    Eigen::Matrix&lt;<span class="keyword">double</span>,<span class="number">3</span>,<span class="number">3</span>&gt; eigMat(q);</span><br><span class="line">    cv::Mat M = toCvMat(eigMat);</span><br><span class="line">    <span class="keyword">return</span> M;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在Converter.h里面加上如下函数定义</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">static cv::Mat toCvMat( const std::vector&lt;float&gt;&amp; v )；</span><br></pre></td></tr></table></figure>
+
+<h4 id="（4）System文件修改"><a href="#（4）System文件修改" class="headerlink" title="（4）System文件修改"></a>（4）System文件修改</h4><p>上述修改完成之后，还需要对system.h和system.cc文件进行修改，分别添加声明和定义。system.h文件：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SaveMap</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span> &amp;filename)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>system.cc文件:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//地图保存</span></span><br><span class="line"><span class="keyword">void</span> System::SaveMap(<span class="keyword">const</span> <span class="built_in">string</span> &amp;filename)</span><br><span class="line">&#123;</span><br><span class="line">    mpMap-&gt;Save(filename);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-测试"><a href="#1-3-测试" class="headerlink" title="1.3 测试"></a>1.3 测试</h3><p>做完这些修改之后，在Examples文件中对应的示例程序中加入地图存储代码即可实现地图存储功能。<br>如在ORB_SLAM2/Examples/RGB-D/rgbd_tum.cc文件的<strong>main函数</strong>中加入如下语句：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SLAM.SaveMap(<span class="string">"map.bin"</span>);</span><br></pre></td></tr></table></figure>
+
+<p>修改/ORB_SLAM2/Examples/ROS/ORB_SLAM2/src/ros_rgbd.cc文件中的<strong>main函数</strong>中加入如下语句： ### 实际上我们运行的是这个cc文件，上面那个可能改不改都行。。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SLAM.SaveMap(<span class="string">"map.bin"</span>);</span><br></pre></td></tr></table></figure>
+
+<p>重新编译ORB_SLAM2库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">cd ~/ORB_SLAM2</span><br><span class="line">chmod +x build.sh</span><br><span class="line">./build.sh </span><br><span class="line"></span><br><span class="line">source /opt/ros/kinetic/setup.sh</span><br><span class="line">source ~/.bashrc</span><br><span class="line">chmod +x build_ros.sh</span><br><span class="line">./build_ros.sh</span><br><span class="line">### 若出错，参考 ORB_slam实现</span><br></pre></td></tr></table></figure>
+
+<p>测试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">roscore</span><br><span class="line">### 新建终端</span><br><span class="line">roslaunch kinect2_bridge kinect2_bridge.launch</span><br><span class="line">### 新建终端</span><br><span class="line">cd ~/ORB_SLAM2/Examples/ROS/ORB_SLAM2</span><br><span class="line">rosrun ORB_SLAM2 RGBD /home/zj224/ORB_SLAM2/Vocabulary/ORBvoc.txt /home/zj224/ORB_SLAM2/Examples/RGB-D/kinect2.yaml</span><br><span class="line"></span><br><span class="line">### 建图完成后 ctrl+C 地图保存在/ORB_SLAM2/Examples/ROS/ORB_SLAM2</span><br></pre></td></tr></table></figure>
+
+
       
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
       
     </div>
     <div class="article-info article-info-index">
@@ -216,16 +282,24 @@
 
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/26/ORB_SLAM2地图保存与加载（1）/">展开全文 >></a>
-        </p>
-      
 
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2019/08/25/yilia 主题一些问题解决/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">yilia 主题一些问题解决</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -245,659 +319,30 @@
 
 
 
-
   
-    <article id="post-yilia 主题一些问题解决" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/25/yilia 主题一些问题解决/">yilia 主题一些问题解决</a>
-    </h1>
   
 
-        
-        <a href="/2019/08/25/yilia 主题一些问题解决/" class="archive-article-date">
-  	<time datetime="2019-08-24T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-公式无法显示"><a href="#1-公式无法显示" class="headerlink" title="1 公式无法显示"></a>1 公式无法显示</h2><p>yilia 目录下有一个_config.yml 编辑里面的</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#数学公式</span><br><span class="line"></span><br><span class="line">mathjax: false</span><br></pre></td></tr></table></figure>
-
-<p>将false 改为true即可</p>
-        
-          <a class="article-more-a" href="/2019/08/25/yilia 主题一些问题解决/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">hexo</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/ubuntu问题//" class="article-tag-list-link color4">ubuntu问题</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/25/yilia 主题一些问题解决/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-ORB_SLAM2 实现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/24/ORB_SLAM2 实现/">ORB_SLAM2 在ROS中使用KinectV2实现</a>
-    </h1>
   
 
-        
-        <a href="/2019/08/24/ORB_SLAM2 实现/" class="archive-article-date">
-  	<time datetime="2019-08-23T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-24</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="安装依赖包"><a href="#安装依赖包" class="headerlink" title="安装依赖包"></a>安装依赖包</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br><span class="line"></span><br><span class="line">sudo apt-get install libboost-all-dev libblas-dev liblapack-dev</span><br><span class="line"></span><br><span class="line">####  安装 Pangolin</span><br><span class="line">git clone git@github.com:stevenlovegrove/Pangolin.git</span><br><span class="line">cd Pangolin</span><br><span class="line">mkdir build</span><br><span class="line">cd build</span><br><span class="line">cmake ..</span><br><span class="line">cmake --build .</span><br><span class="line"></span><br><span class="line">##### 安装 eigen</span><br><span class="line">http://eigen.tuxfamily.org/index.php?title=Main_Page ### 下载eigen包 解压</span><br><span class="line">cd eigen</span><br><span class="line">mkdir build</span><br><span class="line">cd build</span><br><span class="line">cmake ..</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br><span class="line"></span><br><span class="line">sudo apt-get install libopencv-dev libeigen3-dev libqt4-dev qt4-qmake libqglviewer-dev libsuitesparse-dev libcxsparse3.1.4 libcholmod3.0.6</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2019/08/24/ORB_SLAM2 实现/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/24/ORB_SLAM2 实现/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-回环检测" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/22/回环检测/">回环检测</a>
-    </h1>
   
 
-        
-        <a href="/2019/08/22/回环检测/" class="archive-article-date">
-  	<time datetime="2019-08-21T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-什么是回环检测？"><a href="#1-什么是回环检测？" class="headerlink" title="1 什么是回环检测？"></a><strong>1 什么是回环检测？</strong></h2><ul>
-<li><p>在视觉slam问题中，位姿的估计往往是一个递推的过程，即由上一帧位姿解算当前帧位姿，因此其中的误差便这样一帧一帧的传递下去，也就是我们所说的累计误差。</p>
-</li>
-<li><p>我们的位姿约束都是与上一帧建立的，第五帧的位姿误差中便已经积累了前面四个约束中的误差。但如果我们发现第五帧位姿不一定要由第四帧推出来，还可以由第二帧推算出来，显然这样计算误差会小很多，因为只存在两个约束的误差了。像这样与之前的某一帧建立位姿约束关系就叫做回环。回环通过减少约束数，起到了减小累计误差的作用。</p>
-</li>
-<li><p>那么我们怎么知道可以由第二帧推算第五帧位姿呢？也许第一帧、第三帧也可以呢。确实，我们之所以用前一帧递推下一帧位姿，因为这两帧足够近，肯定可以建立两帧的约束，但是距离较远的两帧就不一定可以建立这样的约束关系了。找出可以建立这种位姿约束的历史帧，就是回环检测。</p>
-</li>
-</ul>
-        
-          <a class="article-more-a" href="/2019/08/22/回环检测/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/22/回环检测/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
-    <article id="post-ubuntu系统备份为ISO文件" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/21/ubuntu系统备份为ISO文件/">ubuntu系统备份为ISO文件</a>
-    </h1>
-  
-
-        
-        <a href="/2019/08/21/ubuntu系统备份为ISO文件/" class="archive-article-date">
-  	<time datetime="2019-08-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-安装systemback"><a href="#1-安装systemback" class="headerlink" title="1 安装systemback"></a>1 安装systemback</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:nemh/systemback</span><br><span class="line"></span><br><span class="line">sudo apt-get update</span><br><span class="line"></span><br><span class="line">sudo apt-get install systemback unionfs-fuse</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2019/08/21/ubuntu系统备份为ISO文件/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">系统</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/ubuntu问题//" class="article-tag-list-link color4">ubuntu问题</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/21/ubuntu系统备份为ISO文件/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-修改默认打开方式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/21/修改默认打开方式/">修改默认打开方式</a>
-    </h1>
-  
-
-        
-        <a href="/2019/08/21/修改默认打开方式/" class="archive-article-date">
-  	<time datetime="2019-08-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>刚装上Typaro时markdown文件没有默认用它打开，而且打开方式中也找不到，可以采用以下方法</li>
-<li>个人的打开方式保存在~/.local/share/applications/mimeapps.list</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gedit ~/.local/share/applications/mimeapps.list</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>修改<code>mimeapps.list</code> 文件，在文件末尾添加</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">text/markdown=typora.desktop</span><br></pre></td></tr></table></figure>
-
-<p>完成。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">系统</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/ubuntu问题//" class="article-tag-list-link color4">ubuntu问题</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/21/修改默认打开方式/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-激光雷达和ROS结合" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/21/激光雷达和ROS结合/">激光雷达和ROS结合</a>
-    </h1>
-  
-
-        
-        <a href="/2019/08/21/激光雷达和ROS结合/" class="archive-article-date">
-  	<time datetime="2019-08-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>网址：<a href="https://github.com/slamtec/rplidar_ros" target="_blank" rel="noopener">https://github.com/slamtec/rplidar_ros</a></strong></p>
-<h2 id="1-下载整个rplidar-ros包"><a href="#1-下载整个rplidar-ros包" class="headerlink" title="1 下载整个rplidar_ros包"></a>1 下载整个rplidar_ros包</h2><ul>
-<li><p>cd catkin_ws/src    ##到你的工作空间的src</p>
-</li>
-<li><p>git clone <a href="https://github.com/Slamtec/rplidar_ros.git" target="_blank" rel="noopener">https://github.com/Slamtec/rplidar_ros.git</a></p>
-</li>
-<li><p>cd ..</p>
-</li>
-<li><p>catkin_make</p>
-</li>
-<li><p>source ./devel/setup.bash</p></li></ul>
-        
-          <a class="article-more-a" href="/2019/08/21/激光雷达和ROS结合/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">硬件</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/21/激光雷达和ROS结合/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-激光雷达安装步骤" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/21/激光雷达安装步骤/">激光雷达安装步骤</a>
-    </h1>
-  
-
-        
-        <a href="/2019/08/21/激光雷达安装步骤/" class="archive-article-date">
-  	<time datetime="2019-08-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-安装SDK"><a href="#1-安装SDK" class="headerlink" title="1. 安装SDK"></a>1. 安装SDK</h2><h3 id="1-1-下载相关文件"><a href="#1-1-下载相关文件" class="headerlink" title="1.1 下载相关文件"></a>1.1 下载相关文件</h3><ul>
-<li>网址：<a href="http://go.slamtec.com/rplidar/a3/download" target="_blank" rel="noopener">http://go.slamtec.com/rplidar/a3/download</a></li>
-<li>我已将相关文件下载至<strong>思岚雷达</strong>文件夹</li>
-<li>后续工作可以按照我的说明，不必去看SDK说明，里面包含Windows、macos等安装，很杂。</li>
-</ul>
-<h3 id="1-2-编译SDK"><a href="#1-2-编译SDK" class="headerlink" title="1.2 编译SDK"></a>1.2 编译SDK</h3><ol>
-<li>解压SDK压缩包至根目录，重命名为<strong>rplidar_sdk</strong></li>
-<li>cd ~/rplidar_sdk/sdk</li>
-<li>make</li>
-</ol>
-<h3 id="1-3-交叉编译"><a href="#1-3-交叉编译" class="headerlink" title="1.3 交叉编译"></a>1.3 交叉编译</h3><ul>
-<li><p>我没有进行这一步骤，因为目前不知道是否需要</p>
-</li>
-<li><p>透过交叉编译特性,SDK 的编译系统支持编译产生其他平台/系统的二进制可<br>执行文件。<br>注意: 该功能仅针对使用 Makefile 的环境.<br>交叉编译特性将通过调用 cross_compile.sh 脚本激活。该脚本的调用语法如<br>下:<br>CROSS_COMPILE_PREFIX=<compile_prefix> ./cross_compile.sh<br>例如: CROSS_COMPILE_PREFIX=arm-linux-gnueabihf ./cross_compile.sh</compile_prefix></p></li></ul>
-        
-          <a class="article-more-a" href="/2019/08/21/激光雷达安装步骤/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">硬件</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/21/激光雷达安装步骤/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
+<script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  id: "http://LiDaiyang1205.github.io/2019/08/26/ORB_SLAM2地图保存与加载（1）/",
+  owner: 'LiDaiyang1205',
+  repo: 'lidaiyang1205.github.io',
+  oauth: {
+    client_id: '475216e46d30d7abf884',
+    client_secret: 'b2579e07ba6a95e1297e8c153a08c2c218ee067b',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
   
 
 
@@ -920,8 +365,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
