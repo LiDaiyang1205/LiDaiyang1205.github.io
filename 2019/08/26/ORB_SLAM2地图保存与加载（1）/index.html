@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="LDY_blog">
 <meta property="og:description" content="本文记录了ORB_SLAM2中地图保存的过程。参考博客：https://blog.csdn.net/qq_34254510/article/details/79969046http://www.cnblogs.com/mafuqiang/p/6972841.htmlhttps://blog.csdn.net/felaim/article/details/79667635https://blog.c">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-08-26T12:24:53.155Z">
+<meta property="og:updated_time" content="2019-08-27T11:11:52.241Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ORB_SLAM2地图保存与加载（1）">
 <meta name="twitter:description" content="本文记录了ORB_SLAM2中地图保存的过程。参考博客：https://blog.csdn.net/qq_34254510/article/details/79969046http://www.cnblogs.com/mafuqiang/p/6972841.htmlhttps://blog.csdn.net/felaim/article/details/79667635https://blog.c">
@@ -216,10 +216,8 @@
 <p>system.cc文件:</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//地图保存</span></span><br><span class="line"><span class="keyword">void</span> System::SaveMap(<span class="keyword">const</span> <span class="built_in">string</span> &amp;filename)</span><br><span class="line">&#123;</span><br><span class="line">    mpMap-&gt;Save(filename);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="1-3-测试"><a href="#1-3-测试" class="headerlink" title="1.3 测试"></a>1.3 测试</h3><p>做完这些修改之后，在Examples文件中对应的示例程序中加入地图存储代码即可实现地图存储功能。<br>如在ORB_SLAM2/Examples/RGB-D/rgbd_tum.cc文件的<strong>main函数</strong>中加入如下语句：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SLAM.SaveMap(<span class="string">"map.bin"</span>);</span><br></pre></td></tr></table></figure>
-
-<p>修改/ORB_SLAM2/Examples/ROS/ORB_SLAM2/src/ros_rgbd.cc文件中的<strong>main函数</strong>中加入如下语句： ### 实际上我们运行的是这个cc文件，上面那个可能改不改都行。。</p>
+<h3 id="1-3-测试"><a href="#1-3-测试" class="headerlink" title="1.3 测试"></a>1.3 测试</h3><p>做完这些修改之后，在Examples文件中对应的示例程序中加入地图存储代码即可实现地图存储功能。</p>
+<p>修改/ORB_SLAM2/Examples/ROS/ORB_SLAM2/src/ros_rgbd.cc文件中的<strong>main函数</strong>中加入如下语句：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SLAM.SaveMap(<span class="string">"map.bin"</span>);</span><br></pre></td></tr></table></figure>
 
 <p>重新编译ORB_SLAM2库</p>
@@ -291,6 +289,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2019/08/27/ORB_SLAM2地图保存与加载（2）/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          ORB_SLAM2地图保存与加载（2）
+        
+      </div>
+    </a>
   
   
     <a href="/2019/08/25/yilia 主题一些问题解决/" id="article-nav-older" class="article-nav-link-wrap">

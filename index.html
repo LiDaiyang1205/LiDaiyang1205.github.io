@@ -156,6 +156,96 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-ORB_SLAM2地图保存与加载（2）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/27/ORB_SLAM2地图保存与加载（2）/">ORB_SLAM2地图保存与加载（2）</a>
+    </h1>
+  
+
+        
+        <a href="/2019/08/27/ORB_SLAM2地图保存与加载（2）/" class="archive-article-date">
+  	<time datetime="2019-08-26T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文记录了ORB_SLAM2中地图加载的过程。<br>参考博客：<br><a href="https://blog.csdn.net/qq_34254510/article/details/79969046" target="_blank" rel="noopener">https://blog.csdn.net/qq_34254510/article/details/79969046</a><br><a href="http://www.cnblogs.com/mafuqiang/p/6972841.html" target="_blank" rel="noopener">http://www.cnblogs.com/mafuqiang/p/6972841.html</a><br><a href="https://blog.csdn.net/felaim/article/details/79667635" target="_blank" rel="noopener">https://blog.csdn.net/felaim/article/details/79667635</a><br><a href="https://blog.csdn.net/u014709760/article/details/86319090" target="_blank" rel="noopener">https://blog.csdn.net/u014709760/article/details/86319090</a></p>
+<h2 id="2-地图加载"><a href="#2-地图加载" class="headerlink" title="2 地图加载"></a>2 地图加载</h2><h3 id="2-1-源码修改"><a href="#2-1-源码修改" class="headerlink" title="2.1 源码修改"></a>2.1 源码修改</h3><p>地图加载部分需要修改的较多，所以按所需修改的文件来进行说明。</p>
+<h4 id="（1）Map相关文件修改"><a href="#（1）Map相关文件修改" class="headerlink" title="（1）Map相关文件修改"></a>（1）Map相关文件修改</h4><p>在Map.h文件中声明地图加载函数、地图点加载函数和关键帧加载函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//加载地图信息</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Load</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span> &amp;filename,SystemSetting* mySystemSetting)</span></span>;</span><br><span class="line">    <span class="function">MapPoint* <span class="title">LoadMapPoint</span><span class="params">(ifstream &amp;f)</span></span>;</span><br><span class="line">    <span class="function">KeyFrame* <span class="title">LoadKeyFrame</span><span class="params">(ifstream &amp;f,SystemSetting* mySystemSetting)</span></span>;</span><br></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2019/08/27/ORB_SLAM2地图保存与加载（2）/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/08/27/ORB_SLAM2地图保存与加载（2）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-ORB_SLAM2地图保存与加载（1）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
