@@ -19,7 +19,7 @@
 <meta property="og:image" content="http://lidaiyang1205.github.io/2019/08/22/回环检测/1.png">
 <meta property="og:image" content="http://lidaiyang1205.github.io/2019/08/22/回环检测/2.png">
 <meta property="og:image" content="http://lidaiyang1205.github.io/2019/08/22/回环检测/3.png">
-<meta property="og:updated_time" content="2019-08-25T10:35:58.857Z">
+<meta property="og:updated_time" content="2019-08-29T12:34:52.124Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="回环检测">
 <meta name="twitter:description" content="1 什么是回环检测？ 在视觉slam问题中，位姿的估计往往是一个递推的过程，即由上一帧位姿解算当前帧位姿，因此其中的误差便这样一帧一帧的传递下去，也就是我们所说的累计误差。  我们的位姿约束都是与上一帧建立的，第五帧的位姿误差中便已经积累了前面四个约束中的误差。但如果我们发现第五帧位姿不一定要由第四帧推出来，还可以由第二帧推算出来，显然这样计算误差会小很多，因为只存在两个约束的误差了。像这样与之前">
@@ -196,14 +196,15 @@
 
 
 <h2 id="2-回环检测的意义"><a href="#2-回环检测的意义" class="headerlink" title="2 回环检测的意义"></a>2 回环检测的意义</h2><ul>
-<li>举例来说，假设我们在前端提取了特征，然后忽略掉特征点,在后端使用 Pose Graph优化整个轨迹，如图 12-1(a) 所示。由于前端给出的只是局部的位姿间约束，比方说，可能是$x_1 − x_2$， $x_ 2 − x _3 $等等。但是，由于 $x _1$ 的估计存在误差,而 $x_2 $是根据 $x _1$ 决定的,$x_3$是由$x_2 $决定的。以此类推，误差就会被累积起来，使得后端优化的结果如图 12-1 (b)所示，慢慢地趋向不准确。而回环检测则可以消除这种累积误差，如图12-1 (c)所示。</li>
+<li>举例来说，假设我们在前端提取了特征，然后忽略掉特征点，在后端使用 Pose Graph优化整个轨迹，如图 12-1(a) 所示。由于前端给出的只是局部的位姿间约束，比方说，可能是$x_1 − x_2$， $x_ 2 − x _3 $等等。但是，由于 $x _1$ 的估计存在误差,而 $x_2 $是根据 $x _1$ 决定的,$x_3$是由$x_2 $决定的。以此类推，误差就会被累积起来，使得后端优化的结果如图 12-1 (b)所示，慢慢地趋向不准确。而回环检测则可以消除这种累积误差，如图12-1 (c)所示。</li>
 </ul>
 <p><img src="/2019/08/22/回环检测/1.png" alt="a"></p>
 <ul>
 <li>回环检测对于 SLAM 系统意义重大。它关系到我们估计的轨迹和地图在长时间下的正确性。另一方面，由于回环检测提供了当前数据与所有历史数据的关联，在跟踪算法丢失之后，我们还可以利用回环检测进行重定位。因此，回环检测对整个 SLAM 系统精度与鲁棒性的提升，是非常明显的。甚至在某些时候，我们把仅有前端和局部后端的系统称为VO，而把带有回环检测和全局后端的称为 SLAM。</li>
 </ul>
 <h2 id="3-回环检测的方法"><a href="#3-回环检测的方法" class="headerlink" title="3 回环检测的方法"></a>3 回环检测的方法</h2><ul>
-<li>回环检测的方法有很多种。因为大多方法实现效果很差，这里只讲最主流的基于外观的回环检测方法。</li>
+<li>回环的产生是因为相机<strong>经过了同一个地方，采集到了相似的数据</strong>。而回环检测的关键，就是如何有效地检测出<strong>相机经过同一个地方</strong>这件事。</li>
+<li>回环检测的方法大致分为两种思路：基于里程计的几何关系(Odometry based)，或基于外观(Appearance based)。这里只讲最主流的<strong>基于外观</strong>的回环检测方法。</li>
 <li>它和前端后端的估计都无关，仅根据<strong>两张图像的相似性</strong>确定回环检测关系。这种做法摆脱了累计误差，使回环检测模块成为 SLAM 系统中一个相对独立的模块（当然前端可以为它提供特征点）。</li>
 </ul>
 <h3 id="3-1-准确率和召回率-Precision-amp-Recall"><a href="#3-1-准确率和召回率-Precision-amp-Recall" class="headerlink" title="3.1 准确率和召回率(Precision &amp; Recall)"></a>3.1 准确率和召回率(Precision &amp; Recall)</h3><p><img src="/2019/08/22/回环检测/2.png" alt="b"><br>$$<br>Precision = TP/(TP+FP)  ,  Recall = TP/(TP+FN)<br>$$</p>
@@ -220,7 +221,7 @@
 <li>最为直观的想法就是直接对比两个图像的矩阵，将两个图像相减，但是由于灰度是一种不稳定的测量值，严重受环境光照和相机曝光的影响，此外如果相机视角发生少量变化，同样的物体，同样的光照，像素发生了位移就会导致灰度值产生巨大差异。</li>
 <li>词袋，也就是 Bag-of-Words（BoW），目的是用”图像上有哪几种特征“来描述一个图像。例如，如果某个照片，我们说里面有一个人、一辆车；而另一张则有两个人、一只狗。根据这样的描述，可以度量这两个图像的相似性。</li>
 <li>”人、车、狗“就是<strong>单词</strong>（Word）；许多单词放在一起组成<strong>字典</strong>（dictionary）。</li>
-<li>“人”、“车”、“狗”都是记录在字典中的单词，我们不妨记为 $w_1,w_2,w_3$ 。然后,对于任意图像 A，根据它们含有的单词，可记为: $A=1\times w_1+1\times w_2+0\times w_3$ （即，$[1,1,0]^T$）来表示图像A中有一个“人”，一辆“车”，没有“狗”。这种方式只考虑<strong>有没有</strong>，不考虑<strong>在哪儿</strong>，能保证相机发生少量运动时，描述向量不发生变化。</li>
+<li>“人”、“车”、“狗”都是记录在字典中的单词，我们不妨记为 $w_1,w_2,w_3$ 。然后，对于任意图像 A，根据它们含有的单词，可记为: $A=1\times w_1+1\times w_2+0\times w_3$ （即，$[1,1,0]^T$）来表示图像A中有一个“人”，一辆“车”，没有“狗”。这种方式只考虑<strong>有没有</strong>，不考虑<strong>在哪儿</strong>，能保证相机发生少量运动时，描述向量不发生变化。</li>
 </ul>
 <h3 id="3-3-字典"><a href="#3-3-字典" class="headerlink" title="3.3 字典"></a>3.3 字典</h3><ul>
 <li><p>按照前面的介绍，字典由很多单词组成，而每一个单词代表了一个概念。一个单词与一个单独的特征点不同，它不是从单个图像上提取出来的，而是某一类特征的组合。所以，字典生成问题类似于一个聚类(Clustering)问题。</p>
@@ -256,7 +257,10 @@
 <li><p>考虑权重以后，对于某个图像 A，它的特征点可对应到许多个单词，组成它的 Bag-of-Words:</p>
 <p>$$A=[(w_1,\eta_1),(w_2,\eta_2),\cdots,(w_N,\eta_N)]=v_A$$</p>
 </li>
-<li><p>给定 $v_A$和 $v_B$<strong>计算差异</strong>：$s(v_A-v_B)=2\sum_{i=1}^{N}{|v_{Ai}|+|v_{Bi}|-|v_{Ai}-v_{Bi}|}$</p>
+<li><p>给定 $v_A$和 $v_B$<strong>计算差异</strong>：$s(v_A-v_B)=$$\sqrt{\sum_{i=1}^{N}{|v_{Ai}-v_{Bi}|^2}}$  欧氏距离；余弦相似度。。。</p>
+</li>
+<li><p><strong>相似性评分的处理</strong></p>
+<p>对于一些相识度本身就很高的场景，单纯的计算相识度、设置阈值是很难取得好的效果的。这时候需要<strong>相对</strong>相似度的评分处理。取一个先验相似度 $s(v_t,v_{t-\Delta t})$，它表示某时刻关键帧图像与上一时刻的关键帧的相似性。然后，其他的分值都参照这个值进行归一化:$s(v_t,v_{t_j})’=s(v_t,v_{t_j})/s(v_t,v_{t-\Delta t})$，再设置阈值。</p>
 </li>
 </ul>
 <h2 id="4-回环检测的实现"><a href="#4-回环检测的实现" class="headerlink" title="4 回环检测的实现"></a>4 回环检测的实现</h2><h3 id="主要使用的库"><a href="#主要使用的库" class="headerlink" title="主要使用的库"></a>主要使用的库</h3><p>基础库：DBoW3    <a href="https://github.com/rmsalinas/DBow3" target="_blank" rel="noopener">https://github.com/rmsalinas/DBow3</a></p>
@@ -501,6 +505,10 @@ MathJax.Hub.Queue(function() {
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">语言学习</a>
+              </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">算法</a>

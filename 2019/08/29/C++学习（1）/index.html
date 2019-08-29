@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://LiDaiyang1205.github.io">
-  <title>yilia 主题一些问题解决 | LDY_blog</title>
+  <title>C++学习（1） | LDY_blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1 公式无法显示yilia 目录下有一个_config.yml 编辑里面的 123#数学公式mathjax: false  将false 改为true即可">
-<meta name="keywords" content="hexo">
+  <meta name="description" content="1 命名空间避免命名冲突 std是C++标准库的命名空间（ namespace）名 using namespace std表示打开std命名空间 12345678910111213#include &amp;lt;iostream&amp;gt;using namespace std;int main() &amp;#123;     cout &amp;lt;&amp;lt; &quot;Hello!&quot; &amp;lt;&amp;lt; endl;     c">
+<meta name="keywords" content="语言学习">
 <meta property="og:type" content="article">
-<meta property="og:title" content="yilia 主题一些问题解决">
-<meta property="og:url" content="http://LiDaiyang1205.github.io/2019/08/25/yilia 主题一些问题解决/index.html">
+<meta property="og:title" content="C++学习（1）">
+<meta property="og:url" content="http://LiDaiyang1205.github.io/2019/08/29/C++学习（1）/index.html">
 <meta property="og:site_name" content="LDY_blog">
-<meta property="og:description" content="1 公式无法显示yilia 目录下有一个_config.yml 编辑里面的 123#数学公式mathjax: false  将false 改为true即可">
+<meta property="og:description" content="1 命名空间避免命名冲突 std是C++标准库的命名空间（ namespace）名 using namespace std表示打开std命名空间 12345678910111213#include &amp;lt;iostream&amp;gt;using namespace std;int main() &amp;#123;     cout &amp;lt;&amp;lt; &quot;Hello!&quot; &amp;lt;&amp;lt; endl;     c">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-08-25T09:48:27.958Z">
+<meta property="og:updated_time" content="2019-08-28T13:51:46.556Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="yilia 主题一些问题解决">
-<meta name="twitter:description" content="1 公式无法显示yilia 目录下有一个_config.yml 编辑里面的 123#数学公式mathjax: false  将false 改为true即可">
+<meta name="twitter:title" content="C++学习（1）">
+<meta name="twitter:description" content="1 命名空间避免命名冲突 std是C++标准库的命名空间（ namespace）名 using namespace std表示打开std命名空间 12345678910111213#include &amp;lt;iostream&amp;gt;using namespace std;int main() &amp;#123;     cout &amp;lt;&amp;lt; &quot;Hello!&quot; &amp;lt;&amp;lt; endl;     c">
   
     <link rel="alternative" href="/atom.xml" title="LDY_blog" type="application/atom+xml">
   
@@ -159,50 +159,34 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-yilia 主题一些问题解决" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-C++学习（1）" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      yilia 主题一些问题解决
+      C++学习（1）
     </h1>
   
 
         
-        <a href="/2019/08/25/yilia 主题一些问题解决/" class="archive-article-date">
-  	<time datetime="2019-08-24T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-25</time>
+        <a href="/2019/08/29/C++学习（1）/" class="archive-article-date">
+  	<time datetime="2019-08-28T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-29</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="1-公式无法显示"><a href="#1-公式无法显示" class="headerlink" title="1 公式无法显示"></a>1 公式无法显示</h2><p>yilia 目录下有一个_config.yml 编辑里面的</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#数学公式</span><br><span class="line"></span><br><span class="line">mathjax: false</span><br></pre></td></tr></table></figure>
+        <h2 id="1-命名空间"><a href="#1-命名空间" class="headerlink" title="1 命名空间"></a>1 命名空间</h2><p>避免命名冲突</p>
+<p>std是C++标准库的命名空间（ namespace）名</p>
+<p>using namespace std表示打开std命名空间</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">     <span class="built_in">cout</span> &lt;&lt; <span class="string">"Hello!"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">     <span class="built_in">cout</span> &lt;&lt; <span class="string">"Welcome to c++!"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">     <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>将false 改为true即可</p>
-<a id="more"></a>
-
-
-
-<h2 id="2-修改头像"><a href="#2-修改头像" class="headerlink" title="2 修改头像"></a>2 修改头像</h2><p>yilia 目录下有一个_config.yml 编辑里面的</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#你的头像url</span><br><span class="line">avatar: /img/1.jpg</span><br></pre></td></tr></table></figure>
-
-<p>将头像图片放在yilia/source/img中即可</p>
-<h2 id="3-上传图片"><a href="#3-上传图片" class="headerlink" title="3 上传图片"></a>3 上传图片</h2><p>配置 hexo 的_config.yml </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">post_asset_folder: true</span><br></pre></td></tr></table></figure>
-
-<p>安装上传本地图片插件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-asset-image --save   ### 先cd 到你的文件夹</span><br></pre></td></tr></table></figure>
-
-<p>新建博客</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo n &quot;xxx&quot;</span><br><span class="line"># 在/source/_posts路径下会生成一个xxx.md和xxx文件</span><br></pre></td></tr></table></figure>
-
-<p>在md文件中引入图片，将你的图片放入xxx文件夹中</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![你想输入的替代文字](xxxx/图片名.jpg)</span><br></pre></td></tr></table></figure>
-
+<p><strong>运行结果：</strong></p>
+<p>Hello!</p>
+<p>Welcome to c++！</p>
 
       
 
@@ -237,7 +221,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">hexo</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">语言学习</a>
         		</li>
       		
 		</ul>
@@ -249,7 +233,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/ubuntu问题//" class="article-tag-list-link color4">ubuntu问题</a>
+        			<a href="/categories/C//" class="article-tag-list-link color4">C++</a>
         		</li>
       		
 		</ul>
@@ -267,18 +251,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/08/26/ORB_SLAM2地图保存与加载（1）/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          ORB_SLAM2地图保存与加载（1）
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/08/24/ORB_SLAM2 实现/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">ORB_SLAM2 在ROS中使用KinectV2实现</div>
+    <a href="/2019/08/27/ORB_SLAM2地图保存与加载（2）/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">ORB_SLAM2地图保存与加载（2）</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -317,7 +292,7 @@
 <script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
 var gitment = new Gitment({
-  id: "http://LiDaiyang1205.github.io/2019/08/25/yilia 主题一些问题解决/",
+  id: "http://LiDaiyang1205.github.io/2019/08/29/C++学习（1）/",
   owner: 'LiDaiyang1205',
   repo: 'lidaiyang1205.github.io',
   oauth: {
