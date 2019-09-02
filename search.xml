@@ -5,10 +5,10 @@
     <url>%2F2019%2F08%2F29%2FC%2B%2B%E5%AD%A6%E4%B9%A0%EF%BC%881%EF%BC%89%2F</url>
     <content type="text"><![CDATA[1 命名空间避免命名冲突 std是C++标准库的命名空间（ namespace）名 using namespace std表示打开std命名空间 12345678910111213#include &lt;iostream&gt;using namespace std;int main() &#123; cout &lt;&lt; "Hello!" &lt;&lt; endl; cout &lt;&lt; "Welcome to c++!" &lt;&lt; endl; return 0;&#125; 运行结果： Hello! Welcome to c++！]]></content>
       <categories>
-        <category>C++</category>
+        <category>语言学习</category>
       </categories>
       <tags>
-        <tag>语言学习</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -19,7 +19,7 @@
         <category>slam</category>
       </categories>
       <tags>
-        <tag>算法</tag>
+        <tag>slam实现</tag>
       </tags>
   </entry>
   <entry>
@@ -30,7 +30,7 @@
         <category>slam</category>
       </categories>
       <tags>
-        <tag>算法</tag>
+        <tag>slam实现</tag>
       </tags>
   </entry>
   <entry>
@@ -38,7 +38,7 @@
     <url>%2F2019%2F08%2F25%2Fyilia%20%E4%B8%BB%E9%A2%98%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%2F</url>
     <content type="text"><![CDATA[1 公式无法显示yilia 目录下有一个_config.yml 编辑里面的 123#数学公式mathjax: false 将false 改为true即可 2 修改头像yilia 目录下有一个_config.yml 编辑里面的 12#你的头像urlavatar: /img/1.jpg 将头像图片放在yilia/source/img中即可 3 上传图片配置 hexo 的_config.yml 1post_asset_folder: true 安装上传本地图片插件 1npm install hexo-asset-image --save ### 先cd 到你的文件夹 新建博客 12hexo n &quot;xxx&quot;# 在/source/_posts路径下会生成一个xxx.md和xxx文件 在md文件中引入图片，将你的图片放入xxx文件夹中 1![你想输入的替代文字](xxxx/图片名.jpg)]]></content>
       <categories>
-        <category>ubuntu问题</category>
+        <category>问题解决</category>
       </categories>
       <tags>
         <tag>hexo</tag>
@@ -52,7 +52,7 @@
         <category>slam</category>
       </categories>
       <tags>
-        <tag>算法</tag>
+        <tag>slam实现</tag>
       </tags>
   </entry>
   <entry>
@@ -63,7 +63,7 @@
         <category>slam</category>
       </categories>
       <tags>
-        <tag>算法</tag>
+        <tag>slam理论</tag>
       </tags>
   </entry>
   <entry>
@@ -71,10 +71,10 @@
     <url>%2F2019%2F08%2F21%2Fubuntu%E7%B3%BB%E7%BB%9F%E5%A4%87%E4%BB%BD%E4%B8%BAISO%E6%96%87%E4%BB%B6%2F</url>
     <content type="text"><![CDATA[1 安装systemback12345sudo add-apt-repository ppa:nemh/systembacksudo apt-get updatesudo apt-get install systemback unionfs-fuse 2 制作当前系统的镜像该软件还可以设置还原点，进行系统还原，操作很简单，一键设置一键还原，这里不再介绍 打开systemback 输入密码 选择Live system create 勾选 include the user data files 点击create new 生成备份结束后，选择备份文件，点击Convert to ISO 到你保存的路径下就能看到整体打包的系统ISO文件。 3 问题处理我进行完成2.5后，无法转为ISO文件，原因为系统大小大于4GB，解决办法如下： 创建sblive文件夹并解压通过systemback生成的.sblive 文件至sblive文件夹: 12mkdir sblivetar -xf /home/systemback_live_2019-08-16.sblive -C sblive ## 中间为你创建的镜像 重命名 syslinux 至 isolinux: 12mv sblive/syslinux/syslinux.cfg sblive/syslinux/isolinux.cfgmv sblive/syslinux sblive/isolinux 安装 cdtools 123456789101112sudo apt-get install aria2 aria2c -s 10 https://nchc.dl.sourceforge.net/project/cdrtools/alpha/cdrtools-3.02a07.tar.gz tar -xzvf cdrtools-3.02a07.tar.gz cd /home/hadoop/cdrtools-3.02 make sudo make install 生成 ISO 文件: 123cd ~ /opt/schily/bin/mkisofs -iso-level 3 -r -V sblive -cache-inodes -J -l -b isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -c isolinux/boot.cat -o sblive.iso sblive 等待执行完成，我们便可在主文件夹下看见生成的sblive.iso镜像文件了 该部分来自：本文链接：https://blog.csdn.net/qq_39940390/article/details/94980229 4 系统安装1 虚拟机 VM14虚拟机的安装包和ubuntu16.04的ISO文件在实验室三星U盘里 安装过程可以参考 https://blog.csdn.net/qq_28090573/article/details/82724910，非常详细 我尝试了在虚拟机中安装我自己生成的ISO文件，但是卡在登陆界面无法进入，在网上查了很久尝试了很多方法也没能解决，最后选择了安装原生ubuntu的ISO文件 2 双系统未尝试安装 总结 systemback 的系统还原功能亲测可用，但是还原点会占一定的存储空间，建议只在重大环境安装前后备份使用 systemback 的ISO文件刻录功能亲测可用，但是得到的ISO文件在安装过程中存在问题，目前没有证明得到的ISO文件可以完成安装（虽然网上很多成功的。。。。）]]></content>
       <categories>
-        <category>ubuntu问题</category>
+        <category>问题解决</category>
       </categories>
       <tags>
-        <tag>系统</tag>
+        <tag>Ubuntu系统</tag>
       </tags>
   </entry>
   <entry>
@@ -82,10 +82,10 @@
     <url>%2F2019%2F08%2F21%2F%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%89%93%E5%BC%80%E6%96%B9%E5%BC%8F%2F</url>
     <content type="text"><![CDATA[刚装上Typaro时markdown文件没有默认用它打开，而且打开方式中也找不到，可以采用以下方法 个人的打开方式保存在~/.local/share/applications/mimeapps.list 1sudo gedit ~/.local/share/applications/mimeapps.list 修改mimeapps.list 文件，在文件末尾添加 1text/markdown=typora.desktop 完成。]]></content>
       <categories>
-        <category>ubuntu问题</category>
+        <category>问题解决</category>
       </categories>
       <tags>
-        <tag>系统</tag>
+        <tag>Ubuntu系统</tag>
       </tags>
   </entry>
   <entry>
@@ -96,7 +96,7 @@
         <category>slam</category>
       </categories>
       <tags>
-        <tag>硬件</tag>
+        <tag>slam实现</tag>
       </tags>
   </entry>
   <entry>
@@ -107,7 +107,7 @@
         <category>slam</category>
       </categories>
       <tags>
-        <tag>硬件</tag>
+        <tag>slam实现</tag>
       </tags>
   </entry>
 </search>
