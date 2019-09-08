@@ -1,9 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[C++学习（1）]]></title>
+    <title><![CDATA[C++学习（3）--类与对象]]></title>
+    <url>%2F2019%2F09%2F05%2FC%2B%2B%E5%AD%A6%E4%B9%A0%EF%BC%883%EF%BC%89%2F</url>
+    <content type="text"><![CDATA[1 面向对象程序设计的基本特点 抽象：解释类与对象之间关系的词。类与对象之间的关系就是抽象的关系。一句话来说明：类是对象的抽象，而对象则是类得特例，即类的具体表现形式。 封装：封装是面向对象编程的核心思想。将对象的属性和行为封装起来,其载体就是类,类通常会对客户隐藏其实现细节,这就是封装的思想。 继承：子类继承父类，可以继承父类原有的属性和方法，也可以增加其他的属性和方法，可以直接重写父类中的某些方法。 多态：多态性一般是指在父类中定义的方法被子类继承后，可以表现出不同的行为。这使得同一个方法在父类及其各个子类中具有不同的语义。 2 类和对象2.1 类的定义语法形式如下： 123456789class 类名称&#123;public: 外部接口private: 私有成员protected: 保护型成员&#125; 2.2类成员的访问控制public:公有类型，类的外部接口。 private:私有类型，只能被本类的成员函数访问，来自类外部的任何访问都是非法的。 protected:保护类型，和私有类型类似，差别在于继承过程中对产生的新类的影响不同。 2.3 对象类的对象是该类的某一特定实体，即类类型的变量。 声明形式： 12类名 对象；Clock myClock； 类中成员互访：直接使用成员名 类外访问：使用“对象名.成员名” 方式访问public属性成员 2.4 类的成员函数实现形式 1234返回值类型 类名：：函数成员名（参数表）&#123; 函数体&#125; 例子 12345678910111213141516171819202122232425262728293031323334353637//设置时钟#include &lt;iostream&gt;using namespace std;class Clock&#123; //时钟类的定义public: //外部接口 void setTime(int newH=0, int newM=0, int newS=0); void showTime();private: //私有数据成员 int hour,minute,second;&#125;;//时钟类函数的实现void Clock::setTime(int newH, int newM, int newS) &#123; hour = newH; minute = newM; second = newS;&#125;inline void Clock::showTime() &#123; cout&lt;&lt;hour&lt;&lt;":"&lt;&lt;minute&lt;&lt;":"&lt;&lt;second&lt;&lt;endl;&#125;//主函数int main()&#123; Clock myClock; //定义对象myClock cout&lt;&lt;"First time set and output:"&lt;&lt;endl; myClock.setTime(); myClock.showTime(); cout&lt;&lt;"Second time set and output:"&lt;&lt;endl; myClock.setTime(22,10,30); myClock.showTime(); return (0);&#125; 3 构造函数和析构函数3.1 构造函数构造函数的作用是在对象被创建时利用特定的值构造对象，将对象初始化为一个特定的状态。 123456789101112131415161718192021222324252627282930313233343536373839404142434445//设置时钟#include &lt;iostream&gt;using namespace std;class Clock&#123; //时钟类的定义public: //外部接口 Clock (int newH, int newM, int newS); //构造函数 void setTime(int newH=0, int newM=0, int newS=0); void showTime();private: //私有数据成员 int hour,minute,second;&#125;;//构造函数的实现Clock::Clock(int newH, int newM, int newS) &#123; hour = newH; minute = newM; second = newS;&#125;//时钟类函数的实现void Clock::setTime(int newH, int newM, int newS) &#123; hour = newH; minute = newM; second = newS;&#125;inline void Clock::showTime() &#123; cout&lt;&lt;hour&lt;&lt;":"&lt;&lt;minute&lt;&lt;":"&lt;&lt;second&lt;&lt;endl;&#125;//主函数int main()&#123; Clock myClock(1,2,3); //定义对象myClock cout&lt;&lt;"First time set and output:"&lt;&lt;endl; myClock.showTime(); cout&lt;&lt;"Second time set and output:"&lt;&lt;endl; myClock.setTime(22,10,30); myClock.showTime(); return (0);&#125; 3.2 复制构造函数复制构造函数是一种特殊的构造函数，其形参是本类的对象的引用。作用是使用一个已经存在的对象（由复制构造函数的参数指定），去初始化同类的一个新的对象。 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748//设置时钟#include &lt;iostream&gt;using namespace std;class Point&#123; //Point 类的定义public: // 外部接口 Point(int xx=0, int yy=0)&#123; // 构造函数 x=xx; y=yy; &#125; Point(Point &amp;p); //复制构造函数 int getX()&#123; return x; &#125; int getY()&#123; return y; &#125;private: // 私有数据 int x, y;&#125;;// 成员函数的实现Point::Point(Point &amp;p) &#123; x=p.x; y=p.y; cout&lt;&lt;"呼叫复制构造函数"&lt;&lt;endl;&#125;// 形参为Point类对象的函数void fun1(Point p)&#123; cout&lt;&lt;p.getX()&lt;&lt;endl;&#125;//返回值为Point类对象的函数Point fun2()&#123; Point a(1,2); return a;&#125;// 主函数int main()&#123; Point a(4,5); //第一个对象a Point b=a; //用法1，用a初始化b cout&lt;&lt;b.getX()&lt;&lt;endl; fun1(b); // 用法2，对象b作为fun1的实参 b=fun2(); // 用法3，函数的返回值是类对象，函数返回时，调用复制构造函数 cout&lt;&lt;b.getX()&lt;&lt;endl; return (0);&#125; 3.3 析构函数作用与构造函数正好相反，用来完成对象被删除前的一些清理工作。在对象生存期即将结束的时刻被自动调用，不接受任何参数，也没有返回值。 4 类的组合类的组合描述的是一个类内嵌套其他类的对象作为成员的情况，是一种包含与被包含的关系。 当创建类的对象时，如果这个类具有内嵌对象成员，那么各个内嵌对象将首先被自动创建。在创建对象时，既要对本类的基本类型数据成员进行初始化，又要对内嵌对象成员进行初始化。 例子 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768//Line 类的例子#include &lt;iostream&gt;#include &lt;cmath&gt; //数学函数using namespace std;class Point&#123; //Point 类定义public: Point(int xx=0, int yy=0)&#123; // 构造函数 x=xx; y=yy; &#125; Point(Point &amp;p); //复制构造函数 int getX()&#123; return x; &#125; int getY()&#123; return y; &#125;private: // 私有数据 int x, y;&#125;;// 成员函数的实现Point::Point(Point &amp;p) &#123; x=p.x; y=p.y; cout&lt;&lt;"呼叫复制构造函数"&lt;&lt;endl;&#125;// 类的组合class Line&#123; // Line类的定义public: Line(Point xp1, Point xp2); Line(Line &amp;l); double getLen() &#123; return len;&#125;private: Point p1, p2; double len;&#125;;// 组合类的构造函数Line::Line(Point xp1, Point xp2) :p1(xp1),p2(xp2)&#123; cout&lt;&lt;"呼叫Line的构造函数:"&lt;&lt;endl; double x= static_cast&lt;double&gt;(p1.getX()-p2.getX()); double y= static_cast&lt;double&gt;(p1.getY()-p2.getY()); len = sqrt(x*x+y*y);&#125;// 组合类的复制构造函数Line::Line(Line &amp;l):p1(l.p1),p2(l.p2) &#123; cout&lt;&lt;"呼叫Line的复制构造函数:"&lt;&lt;endl; len=l.len;&#125;// 主函数int main()&#123; Point myp1(1,1), myp2(4,5); Line line(myp1,myp2); Line line2(line); cout&lt;&lt;"Line的长度为:"&lt;&lt;endl; cout&lt;&lt;line.getLen()&lt;&lt;endl; cout&lt;&lt;"Line2的长度为:"&lt;&lt;endl; cout&lt;&lt;line2.getLen()&lt;&lt;endl; return (0);&#125;]]></content>
+      <categories>
+        <category>语言学习</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[C++学习（2）--函数]]></title>
+    <url>%2F2019%2F09%2F04%2FC%2B%2B%E5%AD%A6%E4%B9%A0%EF%BC%882%EF%BC%89%2F</url>
+    <content type="text"><![CDATA[1 函数的定义与使用1.1 函数定义的语法形式1234567类型说明符 函数名（含类型说明的形参表）&#123;​ 语句序列&#125; 1.2 函数的调用调用前先声明： 1类型说明符 函数名（含类型说明的形参表）; 再调用： 1函数名（实参表） 一般调用 12345678910111213141516//求x的n次方#include &lt;iostream&gt;using namespace std;double power(double x, int n);int main()&#123; cout &lt;&lt; "5 to the power 2 is "&lt;&lt; power(5,2) &lt;&lt;endl; return 0;&#125;double power(double x, int n)&#123; double val=1.0; while (n--) val *= x; return val;&#125; 嵌套调用 12345678910111213141516171819//求两个数平方和#include &lt;iostream&gt;using namespace std;int fun2(int m)&#123; return m*m;&#125;int fun1(int x, int y)&#123; return fun2(x)+fun2(y);&#125;int main()&#123; int a, b; cout&lt;&lt;"请输入两个数："; cin&gt;&gt;a&gt;&gt;b; cout&lt;&lt;"它们的平方和为："&lt;&lt;fun1(a,b)&lt;&lt;endl; return 0;&#125; 递归调用 1234567891011121314151617181920//求n的阶乘#include &lt;iostream&gt;using namespace std;unsigned fac(unsigned n)&#123; unsigned f; if (n==0) f=1; else f=fac(n-1)*n; return f;&#125;int main()&#123; unsigned n; cout&lt;&lt;"输入一个正整数："; cin&gt;&gt;n; unsigned y=fac(n); cout&lt;&lt;n&lt;&lt;"!="&lt;&lt;y&lt;&lt;endl; return 0;&#125; 1.3 函数的参数传递值传递（单项传递） 12345678910111213141516//交换两个数#include &lt;iostream&gt;using namespace std;void swap (int a, int b)&#123; int t = a; a=b; b=t;&#125;int main()&#123; int x=5, y=10; cout &lt;&lt; "x="&lt;&lt;x&lt;&lt;" y="&lt;&lt;y&lt;&lt;endl; swap(x,y); cout &lt;&lt; "x="&lt;&lt;x&lt;&lt;" y="&lt;&lt;y&lt;&lt;endl; return 0;&#125; 输出： 12x=5 y=10x=5 y=10 引用传递（双向） 12345678910111213141516//交换两个数#include &lt;iostream&gt;using namespace std;void swap (int &amp;a, int &amp;b)&#123; int t = a; a=b; b=t;&#125;int main()&#123; int x=5, y=10; cout &lt;&lt; "x="&lt;&lt;x&lt;&lt;" y="&lt;&lt;y&lt;&lt;endl; swap(x,y); cout &lt;&lt; "x="&lt;&lt;x&lt;&lt;" y="&lt;&lt;y&lt;&lt;endl; return 0;&#125; 输出： 12x=5 y=10x=10 y=5 2 C++系统函数 C++系统提供很多自带的函数，如数学函数，平方根（sqrt)，求绝对值（abs）等等。 只需要用include指令嵌入相应的头文件，就可以使用系统函数。如数学函数，只需在开头写： 1#include &lt;cmath&gt;]]></content>
+      <categories>
+        <category>语言学习</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[C++学习（1）--基础]]></title>
     <url>%2F2019%2F08%2F29%2FC%2B%2B%E5%AD%A6%E4%B9%A0%EF%BC%881%EF%BC%89%2F</url>
-    <content type="text"><![CDATA[1 命名空间避免命名冲突 std是C++标准库的命名空间（ namespace）名 using namespace std表示打开std命名空间 12345678910111213#include &lt;iostream&gt;using namespace std;int main() &#123; cout &lt;&lt; "Hello!" &lt;&lt; endl; cout &lt;&lt; "Welcome to c++!" &lt;&lt; endl; return 0;&#125; 运行结果： Hello! Welcome to c++！]]></content>
+    <content type="text"><![CDATA[1 命名空间避免命名冲突 std是C++标准库的命名空间（ namespace）名 using namespace std表示打开std命名空间 12345678910111213#include &lt;iostream&gt;using namespace std;int main() &#123; cout &lt;&lt; "Hello!" &lt;&lt; endl; cout &lt;&lt; "Welcome to c++!" &lt;&lt; endl; return 0;&#125; 运行结果： Hello! Welcome to c++！ 2 基本运算12345678910111213141516#include &lt;iostream&gt;using namespace std;int main() &#123; const int PRICE = 30; // 整数常量 int num, total; // 初始化 double v, r, h; num = 10; // 赋值 total = num * PRICE; cout &lt;&lt; total &lt;&lt; endl; r = 2.5; h = 3.2; v = 3.14159 * r * r * h; cout &lt;&lt; v &lt;&lt; endl; return 0;&#125; 运行结果： 30062.8318 注意：1/2为0，1/2.0为0.5 。 3 数据输入输出 “&lt;&lt;”是预定义的插入符，作用在流类对象cout上便可以实现项标准输出设备输出。 1cout &lt;&lt; 表达式 &lt;&lt; 表达式... 标准输入是将提取符作用在流类对象cin上。 1cin &gt;&gt; 表达式 &gt;&gt; 表达式... 提取符可以连续写多个，每个后面跟一个表达式，该表达式通常是用于存放输入值的变量。例如： 123int a, b;cin &gt;&gt; a &gt;&gt; b; 常用的I/O流类库操纵符 例： 1234567#include &lt;iostream&gt;#include &lt;iomanip&gt;using namespace std;int main() &#123; cout &lt;&lt; setw(5) &lt;&lt; setprecision(3) &lt;&lt; 3.1415; return 0;&#125; 输出 3.14 4 算法基本控制结构4.1 if 语句12345678910111213141516171819//判断是不是闰年#include &lt;iostream&gt;using namespace std;int main()&#123; int year; bool isLeapYear; cout &lt;&lt; "Enter the year: "; cin &gt;&gt; year; isLeapYear = ((year % 4 == 0 &amp;&amp; year % 100 != 0) || (year % 400 == 0)); if (isLeapYear) cout &lt;&lt; year &lt;&lt; " is a leap year" &lt;&lt; endl; else cout &lt;&lt; year &lt;&lt; " is not a leap year" &lt;&lt; endl; return 0;&#125; 注意：如果if else 语句里面还有if else语句，最好有{}来确定层次关系，否则在省略else情况下会出错。 4.2 switch 语句1234567891011121314151617181920212223242526//判断星期几#include &lt;iostream&gt;using namespace std;int main()&#123; int day; cin &gt;&gt; day; switch (day)&#123; case 0: cout &lt;&lt; "星期天" &lt;&lt; endl; break; case 1: cout &lt;&lt; "星期一" &lt;&lt; endl; break; case 2: cout &lt;&lt; "星期二" &lt;&lt; endl; break; case 3: cout &lt;&lt; "星期三" &lt;&lt; endl; break; case 4: cout &lt;&lt; "星期四" &lt;&lt; endl; break; case 5: cout &lt;&lt; "星期五" &lt;&lt; endl; break; case 6: cout &lt;&lt; "星期六" &lt;&lt; endl; break; &#125; return 0;&#125; 4.3 while 语句12345678910111213//计算1加到10#include &lt;iostream&gt;using namespace std;int main()&#123; int i = 1, sum = 0; while (i &lt;= 10)&#123; sum += i; i++; &#125; cout &lt;&lt; "sum = " &lt;&lt; sum &lt;&lt; endl; return 0;&#125; 4.4 do while 语句12345678910111213//计算1加到10#include &lt;iostream&gt;using namespace std;int main()&#123; int i = 1, sum = 0; do&#123; sum += i; i++; &#125;while (i &lt;= 10); cout &lt;&lt; "sum = " &lt;&lt; sum &lt;&lt; endl; return 0;&#125; 4.5 for 语句123456789101112131415//求一个整数所有因子#include &lt;iostream&gt;using namespace std;int main()&#123; int n; cout &lt;&lt; "Enter a positive integer: "; cin &gt;&gt; n; cout &lt;&lt; "Number " &lt;&lt; n &lt;&lt; " Factors "; for (int k=1; k&lt;=n; k++) if (n%k==0) cout &lt;&lt; k &lt;&lt; " "; cout &lt;&lt; endl; return 0;&#125;]]></content>
       <categories>
         <category>语言学习</category>
       </categories>
@@ -78,17 +100,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[修改默认打开方式]]></title>
-    <url>%2F2019%2F08%2F21%2F%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%89%93%E5%BC%80%E6%96%B9%E5%BC%8F%2F</url>
-    <content type="text"><![CDATA[刚装上Typaro时markdown文件没有默认用它打开，而且打开方式中也找不到，可以采用以下方法 个人的打开方式保存在~/.local/share/applications/mimeapps.list 1sudo gedit ~/.local/share/applications/mimeapps.list 修改mimeapps.list 文件，在文件末尾添加 1text/markdown=typora.desktop 完成。]]></content>
-      <categories>
-        <category>问题解决</category>
-      </categories>
-      <tags>
-        <tag>Ubuntu系统</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[激光雷达和ROS结合]]></title>
     <url>%2F2019%2F08%2F21%2F%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE%E5%92%8CROS%E7%BB%93%E5%90%88%2F</url>
     <content type="text"><![CDATA[网址：https://github.com/slamtec/rplidar_ros 1 下载整个rplidar_ros包 cd catkin_ws/src ##到你的工作空间的src git clone https://github.com/Slamtec/rplidar_ros.git cd .. catkin_make source ./devel/setup.bash 2 运行rplidar_ros包###每次雷达重新连接电脑时，需要进行2.1前的步骤，如果USB口不是USB0，需要改动launch文件中的 param name=”serial_port” type=”string” value=”/dev/rplidar”/ ls -l /dev |grep ttyUSB #检查雷达的USB口 sudo chmod 666 /dev/ttyUSB0 #赋予权限 2.1在rviz中显示 roslaunch rplidar_ros view_rplidar_a3.launch 2.2在终端显示 roslaunch rplidar_ros rplidar_a3.launch #启动雷达 rosrun rplidar_ros rplidarNodeClient #在另外一个终端打开]]></content>
@@ -108,6 +119,17 @@
       </categories>
       <tags>
         <tag>slam实现</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[修改默认打开方式]]></title>
+    <url>%2F2019%2F08%2F21%2F%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%89%93%E5%BC%80%E6%96%B9%E5%BC%8F%2F</url>
+    <content type="text"><![CDATA[刚装上Typaro时markdown文件没有默认用它打开，而且打开方式中也找不到，可以采用以下方法 个人的打开方式保存在~/.local/share/applications/mimeapps.list 1sudo gedit ~/.local/share/applications/mimeapps.list 修改mimeapps.list 文件，在文件末尾添加 1text/markdown=typora.desktop 完成。]]></content>
+      <categories>
+        <category>问题解决</category>
+      </categories>
+      <tags>
+        <tag>Ubuntu系统</tag>
       </tags>
   </entry>
 </search>

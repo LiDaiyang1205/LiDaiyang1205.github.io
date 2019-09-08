@@ -6,20 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://LiDaiyang1205.github.io">
-  <title>C++学习（1） | LDY_blog</title>
+  <title>C++学习（1）--基础 | LDY_blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="1 命名空间避免命名冲突 std是C++标准库的命名空间（ namespace）名 using namespace std表示打开std命名空间 12345678910111213#include &amp;lt;iostream&amp;gt;using namespace std;int main() &amp;#123;     cout &amp;lt;&amp;lt; &quot;Hello!&quot; &amp;lt;&amp;lt; endl;     c">
 <meta name="keywords" content="C++">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C++学习（1）">
+<meta property="og:title" content="C++学习（1）--基础">
 <meta property="og:url" content="http://LiDaiyang1205.github.io/2019/08/29/C++学习（1）/index.html">
 <meta property="og:site_name" content="LDY_blog">
 <meta property="og:description" content="1 命名空间避免命名冲突 std是C++标准库的命名空间（ namespace）名 using namespace std表示打开std命名空间 12345678910111213#include &amp;lt;iostream&amp;gt;using namespace std;int main() &amp;#123;     cout &amp;lt;&amp;lt; &quot;Hello!&quot; &amp;lt;&amp;lt; endl;     c">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-02T03:24:48.776Z">
+<meta property="og:image" content="https://i.postimg.cc/85VXs6Dz/4.png">
+<meta property="og:updated_time" content="2019-09-08T05:47:09.747Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="C++学习（1）">
+<meta name="twitter:title" content="C++学习（1）--基础">
 <meta name="twitter:description" content="1 命名空间避免命名冲突 std是C++标准库的命名空间（ namespace）名 using namespace std表示打开std命名空间 12345678910111213#include &amp;lt;iostream&amp;gt;using namespace std;int main() &amp;#123;     cout &amp;lt;&amp;lt; &quot;Hello!&quot; &amp;lt;&amp;lt; endl;     c">
+<meta name="twitter:image" content="https://i.postimg.cc/85VXs6Dz/4.png">
   
     <link rel="alternative" href="/atom.xml" title="LDY_blog" type="application/atom+xml">
   
@@ -178,7 +180,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      C++学习（1）
+      C++学习（1）--基础
     </h1>
   
 
@@ -199,6 +201,39 @@
 <p><strong>运行结果：</strong></p>
 <p>Hello!</p>
 <p>Welcome to c++！</p>
+<a id="more"></a>
+
+<h2 id="2-基本运算"><a href="#2-基本运算" class="headerlink" title="2 基本运算"></a>2 基本运算</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> PRICE = <span class="number">30</span>; <span class="comment">// 整数常量</span></span><br><span class="line">    <span class="keyword">int</span> num, total;       <span class="comment">// 初始化</span></span><br><span class="line">    <span class="keyword">double</span> v, r, h;       </span><br><span class="line">    num = <span class="number">10</span>;             <span class="comment">// 赋值</span></span><br><span class="line">    total = num * PRICE;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; total &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    r = <span class="number">2.5</span>;</span><br><span class="line">    h = <span class="number">3.2</span>;</span><br><span class="line">    v = <span class="number">3.14159</span> * r * r * h;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; v &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果：</p>
+<p>300<br>62.8318</p>
+<p><strong>注意</strong>：<strong>1/2为0，1/2.0为0.5</strong> 。</p>
+<h2 id="3-数据输入输出"><a href="#3-数据输入输出" class="headerlink" title="3 数据输入输出"></a>3 数据输入输出</h2><p> “&lt;&lt;”是预定义的插入符，作用在流类对象cout上便可以实现项标准输出设备输出。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cout</span> &lt;&lt; 表达式 &lt;&lt; 表达式...</span><br></pre></td></tr></table></figure>
+
+<p> 标准输入是将提取符作用在流类对象cin上。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cin</span> &gt;&gt; 表达式 &gt;&gt; 表达式...</span><br></pre></td></tr></table></figure>
+
+<p> 提取符可以连续写多个，每个后面跟一个表达式，该表达式通常是用于存放输入值的变量。例如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a, b;</span><br><span class="line"></span><br><span class="line"><span class="built_in">cin</span> &gt;&gt; a &gt;&gt; b;</span><br></pre></td></tr></table></figure>
+
+<p><strong>常用的I/O流类库操纵符</strong></p>
+<p><img src="https://i.postimg.cc/85VXs6Dz/4.png" alt="常用的流类库操纵符"></p>
+<p>例：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iomanip&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; setw(<span class="number">5</span>) &lt;&lt; setprecision(<span class="number">3</span>) &lt;&lt; <span class="number">3.1415</span>; </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出  3.14</p>
+<h2 id="4-算法基本控制结构"><a href="#4-算法基本控制结构" class="headerlink" title="4 算法基本控制结构"></a>4 算法基本控制结构</h2><h3 id="4-1-if-语句"><a href="#4-1-if-语句" class="headerlink" title="4.1 if 语句"></a>4.1 if 语句</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//判断是不是闰年</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> year;</span><br><span class="line">    <span class="keyword">bool</span> isLeapYear;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"Enter the year: "</span>;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; year;</span><br><span class="line">    isLeapYear = ((year % <span class="number">4</span> == <span class="number">0</span> &amp;&amp; year % <span class="number">100</span> != <span class="number">0</span>) ||</span><br><span class="line">            (year % <span class="number">400</span> == <span class="number">0</span>));</span><br><span class="line">    <span class="keyword">if</span> (isLeapYear)</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; year &lt;&lt; <span class="string">" is a leap year"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; year &lt;&lt; <span class="string">" is not a leap year"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：如果if else 语句里面还有if else语句，最好有{}来确定层次关系，否则在省略else情况下会出错。</strong></p>
+<h3 id="4-2-switch-语句"><a href="#4-2-switch-语句" class="headerlink" title="4.2 switch 语句"></a>4.2 switch 语句</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//判断星期几</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> day;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; day;</span><br><span class="line">    <span class="keyword">switch</span> (day)&#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0</span>: <span class="built_in">cout</span> &lt;&lt; <span class="string">"星期天"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">1</span>: <span class="built_in">cout</span> &lt;&lt; <span class="string">"星期一"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">2</span>: <span class="built_in">cout</span> &lt;&lt; <span class="string">"星期二"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">3</span>: <span class="built_in">cout</span> &lt;&lt; <span class="string">"星期三"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">4</span>: <span class="built_in">cout</span> &lt;&lt; <span class="string">"星期四"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">5</span>: <span class="built_in">cout</span> &lt;&lt; <span class="string">"星期五"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">6</span>: <span class="built_in">cout</span> &lt;&lt; <span class="string">"星期六"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-while-语句"><a href="#4-3-while-语句" class="headerlink" title="4.3 while 语句"></a>4.3 while 语句</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//计算1加到10</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">1</span>, sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (i &lt;= <span class="number">10</span>)&#123;</span><br><span class="line">        sum += i;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"sum = "</span> &lt;&lt; sum &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-4-do-while-语句"><a href="#4-4-do-while-语句" class="headerlink" title="4.4 do while 语句"></a>4.4 do while 语句</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//计算1加到10</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">1</span>, sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">do</span>&#123;</span><br><span class="line">        sum += i;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;<span class="keyword">while</span> (i &lt;= <span class="number">10</span>);</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"sum = "</span> &lt;&lt; sum &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-5-for-语句"><a href="#4-5-for-语句" class="headerlink" title="4.5 for 语句"></a>4.5 for 语句</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//求一个整数所有因子</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"Enter a positive integer: "</span>;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"Number "</span> &lt;&lt; n &lt;&lt; <span class="string">" Factors "</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> k=<span class="number">1</span>; k&lt;=n; k++)</span><br><span class="line">        <span class="keyword">if</span> (n%k==<span class="number">0</span>)</span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; k &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
       
 
@@ -262,6 +297,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2019/09/04/C++学习（2）/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          C++学习（2）--函数
+        
+      </div>
+    </a>
   
   
     <a href="/2019/08/27/ORB_SLAM2地图保存与加载（2）/" id="article-nav-older" class="article-nav-link-wrap">
@@ -428,26 +472,6 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">语言学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">硬件</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
              
@@ -457,6 +481,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Ubuntu系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
              
               <li class="article-tag-list-item">
