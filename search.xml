@@ -111,6 +111,17 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[激光雷达和ROS结合]]></title>
+    <url>%2F2019%2F08%2F21%2F%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE%E5%92%8CROS%E7%BB%93%E5%90%88%2F</url>
+    <content type="text"><![CDATA[网址：https://github.com/slamtec/rplidar_ros 1 下载整个rplidar_ros包 cd catkin_ws/src ##到你的工作空间的src git clone https://github.com/Slamtec/rplidar_ros.git cd .. catkin_make source ./devel/setup.bash 2 运行rplidar_ros包###每次雷达重新连接电脑时，需要进行2.1前的步骤，如果USB口不是USB0，需要改动launch文件中的 param name=”serial_port” type=”string” value=”/dev/rplidar”/ ls -l /dev |grep ttyUSB #检查雷达的USB口 sudo chmod 666 /dev/ttyUSB0 #赋予权限 2.1在rviz中显示 roslaunch rplidar_ros view_rplidar_a3.launch 2.2在终端显示 roslaunch rplidar_ros rplidar_a3.launch #启动雷达 rosrun rplidar_ros rplidarNodeClient #在另外一个终端打开]]></content>
+      <categories>
+        <category>slam</category>
+      </categories>
+      <tags>
+        <tag>slam实现</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[激光雷达安装步骤]]></title>
     <url>%2F2019%2F08%2F21%2F%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4%2F</url>
     <content type="text"><![CDATA[1. 安装SDK1.1 下载相关文件 网址：http://go.slamtec.com/rplidar/a3/download 我已将相关文件下载至思岚雷达文件夹 后续工作可以按照我的说明，不必去看SDK说明，里面包含Windows、macos等安装，很杂。 1.2 编译SDK 解压SDK压缩包至根目录，重命名为rplidar_sdk cd ~/rplidar_sdk/sdk make 1.3 交叉编译 我没有进行这一步骤，因为目前不知道是否需要 透过交叉编译特性,SDK 的编译系统支持编译产生其他平台/系统的二进制可执行文件。注意: 该功能仅针对使用 Makefile 的环境.交叉编译特性将通过调用 cross_compile.sh 脚本激活。该脚本的调用语法如下:CROSS_COMPILE_PREFIX= ./cross_compile.sh例如: CROSS_COMPILE_PREFIX=arm-linux-gnueabihf ./cross_compile.sh 2. 连接雷达和PC 直接接电脑即可 3. 运行DEMO3.1 ultra_simple 该示例程序演示 PC 通过串口与 RPLIDAR 进行连接，并不断的将 RPLIDAR 扫描数据输出的最简单过程。 ls /dev/ttyUSB* ##这个命令可以检测你的雷达USB编号，看你雷达连上没 cd ~/rplidar_sdk/sdk/output/Linux/Release ./ultra_simple /dev/ttyUSB0 能转起来就说明安装好了]]></content>
@@ -130,17 +141,6 @@
       </categories>
       <tags>
         <tag>Ubuntu系统</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[激光雷达和ROS结合]]></title>
-    <url>%2F2019%2F08%2F21%2F%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE%E5%92%8CROS%E7%BB%93%E5%90%88%2F</url>
-    <content type="text"><![CDATA[网址：https://github.com/slamtec/rplidar_ros 1 下载整个rplidar_ros包 cd catkin_ws/src ##到你的工作空间的src git clone https://github.com/Slamtec/rplidar_ros.git cd .. catkin_make source ./devel/setup.bash 2 运行rplidar_ros包###每次雷达重新连接电脑时，需要进行2.1前的步骤，如果USB口不是USB0，需要改动launch文件中的 param name=”serial_port” type=”string” value=”/dev/rplidar”/ ls -l /dev |grep ttyUSB #检查雷达的USB口 sudo chmod 666 /dev/ttyUSB0 #赋予权限 2.1在rviz中显示 roslaunch rplidar_ros view_rplidar_a3.launch 2.2在终端显示 roslaunch rplidar_ros rplidar_a3.launch #启动雷达 rosrun rplidar_ros rplidarNodeClient #在另外一个终端打开]]></content>
-      <categories>
-        <category>slam</category>
-      </categories>
-      <tags>
-        <tag>slam实现</tag>
       </tags>
   </entry>
 </search>
