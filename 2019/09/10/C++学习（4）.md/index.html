@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://LiDaiyang1205.github.io">
   <title>C++学习（4）--数据的共享与保护 | LDY_blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1 标识符的作用域与可见性1.1 作用域作用域是一个标识符在程序正文中有效的区域。 (1) 函数原型作用域 在函数原型声明时形式参数的作用范围就是函数原型作用域。 (2) 局部作用域 函数形参列表中形参的作用域，从形参列表中的声明处开始，到整个函数体结束之处为止。 函数体内声明的变量，其作用域从声明处开始，一直到声明所在的块结束的大括号为止。 具有局部作用域的变堡也称为局部变量。 (3) 类作用域">
+  <meta name="description" content="1 标识符的作用域与可见性1.1 作用域作用域是一个标识符在程序正文中有效的区域。 (1) 函数原型作用域 在函数原型声明时形式参数的作用范围就是函数原型作用域。 (2) 局部作用域 函数形参列表中形参的作用域，从形参列表中的声明处开始，到整个函数体结束之处为止。 函数体内声明的变量，其作用域从声明处开始，一直到声明所在的块结束的大括号为止。 具有局部作用域的变堡也称为局部变量。">
 <meta name="keywords" content="C++">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++学习（4）--数据的共享与保护">
 <meta property="og:url" content="http://LiDaiyang1205.github.io/2019/09/10/C++学习（4）.md/index.html">
 <meta property="og:site_name" content="LDY_blog">
-<meta property="og:description" content="1 标识符的作用域与可见性1.1 作用域作用域是一个标识符在程序正文中有效的区域。 (1) 函数原型作用域 在函数原型声明时形式参数的作用范围就是函数原型作用域。 (2) 局部作用域 函数形参列表中形参的作用域，从形参列表中的声明处开始，到整个函数体结束之处为止。 函数体内声明的变量，其作用域从声明处开始，一直到声明所在的块结束的大括号为止。 具有局部作用域的变堡也称为局部变量。 (3) 类作用域">
+<meta property="og:description" content="1 标识符的作用域与可见性1.1 作用域作用域是一个标识符在程序正文中有效的区域。 (1) 函数原型作用域 在函数原型声明时形式参数的作用范围就是函数原型作用域。 (2) 局部作用域 函数形参列表中形参的作用域，从形参列表中的声明处开始，到整个函数体结束之处为止。 函数体内声明的变量，其作用域从声明处开始，一直到声明所在的块结束的大括号为止。 具有局部作用域的变堡也称为局部变量。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-11T13:34:54.904Z">
+<meta property="og:updated_time" content="2019-09-12T01:32:15.630Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++学习（4）--数据的共享与保护">
-<meta name="twitter:description" content="1 标识符的作用域与可见性1.1 作用域作用域是一个标识符在程序正文中有效的区域。 (1) 函数原型作用域 在函数原型声明时形式参数的作用范围就是函数原型作用域。 (2) 局部作用域 函数形参列表中形参的作用域，从形参列表中的声明处开始，到整个函数体结束之处为止。 函数体内声明的变量，其作用域从声明处开始，一直到声明所在的块结束的大括号为止。 具有局部作用域的变堡也称为局部变量。 (3) 类作用域">
+<meta name="twitter:description" content="1 标识符的作用域与可见性1.1 作用域作用域是一个标识符在程序正文中有效的区域。 (1) 函数原型作用域 在函数原型声明时形式参数的作用范围就是函数原型作用域。 (2) 局部作用域 函数形参列表中形参的作用域，从形参列表中的声明处开始，到整个函数体结束之处为止。 函数体内声明的变量，其作用域从声明处开始，一直到声明所在的块结束的大括号为止。 具有局部作用域的变堡也称为局部变量。">
   
     <link rel="alternative" href="/atom.xml" title="LDY_blog" type="application/atom+xml">
   
@@ -198,6 +198,8 @@
 <p>函数形参列表中形参的作用域，从形参列表中的声明处开始，到整个函数体结束之处为止。</p>
 <p>函数体内声明的变量，其作用域从声明处开始，一直到声明所在的块结束的大括号为止。</p>
 <p>具有局部作用域的变堡也称为<strong>局部变量</strong>。</p>
+<a id="more"></a>
+
 <p><strong>(3) 类作用域</strong></p>
 <p>类可以被看成是一组有名成员的集合，类$ X $的成员 $m$ 具有类作用域，对 $m $的访问方式有如下 3 种。<br>(1) 如果在 $X $的成员函数中没有声明同名的局部作用域标识符，那么在该函数内可以直接访问成员 $m $。也就是说$m $在这样的函数中都起作用。<br>(2) 通过表达式 $x.m $或者$ x::m$ 。这正是程序中访问对象成员的最基本方法。<br>(3) 通过 ptr-&gt;m 这样的表达式，其中 ptr 为指向 X 类的一个对象的指针。</p>
 <p><strong>(4) 命名空间作用域</strong></p>
@@ -300,7 +302,7 @@
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          ORB_SLAM2 程序解读（1）
+          ORB_SLAM2 程序解读（1）-- 概述与ros_rgbd.cc
         
       </div>
     </a>

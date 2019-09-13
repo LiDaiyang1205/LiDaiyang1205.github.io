@@ -6,12 +6,12 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://LiDaiyang1205.github.io">
-  <title>ORB_SLAM2 程序解读（1） | LDY_blog</title>
+  <title>ORB_SLAM2 程序解读（1）-- 概述与ros_rgbd.cc | LDY_blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="0 概述ORB-SLAM是由Raul Mur-Artal，J. M. M. Montiel和Juan D. Tardos于2015年发表在IEEE Transactions on Robotics。代码主页网址为：https://github.com/raulmur/ORB_SLAM2 。 我之所以选择ORB_SLAM2，是因为之前在研究回环检测，回环检测涉及到特征点的采集和处理，ORB就是特征点">
 <meta name="keywords" content="slam实现">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ORB_SLAM2 程序解读（1）">
+<meta property="og:title" content="ORB_SLAM2 程序解读（1）-- 概述与ros_rgbd.cc">
 <meta property="og:url" content="http://LiDaiyang1205.github.io/2019/09/10/ORB_SLAM2 程序解读（1）/index.html">
 <meta property="og:site_name" content="LDY_blog">
 <meta property="og:description" content="0 概述ORB-SLAM是由Raul Mur-Artal，J. M. M. Montiel和Juan D. Tardos于2015年发表在IEEE Transactions on Robotics。代码主页网址为：https://github.com/raulmur/ORB_SLAM2 。 我之所以选择ORB_SLAM2，是因为之前在研究回环检测，回环检测涉及到特征点的采集和处理，ORB就是特征点">
@@ -19,9 +19,9 @@
 <meta property="og:image" content="https://i.postimg.cc/DwHwnm7Z/image.jpg">
 <meta property="og:image" content="https://i.postimg.cc/m2XbyjpJ/orbslam.jpg">
 <meta property="og:image" content="https://i.postimg.cc/0QbQ21hk/1.png">
-<meta property="og:updated_time" content="2019-09-11T13:36:16.246Z">
+<meta property="og:updated_time" content="2019-09-13T02:01:59.629Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ORB_SLAM2 程序解读（1）">
+<meta name="twitter:title" content="ORB_SLAM2 程序解读（1）-- 概述与ros_rgbd.cc">
 <meta name="twitter:description" content="0 概述ORB-SLAM是由Raul Mur-Artal，J. M. M. Montiel和Juan D. Tardos于2015年发表在IEEE Transactions on Robotics。代码主页网址为：https://github.com/raulmur/ORB_SLAM2 。 我之所以选择ORB_SLAM2，是因为之前在研究回环检测，回环检测涉及到特征点的采集和处理，ORB就是特征点">
 <meta name="twitter:image" content="https://i.postimg.cc/DwHwnm7Z/image.jpg">
   
@@ -182,7 +182,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      ORB_SLAM2 程序解读（1）
+      ORB_SLAM2 程序解读（1）-- 概述与ros_rgbd.cc
     </h1>
   
 
@@ -197,11 +197,11 @@
       
         <h2 id="0-概述"><a href="#0-概述" class="headerlink" title="0 概述"></a>0 概述</h2><p>ORB-SLAM是由Raul Mur-Artal，J. M. M. Montiel和Juan D. Tardos于2015年发表在IEEE Transactions on Robotics。代码主页网址为：<a href="https://github.com/raulmur/ORB_SLAM2" target="_blank" rel="noopener">https://github.com/raulmur/ORB_SLAM2</a> 。</p>
 <p>我之所以选择ORB_SLAM2，是因为之前在研究<a href="https://lidaiyang1205.github.io/2019/08/22/回环检测/">回环检测</a>，回环检测涉及到特征点的采集和处理，ORB就是特征点最常用的采集方法。为了实现ORB_SLAM2 的使用，我从安装依赖项到运行测试都写了<a href="https://lidaiyang1205.github.io/2019/08/24/ORB_SLAM2%20%E5%AE%9E%E7%8E%B0/">完整的文档</a>。实现ORBSLAM2的运行后，我发现这个包建图没问题，但是没有保存地图和加载地图的功能，于是又通过看博客改源码，实现了<a href="https://lidaiyang1205.github.io/2019/08/26/ORB_SLAM2地图保存与加载（1）/">地图保存</a>和<a href="https://lidaiyang1205.github.io/2019/08/27/ORB_SLAM2地图保存与加载（2）/">地图加载</a>。之前都是看着别人的博客改，自己对这个包一知半解，所以这里系统学习一下这个库。</p>
+<a id="more"></a>
+
 <p>ORB-SLAM是一个基于特征点的实时单目SLAM系统，在大规模的、小规模的、室内室外的环境都可以运行。该系统对剧烈运动也很鲁棒，支持宽基线的闭环检测和重定位，包括全自动初始化。该系统包含了所有SLAM系统共有的模块：<strong>跟踪（Tracking）、建图（Mapping）、重定位（Relocalization）、回环检测（Loop closing）</strong>。由于ORB-SLAM系统是基于特征点的SLAM系统，故其能够实时计算出相机的轨线，并生成场景的稀疏三维重建结果。</p>
 <p><strong>贡献</strong>：</p>
 <p><img src="https://i.postimg.cc/DwHwnm7Z/image.jpg" alt="è¿éåå¾çæè¿°"></p>
-<a id="more"></a>
-
 <h2 id="1-系统架构"><a href="#1-系统架构" class="headerlink" title="1 系统架构"></a>1 系统架构</h2><p>ORB-SLAM其中的关键点如下图所示： </p>
 <p><img src="https://i.postimg.cc/m2XbyjpJ/orbslam.jpg" alt="system.png"></p>
 <p>ORB-SLAM主要分为三个线程进行，分别是Tracking、LocalMapping和LoopClosing。ORB-SLAM2的工程非常清晰漂亮，三个线程分别存放在对应的三个文件中，分别是Tracking.cpp、LocalMapping.cpp和LoopClosing.cpp文件中，很容易找到。 </p>
@@ -303,6 +303,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2019/09/11/ORB_SLAM2 程序解读（2）/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          ORB_SLAM2 程序解读（2）-- System.cc
+        
+      </div>
+    </a>
   
   
     <a href="/2019/09/10/C++学习（4）.md/" id="article-nav-older" class="article-nav-link-wrap">

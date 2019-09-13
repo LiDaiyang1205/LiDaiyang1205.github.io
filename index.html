@@ -168,6 +168,93 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-ORB_SLAM2 程序解读（2）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/11/ORB_SLAM2 程序解读（2）/">ORB_SLAM2 程序解读（2）-- System.cc</a>
+    </h1>
+  
+
+        
+        <a href="/2019/09/11/ORB_SLAM2 程序解读（2）/" class="archive-article-date">
+  	<time datetime="2019-09-10T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-System-cc"><a href="#1-System-cc" class="headerlink" title="1 System.cc"></a>1 System.cc</h2><p>System.cc是ORB-SLAM2的主程序，也是ORB-SLAM2系统的入口。</p>
+        
+          <a class="article-more-a" href="/2019/09/11/ORB_SLAM2 程序解读（2）/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">slam实现</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/09/11/ORB_SLAM2 程序解读（2）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-ORB_SLAM2 程序解读（1）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -175,7 +262,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/10/ORB_SLAM2 程序解读（1）/">ORB_SLAM2 程序解读（1）</a>
+      <a class="article-title" href="/2019/09/10/ORB_SLAM2 程序解读（1）/">ORB_SLAM2 程序解读（1）-- 概述与ros_rgbd.cc</a>
     </h1>
   
 
@@ -190,9 +277,6 @@
       
         <h2 id="0-概述"><a href="#0-概述" class="headerlink" title="0 概述"></a>0 概述</h2><p>ORB-SLAM是由Raul Mur-Artal，J. M. M. Montiel和Juan D. Tardos于2015年发表在IEEE Transactions on Robotics。代码主页网址为：<a href="https://github.com/raulmur/ORB_SLAM2" target="_blank" rel="noopener">https://github.com/raulmur/ORB_SLAM2</a> 。</p>
 <p>我之所以选择ORB_SLAM2，是因为之前在研究<a href="https://lidaiyang1205.github.io/2019/08/22/回环检测/">回环检测</a>，回环检测涉及到特征点的采集和处理，ORB就是特征点最常用的采集方法。为了实现ORB_SLAM2 的使用，我从安装依赖项到运行测试都写了<a href="https://lidaiyang1205.github.io/2019/08/24/ORB_SLAM2%20%E5%AE%9E%E7%8E%B0/">完整的文档</a>。实现ORBSLAM2的运行后，我发现这个包建图没问题，但是没有保存地图和加载地图的功能，于是又通过看博客改源码，实现了<a href="https://lidaiyang1205.github.io/2019/08/26/ORB_SLAM2地图保存与加载（1）/">地图保存</a>和<a href="https://lidaiyang1205.github.io/2019/08/27/ORB_SLAM2地图保存与加载（2）/">地图加载</a>。之前都是看着别人的博客改，自己对这个包一知半解，所以这里系统学习一下这个库。</p>
-<p>ORB-SLAM是一个基于特征点的实时单目SLAM系统，在大规模的、小规模的、室内室外的环境都可以运行。该系统对剧烈运动也很鲁棒，支持宽基线的闭环检测和重定位，包括全自动初始化。该系统包含了所有SLAM系统共有的模块：<strong>跟踪（Tracking）、建图（Mapping）、重定位（Relocalization）、回环检测（Loop closing）</strong>。由于ORB-SLAM系统是基于特征点的SLAM系统，故其能够实时计算出相机的轨线，并生成场景的稀疏三维重建结果。</p>
-<p><strong>贡献</strong>：</p>
-<p><img src="https://i.postimg.cc/DwHwnm7Z/image.jpg" alt="è¿éåå¾çæè¿°"></p>
         
           <a class="article-more-a" href="/2019/09/10/ORB_SLAM2 程序解读（1）/#more">more >></a>
         
@@ -286,41 +370,9 @@
 <p>函数形参列表中形参的作用域，从形参列表中的声明处开始，到整个函数体结束之处为止。</p>
 <p>函数体内声明的变量，其作用域从声明处开始，一直到声明所在的块结束的大括号为止。</p>
 <p>具有局部作用域的变堡也称为<strong>局部变量</strong>。</p>
-<p><strong>(3) 类作用域</strong></p>
-<p>类可以被看成是一组有名成员的集合，类$ X $的成员 $m$ 具有类作用域，对 $m $的访问方式有如下 3 种。<br>(1) 如果在 $X $的成员函数中没有声明同名的局部作用域标识符，那么在该函数内可以直接访问成员 $m $。也就是说$m $在这样的函数中都起作用。<br>(2) 通过表达式 $x.m $或者$ x::m$ 。这正是程序中访问对象成员的最基本方法。<br>(3) 通过 ptr-&gt;m 这样的表达式，其中 ptr 为指向 X 类的一个对象的指针。</p>
-<p><strong>(4) 命名空间作用域</strong></p>
-<p>具有命名空间作用域的变量也称为<strong>全局变量</strong>。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//作用域实例</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> i;            <span class="comment">//在全局命名空间中的全局变量</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> Ns&#123;</span><br><span class="line">    <span class="keyword">int</span> j;        <span class="comment">//在 NS 命名空间中的全局变量</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 主函数</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    i = <span class="number">5</span>;        <span class="comment">//为全局变量 i 赋值</span></span><br><span class="line">    Ns::j=<span class="number">6</span>;    <span class="comment">//为全局变星]赋值</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">using</span> <span class="keyword">namespace</span> Ns; <span class="comment">//使得在当前块中可以直接引用 Ns 命名空间的标识符</span></span><br><span class="line">        <span class="keyword">int</span> i;              <span class="comment">//局部变量,局部作用域</span></span><br><span class="line">        i = <span class="number">7</span>;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">"i="</span>&lt;&lt;i&lt;&lt;<span class="built_in">endl</span>; <span class="comment">//输出 7</span></span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">"j="</span>&lt;&lt;j&lt;&lt;<span class="built_in">endl</span>; <span class="comment">//输出 6</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"i="</span>&lt;&lt;i&lt;&lt;<span class="built_in">endl</span>;<span class="comment">//输出 5</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-2-可见性"><a href="#1-2-可见性" class="headerlink" title="1.2 可见性"></a>1.2 可见性</h3><p>从标识符引用的角度，来看标识符的有效范围，即标识符的可见性。程序运行到某一点，能够引用到的标识符，就是该处可见的标识符。</p>
-<p>作用域可见性的一般规则如下：</p>
-<ul>
-<li>标识符要声明在前，引用在后。</li>
-<li>在同一作用域中，不能声明同名的标识符。</li>
-<li>在没有互相包含关系的不同的作用域中声明的同名标识符，互不影响。</li>
-<li>如果在两个或多个具有包含关系的作用域中声明了同名标识符，则外层标识符在内层不可见。</li>
-</ul>
-<h2 id="2-对象的生存期"><a href="#2-对象的生存期" class="headerlink" title="2 对象的生存期"></a>2 对象的生存期</h2><p>对象(包括简单变量)都有诞生和消失的时刻。对象从诞生到结束的这段时间就是它的生存期。</p>
-<h3 id="2-1-静态生存期"><a href="#2-1-静态生存期" class="headerlink" title="2.1 静态生存期"></a>2.1 静态生存期</h3><p>如果对象的生存期与程序的运行期相同，则称它具有静态生存期。在命名空间作用域中声明的对象都是具有静态生存期的。如果要在函数内部的局部作用域中声明具有静态生存期的对象，则要使用关键字 <strong>$static$</strong> 。</p>
-<h3 id="2-2-动态生存期"><a href="#2-2-动态生存期" class="headerlink" title="2.2 动态生存期"></a>2.2 动态生存期</h3><p>在局部作用域中声明的具有动态生存期的对象，习惯上也称为局部生存期对象。局部生存期对象诞生于声明点，结束于声明所在的块执行完毕之时。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//变量的生存期与可见性</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> i=<span class="number">1</span>;                            <span class="comment">//i为全局变量，具有静态生存期</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">other</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//a,b为静态局部变量，具有全局寿命，局部可见，只第一次进入函数时被初始化</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> a=<span class="number">2</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> b;</span><br><span class="line">    <span class="comment">//c为局部变量，具有动态生存期，每次进入函数时都初始化</span></span><br><span class="line">    <span class="keyword">int</span> c=<span class="number">10</span>;</span><br><span class="line">    a+=<span class="number">2</span>;</span><br><span class="line">    i+=<span class="number">32</span>;</span><br><span class="line">    c+=<span class="number">5</span>;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"---OTHER---"</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">" i: "</span>&lt;&lt;i&lt;&lt;<span class="string">" a: "</span>&lt;&lt;a&lt;&lt;<span class="string">" b: "</span>&lt;&lt;b&lt;&lt;<span class="string">" c: "</span>&lt;&lt;c&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    b=a;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//a为静态局部变量，具有全局寿命，局部可见</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> a;</span><br><span class="line">    <span class="comment">//b,c为局部变量，具有动态生存期</span></span><br><span class="line">    <span class="keyword">int</span> b=<span class="number">-10</span>;</span><br><span class="line">    <span class="keyword">int</span> c=<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"---MAIN---"</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">" i: "</span>&lt;&lt;i&lt;&lt;<span class="string">" a: "</span>&lt;&lt;a&lt;&lt;<span class="string">" b: "</span>&lt;&lt;b&lt;&lt;<span class="string">" c: "</span>&lt;&lt;c&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    c+=<span class="number">8</span>;</span><br><span class="line">    other();</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"---MAIN---"</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">" i: "</span>&lt;&lt;i&lt;&lt;<span class="string">" a: "</span>&lt;&lt;a&lt;&lt;<span class="string">" b: "</span>&lt;&lt;b&lt;&lt;<span class="string">" c: "</span>&lt;&lt;c&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    i+=<span class="number">10</span>;</span><br><span class="line">    other();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>输出</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">---MAIN---</span><br><span class="line"> i: 1 a: 0 b: -10 c: 0</span><br><span class="line">---OTHER---</span><br><span class="line"> i: 33 a: 4 b: 0 c: 15</span><br><span class="line">---MAIN---</span><br><span class="line"> i: 33 a: 0 b: -10 c: 8</span><br><span class="line">---OTHER---</span><br><span class="line"> i: 75 a: 6 b: 4 c: 15</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//具有静态和动态生存期对象的时钟程序</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Clock</span>&#123;</span>                                       <span class="comment">//时钟类定义 </span></span><br><span class="line">	<span class="keyword">public</span>:                                        <span class="comment">//外部接口 </span></span><br><span class="line">		Clock();</span><br><span class="line">		<span class="function"><span class="keyword">void</span> <span class="title">setTime</span><span class="params">(<span class="keyword">int</span> newH,<span class="keyword">int</span> newM,<span class="keyword">int</span> newS)</span></span>;  <span class="comment">//3个形参均具有函数原型作用域 </span></span><br><span class="line">		<span class="function"><span class="keyword">void</span> <span class="title">showTime</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="keyword">private</span>:                                       <span class="comment">//私有数据成员 </span></span><br><span class="line">		<span class="keyword">int</span> hour,minute,second;</span><br><span class="line">&#125;; </span><br><span class="line"></span><br><span class="line"><span class="comment">//时钟类成员函数的实现</span></span><br><span class="line">Clock::Clock():hour(<span class="number">0</span>),minute(<span class="number">0</span>),second(<span class="number">0</span>)&#123;&#125;       <span class="comment">//构造函数 </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Clock::setTime(<span class="keyword">int</span> newH,<span class="keyword">int</span> newM,<span class="keyword">int</span> newS)&#123;   <span class="comment">//3个形参均具有局部作用域 </span></span><br><span class="line">	hour=newH;</span><br><span class="line">	minute=newM;</span><br><span class="line">	second=newS;</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Clock::showTime()&#123;</span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt;hour&lt;&lt;<span class="string">":"</span>&lt;&lt;minute&lt;&lt;<span class="string">":"</span>&lt;&lt;second&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Clock globClock;                                   <span class="comment">//声明对象globClock，具有静态生存期，命名空间作用域 </span></span><br><span class="line"><span class="comment">//由默认构造函数初始化为0：0：0</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;                                        <span class="comment">//主函数 </span></span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt;<span class="string">"First time output:"</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	<span class="comment">//引用具有命名空间作用域的对象globClock</span></span><br><span class="line">	globClock.showTime();                          <span class="comment">//对象的成员函数具有类作用域 </span></span><br><span class="line">	<span class="comment">//显示0：0：0</span></span><br><span class="line">	globClock.setTime(<span class="number">8</span>,<span class="number">30</span>,<span class="number">30</span>);                    <span class="comment">//将时间设置为8：30：30 </span></span><br><span class="line">	</span><br><span class="line">	<span class="function">Clock <span class="title">myClock</span><span class="params">(globClock)</span></span>;                      <span class="comment">//声明具有块作用域的对象myClock </span></span><br><span class="line">	<span class="comment">//调用复制构造函数，以globClock为初始值</span></span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt;<span class="string">"Second time output:"</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	myClock.showTime();                            <span class="comment">//引用具有块作用域的对象myClock </span></span><br><span class="line">	<span class="comment">//输出8:30:30</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>输出</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">First time output:</span><br><span class="line">0:0:0</span><br><span class="line">Second time output:</span><br><span class="line">8:30:30</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-类的静态成员"><a href="#3-类的静态成员" class="headerlink" title="3  类的静态成员"></a>3  类的静态成员</h2><h3 id="3-1-静态数据成员"><a href="#3-1-静态数据成员" class="headerlink" title="3.1 静态数据成员"></a>3.1 静态数据成员</h3><p>如果某个属性为整个类所共有，不属于任何一个具体对象，则采用 <strong>static</strong> 关键字来声明为静态成员。</p>
-<p>类属性是描述类的所有对象共同特征的一个数据项，对于任何对象实例，它的属性值是相同的。</p>
-<p>静态数据成员具有静态生存期。由于静态数据成员不属于任何一个对象，因此可以通过类名对它进行访问，一般的用法是”类名::标识符”。</p>
-<h3 id="3-2-静态函数成员"><a href="#3-2-静态函数成员" class="headerlink" title="3.2 静态函数成员"></a>3.2 静态函数成员</h3><p>所谓静态成员函数就是使用 static 关键字声明的函数成员。同静态数据成员一样，静态成员函数也属于整个类，由同一个类的所有对象共同拥有，为这些对象所共享。</p>
-<p>静态成员函数可以直接访问该类的静态数据和函数成员。而访问非静态成员，必须通过对象名。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//具有静态数据和函数成员的Point类</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span>&#123;</span>                                                   <span class="comment">//Point类定义</span></span><br><span class="line"><span class="keyword">public</span>:                                                       <span class="comment">//外部接口</span></span><br><span class="line">    Point(<span class="keyword">int</span> x=<span class="number">0</span>,<span class="keyword">int</span> y=<span class="number">0</span>):x(x),y(y)&#123;                         <span class="comment">//构造函数</span></span><br><span class="line">        <span class="comment">//在构造函数中对count累加，所有对象共同维护同一个count</span></span><br><span class="line">        count++;</span><br><span class="line">    &#125;</span><br><span class="line">    Point(Point &amp;p)&#123;                                          <span class="comment">//复制构造函数</span></span><br><span class="line">        x=p.x;</span><br><span class="line">        y=p.y;</span><br><span class="line">        count++;</span><br><span class="line">    &#125;</span><br><span class="line">    ~Point()&#123;count--;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getX</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> x;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getY</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> y;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">showCount</span><span class="params">()</span></span>&#123;                                 <span class="comment">//静态函数成员</span></span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">" Object count="</span>&lt;&lt;count&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:                                                     <span class="comment">//私有数据成员</span></span><br><span class="line">    <span class="keyword">int</span> x,y;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> count;                                <span class="comment">//静态数据成员声明，用于记录点的个数</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> Point::count=<span class="number">0</span>;                               <span class="comment">//静态数据成员定义和初始化，使用类名限定</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;                                                <span class="comment">//主函数</span></span><br><span class="line">    Point::showCount();</span><br><span class="line">    <span class="function">Point <span class="title">a</span><span class="params">(<span class="number">4</span>,<span class="number">5</span>)</span></span>;                               <span class="comment">//定义对象a，其构造函数会使count增1</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"Point A: "</span>&lt;&lt;a.getX()&lt;&lt;<span class="string">","</span>&lt;&lt;a.getY();</span><br><span class="line">    Point::showCount();                                    <span class="comment">//输出对象个数</span></span><br><span class="line"></span><br><span class="line">    <span class="function">Point <span class="title">b</span><span class="params">(a)</span></span>;                                  <span class="comment">//定义对象b，其构造函数会使count增1</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"Point B: "</span>&lt;&lt;b.getX()&lt;&lt;<span class="string">","</span>&lt;&lt;b.getY();</span><br><span class="line">    Point::showCount();                                     <span class="comment">//输出对象个数</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
+        
+          <a class="article-more-a" href="/2019/09/10/C++学习（4）.md/#more">more >></a>
+        
       
 
       
@@ -405,7 +457,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>论文原文下载：<a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7946260" target="_blank" rel="noopener">https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7946260</a></p>
-<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>ORB-SLAM2是基于单目、双目和RGB-D相机的一套完整的SLAM方案。它能够实现地图重用、回环检测和重新定位的功能。无论是在室内的小型手持设备，还是到工厂环境的无人机和城市里驾驶的汽车，ORB-SLAM2都能够在标准的CPU上进行实时工作。ORB-SLAM2在<strong>后端</strong>上采用的是<strong>基于单目和双目的光束法平差优化（BA）</strong>的方式，这个方法允许米制比例尺的轨迹精确度评估。此外，ORB-SLAM2包含一个轻量级的定位模式，该模式能够在允许零点漂移的条件下，利用视觉里程计来追踪未建图的区域并且匹配特征点。</p>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>ORB-SLAM2是基于单目、双目和RGB-D相机的一套完整的SLAM方案。它能够实现地图重用、回环检测和重新定位的功能。无论是在室内的小型手持设备，还是到工厂环境的无人机和城市里驾驶的汽车，ORB-SLAM2都能够在标准的CPU上进行实时工作。ORB-SLAM2在<strong>后端</strong>上采用的是<strong>基于单目和双目的光束法平差优化（BA）</strong>的方式，这个方法允许”米”级别的轨迹精确度评估。此外，ORB-SLAM2包含一个轻量级的定位模式，该模式能够在允许零点漂移的条件下，利用视觉里程计来追踪未建图的区域并且匹配特征点。</p>
 <p>我们用29个广泛使用的公共数据测试的结果显示，在大多数情况下，本文方案比此前方案精度更高，此外，我们开源了ORB-SLAM2源代码，不仅仅是为了整个SLAM领域，同时也希望能够为其他领域研究者提供一套SLAM的解决方案。</p>
         
           <a class="article-more-a" href="/2019/09/09/ORBSLAM2论文/#more">more >></a>
@@ -988,93 +1040,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/08/25/yilia 主题一些问题解决/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-ORB_SLAM2 实现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/24/ORB_SLAM2 实现/">ORB_SLAM2 在ROS中使用KinectV2实现</a>
-    </h1>
-  
-
-        
-        <a href="/2019/08/24/ORB_SLAM2 实现/" class="archive-article-date">
-  	<time datetime="2019-08-23T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-24</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="安装依赖包"><a href="#安装依赖包" class="headerlink" title="安装依赖包"></a>安装依赖包</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br><span class="line"></span><br><span class="line">sudo apt-get install libboost-all-dev libblas-dev liblapack-dev</span><br><span class="line"></span><br><span class="line">####  安装 Pangolin</span><br><span class="line">git clone git@github.com:stevenlovegrove/Pangolin.git</span><br><span class="line">cd Pangolin</span><br><span class="line">mkdir build</span><br><span class="line">cd build</span><br><span class="line">cmake ..</span><br><span class="line">cmake --build .</span><br><span class="line"></span><br><span class="line">##### 安装 eigen</span><br><span class="line">http://eigen.tuxfamily.org/index.php?title=Main_Page ### 下载eigen包 解压</span><br><span class="line">cd eigen</span><br><span class="line">mkdir build</span><br><span class="line">cd build</span><br><span class="line">cmake ..</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br><span class="line"></span><br><span class="line">sudo apt-get install libopencv-dev libeigen3-dev libqt4-dev qt4-qmake libqglviewer-dev libsuitesparse-dev libcxsparse3.1.4 libcholmod3.0.6</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2019/08/24/ORB_SLAM2 实现/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">slam实现</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/24/ORB_SLAM2 实现/">展开全文 >></a>
         </p>
       
 
