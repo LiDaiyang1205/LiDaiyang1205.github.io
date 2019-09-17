@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[ORB_SLAM2 程序解读（2）-- System.cc]]></title>
-    <url>%2F2019%2F09%2F11%2FORB_SLAM2%20%E7%A8%8B%E5%BA%8F%E8%A7%A3%E8%AF%BB%EF%BC%882%EF%BC%89%2F</url>
-    <content type="text"><![CDATA[1 System.ccSystem.cc是ORB-SLAM2的主程序，也是ORB-SLAM2系统的入口。 System函数中的关键代码及标注 12345678910111213mpVocabulary = new ORBVocabulary();//读取ORB词袋mpKeyFrameDatabase = new KeyFrameDatabase(*mpVocabulary);//创建关键帧数据库mpMap = new Map();//创建地图对象mpFrameDrawer = new FrameDrawer(mpMap);//创建显示关键帧的窗口mpMapDrawer = new MapDrawer(mpMap, strSettingsFile);//创建显示地图的窗口mpTracker = new Tracking(this, mpVocabulary, mpFrameDrawer, mpMapDrawer,mpMap, mpKeyFrameDatabase, strSettingsFile, mSensor);//初始化Tracking线程，该线程在主循环中mpLocalMapper = new LocalMapping(mpMap, mSensor==MONOCULAR);//初始化Local Mapping线程mptLocalMapping = new thread(&amp;ORB_SLAM2::LocalMapping::Run,mpLocalMapper);//启动线程mpLoopCloser = new LoopClosing(mpMap, mpKeyFrameDatabase, mpVocabulary, mSensor!=MONOCULAR);//初始化LoopClosing线程mptLoopClosing = new thread(&amp;ORB_SLAM2::LoopClosing::Run, mpLoopCloser);//启动线程mpViewer = new Viewer(this, mpFrameDrawer,mpMapDrawer,mpTracker,strSettingsFile);//初始化窗口mptViewer = new thread(&amp;Viewer::Run, mpViewer);//启动，前面会有一个是否可视化的判断 其他函数接口： 123456789cv::Mat System::TrackStereo(const cv::Mat &amp;imLeft, const cv::Mat &amp;imRight, const double &amp;timestamp)//追踪双目数据，返回mpTracker-&gt;GrabImageStereo(imLeft,imRight,timestamp)cv::Mat System::TrackRGBD(const cv::Mat &amp;im, const cv::Mat &amp;depthmap, const double &amp;timestamp)//追踪深度相机数据，返回mpTracker-&gt;GrabImageRGBD(im,depthmap,timestamp)cv::Mat System::TrackMonocular(const cv::Mat &amp;im, const double &amp;timestamp)//追踪单目相机数据返回mpTracker-&gt;GrabImageMonocular(im,timestamp)void System::ActivateLocalizationMode()//mbActivateLocalizationMode = true，激活 mbActivateLocalizationModevoid System::DeactivateLocalizationMode()// mbDeactivateLocalizationMode = true，激活 mbDeactivateLocalizationModevoid System::Shutdown()//判断运行是否结束，结束则关闭系统void System::SaveTrajectoryTUM(const string &amp;filename)//求数据集中每一帧的位姿void System::SaveKeyFrameTrajectoryTUM(const string &amp;filename)//求数据集中每一关键帧的位姿void System::SaveTrajectoryKITTI(const string &amp;filename)//求数据集中每一帧的位姿 具体代码注释参见 https://github.com/LiDaiyang1205/SLAM_ldy]]></content>
+    <title><![CDATA[ORB_SLAM2 程序解读（3）-- ORB特征提取 ORBextractor.cc]]></title>
+    <url>%2F2019%2F09%2F16%2FORB_SLAM2%20%E7%A8%8B%E5%BA%8F%E8%A7%A3%E8%AF%BB%EF%BC%883%EF%BC%89%2F</url>
+    <content type="text"><![CDATA[1 ORB 特征点特征点由关键点（Key-point）和描述子（Descriptor）两部分组成。ORB特征点（Oriented FAST and Rotated BRIEF）是由Oriented FAST角点和 BRIEF （Binary Robust Independent Elementary Features）描述子构成，其计算速度是sift特征点的100倍，是surf特征点的10倍。 FAST和BRIEF在SLAM十四讲里都有介绍，这里主要说一下尺度不变性和旋转特性。 1.1 尺度不变性*尺度不变性 *是由构建图像金字塔，并在金字塔的每一层上检测角点来实现。 （1）对图像做不同尺度的高斯模糊 为了让尺度体现其连续性，高斯金字塔在简单降采样的基础上加上了高斯滤波。将图像金字塔每层的一张图像使用不同参数做高斯模糊，使得金字塔的每层含有多张高斯模糊图像，将金字塔每层多张图像合称为一组(Octave)，金字塔每层只有一组图像，组数和金字塔层数相等，使用下列公式计算，每组含有多张(也叫层Interval)图像。另外，降采样时，高斯金字塔上一组图像的初始图像(底层图像)是由前一组图像的倒数第三张图像隔点采样得到的。$$n=\log _{2}{\min (M, N)}-t, t \in\left[0, \log _{2}{\min (M, N)}\right]$$其中M、N为原图像的大小，t为塔顶图像的最小维数的对数值。如，对于大小为512x512的图像，金字塔上各层图像的大小如图1所示，当塔顶图像为4x4时，n=7，当塔顶图像为2x2时，n=8。 （2）对图像做降采样(隔点采样) 总结： 设置一个比例因子scaleFactor（opencv默认为1.2）和金字塔的层数nlevels（opencv默认为8）。将原图像按比例因子缩小成nlevels幅图像。缩放后的图像为：I’= I/scaleFactork(k=1,2,…, nlevels)。nlevels幅不同比例的图像提取特征点总和作为这幅图像的FAST特征点。 1.2 旋转特性特征的旋转 是由灰度质心法（Intensity Centroid）实现的。 灰度质心法在十四讲里有详细的讲解。这里放更加直观的公式。$$x_{0}=\frac{\sum_{i=1}^{m} \sum_{j=1}^{n} x_{i} f_{i j}}{\sum_{i=1}^{m} \sum_{j=1}^{n} f_{i j}}$$ $$y_{0}=\frac{\sum_{i=1}^{m} \sum_{j=1}^{n} y_{j} f_{i j}}{\sum_{i=1}^{m} \sum_{j=1}^{n} f_{i j}}$$ $$f_{ij}=\begin{cases} 0，像素灰度值&lt;T\ f_{ij}，像素灰度值\geq T\end{cases}$$ 其中，图片大小为$m\times n $，$(x_0,y_0)$表示质心，$x_i$表示第$i$行的坐标，$y_j$表示第$j$列的坐标，$f_{ij}$表示第$i$行第$j$列的像素值。 2 代码实现ORB-SLAM2中提取ORB特征是由ORBextractor.cc实现的。 该方法流程：1.对于输入的图片，计算其图像金字塔；2.提取图像金字塔中各层图像的关键点；3.计算提取出的关键点对应的描述子； 具体代码注释参见 https://github.com/LiDaiyang1205/SLAM_ldy]]></content>
       <categories>
         <category>slam</category>
       </categories>
@@ -12,9 +12,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[ORB_SLAM2 程序解读（1）-- 概述与ros_rgbd.cc]]></title>
-    <url>%2F2019%2F09%2F10%2FORB_SLAM2%20%E7%A8%8B%E5%BA%8F%E8%A7%A3%E8%AF%BB%EF%BC%881%EF%BC%89%2F</url>
-    <content type="text"><![CDATA[0 概述ORB-SLAM是由Raul Mur-Artal，J. M. M. Montiel和Juan D. Tardos于2015年发表在IEEE Transactions on Robotics。代码主页网址为：https://github.com/raulmur/ORB_SLAM2 。 我之所以选择ORB_SLAM2，是因为之前在研究回环检测，回环检测涉及到特征点的采集和处理，ORB就是特征点最常用的采集方法。为了实现ORB_SLAM2 的使用，我从安装依赖项到运行测试都写了完整的文档。实现ORBSLAM2的运行后，我发现这个包建图没问题，但是没有保存地图和加载地图的功能，于是又通过看博客改源码，实现了地图保存和地图加载。之前都是看着别人的博客改，自己对这个包一知半解，所以这里系统学习一下这个库。 ORB-SLAM是一个基于特征点的实时单目SLAM系统，在大规模的、小规模的、室内室外的环境都可以运行。该系统对剧烈运动也很鲁棒，支持宽基线的闭环检测和重定位，包括全自动初始化。该系统包含了所有SLAM系统共有的模块：跟踪（Tracking）、建图（Mapping）、重定位（Relocalization）、回环检测（Loop closing）。由于ORB-SLAM系统是基于特征点的SLAM系统，故其能够实时计算出相机的轨线，并生成场景的稀疏三维重建结果。 贡献： 1 系统架构ORB-SLAM其中的关键点如下图所示： ORB-SLAM主要分为三个线程进行，分别是Tracking、LocalMapping和LoopClosing。ORB-SLAM2的工程非常清晰漂亮，三个线程分别存放在对应的三个文件中，分别是Tracking.cpp、LocalMapping.cpp和LoopClosing.cpp文件中，很容易找到。 （1）跟踪（Tracking） 这一部分主要工作是从图像中提取ORB特征，根据上一帧进行姿态估计，或者进行通过全局重定位初始化位姿，然后跟踪已经重建的局部地图，优化位姿，再根据一些规则确定新的关键帧。 （2）建图（LocalMapping） 这一部分主要完成局部地图构建。包括对关键帧的插入，验证最近生成的地图点并进行筛选，然后生成新的地图点，使用局部光束平差调整（Local BA），最后再对插入的关键帧进行筛选，去除多余的关键帧。 （3）闭环检测（LoopClosing） 这一部分主要分为两个过程，分别是闭环探测和闭环校正。闭环检测先使用WOB进行探测，然后通过Sim3算法计算相似变换。闭环校正，主要是闭环融合和Essential Graph的图优化。 2 代码结构ORB-SLAM2代码写的很整洁。打开ORB-SLAM2的文件夹，你会看到以下文件夹： Examples文件夹：存放的分别是基于单目、双目、RGBD的实例程序 include文件夹：存放的是头文件，ORB-SLAM2可以被当作一个库来使用，很多函数都可以直接调用 src文件夹：存放的是和include对应的源文件，要讲的代码在该文件夹下 Thirdparty文件夹：存放的是用到的第三方库，优化库g2o在该文件夹下 Vocabulary文件夹：存放的是回环检测中BoW用到的视觉词典名为ORBvoc.txt build.sh:配置文件 其中变量命名规则： “p”表示指针数据类型；”n”表示int类型；“b”表示bool类型；”s”表示set类型； ”v”表示vevtor数据类型；“l”表示list数据类型；”m”表示类成员变量 3 ros_rgbd.ccORB_SLAM的代码非常整齐，简洁，便于阅读。由于我们用的是Kinect 2，有自己的slam小车，用的是ROS实现，所以使用的是/Examples/ROS/ORB_SLAM2/src/ros_rgbd.cc这个主程序。 1 定义了图像采集的类 123456789class ImageGrabber //图像采集&#123;public: ImageGrabber(ORB_SLAM2::System* pSLAM):mpSLAM(pSLAM)&#123;&#125; void GrabRGBD(const sensor_msgs::ImageConstPtr&amp; msgRGB,const sensor_msgs::ImageConstPtr&amp; msgD); ORB_SLAM2::System* mpSLAM;&#125;; 2 定义 ImageGrabber::GrabRGBD 函数 123456789101112131415161718192021222324252627void ImageGrabber::GrabRGBD(const sensor_msgs::ImageConstPtr&amp; msgRGB,const sensor_msgs::ImageConstPtr&amp; msgD)&#123; // Copy the ros image message to cv::Mat. cv_bridge::CvImageConstPtr cv_ptrRGB; // RGB信息 try &#123; cv_ptrRGB = cv_bridge::toCvShare(msgRGB); &#125; catch (cv_bridge::Exception&amp; e) &#123; ROS_ERROR("cv_bridge exception: %s", e.what()); return; &#125; cv_bridge::CvImageConstPtr cv_ptrD; // 深度信息 try &#123; cv_ptrD = cv_bridge::toCvShare(msgD); &#125; catch (cv_bridge::Exception&amp; e) &#123; ROS_ERROR("cv_bridge exception: %s", e.what()); return; &#125; mpSLAM-&gt;TrackRGBD(cv_ptrRGB-&gt;image,cv_ptrD-&gt;image,cv_ptrRGB-&gt;header.stamp.toSec());&#125; 2 主函数 123//初始化启动rosros::init(argc, argv, "RGBD");ros::start(); 12//创建ORB_SLAM2系统对象ORB_SLAM2::System SLAM(argv[1],argv[2],ORB_SLAM2::System::RGBD,true); 12//创建ImagGrabb 对象 igbImageGrabber igb(&amp;SLAM); 123456//读取rgb和深度信息message_filters::Subscriber&lt;sensor_msgs::Image&gt; rgb_sub(nh,"/kinect2/qhd/image_color",1);message_filters::Subscriber&lt;sensor_msgs::Image&gt; depth_sub(nh,"/kinect2/qhd/image_depth_rect",1);typedef message_filters::sync_policies::ApproximateTime&lt;sensor_msgs::Image, sensor_msgs::Image&gt; sync_pol;message_filters::Synchronizer&lt;sync_pol&gt; sync(sync_pol(10),rgb_sub,depth_sub);sync.registerCallback(boost::bind(&amp;ImageGrabber::GrabRGBD,&amp;igb,_1,_2)); 12345678//slam系统操作，加载、保存、关闭 //SLAM.LoadMap("/home/zj224/ORB_SLAM2/Examples/ROS/ORB_SLAM2/map.bin");//load the mapros::spin();// Stop all threadsSLAM.Shutdown();SLAM.SaveMap("map.bin"); //save the map// Save camera trajectorySLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");]]></content>
+    <title><![CDATA[ORB_SLAM2 程序解读（2）-- System.cc]]></title>
+    <url>%2F2019%2F09%2F11%2FORB_SLAM2%20%E7%A8%8B%E5%BA%8F%E8%A7%A3%E8%AF%BB%EF%BC%882%EF%BC%89%2F</url>
+    <content type="text"><![CDATA[1 System.ccSystem.cc是ORB-SLAM2的主程序，也是ORB-SLAM2系统的入口。 System函数中的关键代码及标注 12345678910111213mpVocabulary = new ORBVocabulary();//读取ORB词袋mpKeyFrameDatabase = new KeyFrameDatabase(*mpVocabulary);//创建关键帧数据库mpMap = new Map();//创建地图对象mpFrameDrawer = new FrameDrawer(mpMap);//创建显示关键帧的窗口mpMapDrawer = new MapDrawer(mpMap, strSettingsFile);//创建显示地图的窗口mpTracker = new Tracking(this, mpVocabulary, mpFrameDrawer, mpMapDrawer,mpMap, mpKeyFrameDatabase, strSettingsFile, mSensor);//初始化Tracking线程，该线程在主循环中mpLocalMapper = new LocalMapping(mpMap, mSensor==MONOCULAR);//初始化Local Mapping线程mptLocalMapping = new thread(&amp;ORB_SLAM2::LocalMapping::Run,mpLocalMapper);//启动线程mpLoopCloser = new LoopClosing(mpMap, mpKeyFrameDatabase, mpVocabulary, mSensor!=MONOCULAR);//初始化LoopClosing线程mptLoopClosing = new thread(&amp;ORB_SLAM2::LoopClosing::Run, mpLoopCloser);//启动线程mpViewer = new Viewer(this, mpFrameDrawer,mpMapDrawer,mpTracker,strSettingsFile);//初始化窗口mptViewer = new thread(&amp;Viewer::Run, mpViewer);//启动，前面会有一个是否可视化的判断 其他函数接口： 123456789cv::Mat System::TrackStereo(const cv::Mat &amp;imLeft, const cv::Mat &amp;imRight, const double &amp;timestamp)//追踪双目数据，返回mpTracker-&gt;GrabImageStereo(imLeft,imRight,timestamp)cv::Mat System::TrackRGBD(const cv::Mat &amp;im, const cv::Mat &amp;depthmap, const double &amp;timestamp)//追踪深度相机数据，返回mpTracker-&gt;GrabImageRGBD(im,depthmap,timestamp)cv::Mat System::TrackMonocular(const cv::Mat &amp;im, const double &amp;timestamp)//追踪单目相机数据返回mpTracker-&gt;GrabImageMonocular(im,timestamp)void System::ActivateLocalizationMode()//mbActivateLocalizationMode = true，激活 mbActivateLocalizationModevoid System::DeactivateLocalizationMode()// mbDeactivateLocalizationMode = true，激活 mbDeactivateLocalizationModevoid System::Shutdown()//判断运行是否结束，结束则关闭系统void System::SaveTrajectoryTUM(const string &amp;filename)//求数据集中每一帧的位姿void System::SaveKeyFrameTrajectoryTUM(const string &amp;filename)//求数据集中每一关键帧的位姿void System::SaveTrajectoryKITTI(const string &amp;filename)//求数据集中每一帧的位姿 具体代码注释参见 https://github.com/LiDaiyang1205/SLAM_ldy]]></content>
       <categories>
         <category>slam</category>
       </categories>
@@ -31,6 +31,17 @@
       </categories>
       <tags>
         <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[ORB_SLAM2 程序解读（1）-- 概述与ros_rgbd.cc]]></title>
+    <url>%2F2019%2F09%2F10%2FORB_SLAM2%20%E7%A8%8B%E5%BA%8F%E8%A7%A3%E8%AF%BB%EF%BC%881%EF%BC%89%2F</url>
+    <content type="text"><![CDATA[0 概述ORB-SLAM是由Raul Mur-Artal，J. M. M. Montiel和Juan D. Tardos于2015年发表在IEEE Transactions on Robotics。代码主页网址为：https://github.com/raulmur/ORB_SLAM2 。 我之所以选择ORB_SLAM2，是因为之前在研究回环检测，回环检测涉及到特征点的采集和处理，ORB就是特征点最常用的采集方法。为了实现ORB_SLAM2 的使用，我从安装依赖项到运行测试都写了完整的文档。实现ORBSLAM2的运行后，我发现这个包建图没问题，但是没有保存地图和加载地图的功能，于是又通过看博客改源码，实现了地图保存和地图加载。之前都是看着别人的博客改，自己对这个包一知半解，所以这里系统学习一下这个库。 ORB-SLAM是一个基于特征点的实时单目SLAM系统，在大规模的、小规模的、室内室外的环境都可以运行。该系统对剧烈运动也很鲁棒，支持宽基线的闭环检测和重定位，包括全自动初始化。该系统包含了所有SLAM系统共有的模块：跟踪（Tracking）、建图（Mapping）、重定位（Relocalization）、回环检测（Loop closing）。由于ORB-SLAM系统是基于特征点的SLAM系统，故其能够实时计算出相机的轨线，并生成场景的稀疏三维重建结果。 贡献： 1 系统架构ORB-SLAM其中的关键点如下图所示： ORB-SLAM主要分为三个线程进行，分别是Tracking、LocalMapping和LoopClosing。ORB-SLAM2的工程非常清晰漂亮，三个线程分别存放在对应的三个文件中，分别是Tracking.cpp、LocalMapping.cpp和LoopClosing.cpp文件中，很容易找到。 （1）跟踪（Tracking） 这一部分主要工作是从图像中提取ORB特征，根据上一帧进行姿态估计，或者进行通过全局重定位初始化位姿，然后跟踪已经重建的局部地图，优化位姿，再根据一些规则确定新的关键帧。 （2）建图（LocalMapping） 这一部分主要完成局部地图构建。包括对关键帧的插入，验证最近生成的地图点并进行筛选，然后生成新的地图点，使用局部光束平差调整（Local BA），最后再对插入的关键帧进行筛选，去除多余的关键帧。 （3）闭环检测（LoopClosing） 这一部分主要分为两个过程，分别是闭环探测和闭环校正。闭环检测先使用WOB进行探测，然后通过Sim3算法计算相似变换。闭环校正，主要是闭环融合和Essential Graph的图优化。 2 代码结构ORB-SLAM2代码写的很整洁。打开ORB-SLAM2的文件夹，你会看到以下文件夹： Examples文件夹：存放的分别是基于单目、双目、RGBD的实例程序 include文件夹：存放的是头文件，ORB-SLAM2可以被当作一个库来使用，很多函数都可以直接调用 src文件夹：存放的是和include对应的源文件，要讲的代码在该文件夹下 Thirdparty文件夹：存放的是用到的第三方库，优化库g2o在该文件夹下 Vocabulary文件夹：存放的是回环检测中BoW用到的视觉词典名为ORBvoc.txt build.sh:配置文件 其中变量命名规则： “p”表示指针数据类型；”n”表示int类型；“b”表示bool类型；”s”表示set类型； ”v”表示vevtor数据类型；“l”表示list数据类型；”m”表示类成员变量 3 ros_rgbd.ccORB_SLAM的代码非常整齐，简洁，便于阅读。由于我们用的是Kinect 2，有自己的slam小车，用的是ROS实现，所以使用的是/Examples/ROS/ORB_SLAM2/src/ros_rgbd.cc这个主程序。 1 定义了图像采集的类 123456789class ImageGrabber //图像采集&#123;public: ImageGrabber(ORB_SLAM2::System* pSLAM):mpSLAM(pSLAM)&#123;&#125; void GrabRGBD(const sensor_msgs::ImageConstPtr&amp; msgRGB,const sensor_msgs::ImageConstPtr&amp; msgD); ORB_SLAM2::System* mpSLAM;&#125;; 2 定义 ImageGrabber::GrabRGBD 函数 123456789101112131415161718192021222324252627void ImageGrabber::GrabRGBD(const sensor_msgs::ImageConstPtr&amp; msgRGB,const sensor_msgs::ImageConstPtr&amp; msgD)&#123; // Copy the ros image message to cv::Mat. cv_bridge::CvImageConstPtr cv_ptrRGB; // RGB信息 try &#123; cv_ptrRGB = cv_bridge::toCvShare(msgRGB); &#125; catch (cv_bridge::Exception&amp; e) &#123; ROS_ERROR("cv_bridge exception: %s", e.what()); return; &#125; cv_bridge::CvImageConstPtr cv_ptrD; // 深度信息 try &#123; cv_ptrD = cv_bridge::toCvShare(msgD); &#125; catch (cv_bridge::Exception&amp; e) &#123; ROS_ERROR("cv_bridge exception: %s", e.what()); return; &#125; mpSLAM-&gt;TrackRGBD(cv_ptrRGB-&gt;image,cv_ptrD-&gt;image,cv_ptrRGB-&gt;header.stamp.toSec());&#125; 2 主函数 123//初始化启动rosros::init(argc, argv, "RGBD");ros::start(); 12//创建ORB_SLAM2系统对象ORB_SLAM2::System SLAM(argv[1],argv[2],ORB_SLAM2::System::RGBD,true); 12//创建ImagGrabb 对象 igbImageGrabber igb(&amp;SLAM); 123456//读取rgb和深度信息message_filters::Subscriber&lt;sensor_msgs::Image&gt; rgb_sub(nh,"/kinect2/qhd/image_color",1);message_filters::Subscriber&lt;sensor_msgs::Image&gt; depth_sub(nh,"/kinect2/qhd/image_depth_rect",1);typedef message_filters::sync_policies::ApproximateTime&lt;sensor_msgs::Image, sensor_msgs::Image&gt; sync_pol;message_filters::Synchronizer&lt;sync_pol&gt; sync(sync_pol(10),rgb_sub,depth_sub);sync.registerCallback(boost::bind(&amp;ImageGrabber::GrabRGBD,&amp;igb,_1,_2)); 12345678//slam系统操作，加载、保存、关闭 //SLAM.LoadMap("/home/zj224/ORB_SLAM2/Examples/ROS/ORB_SLAM2/map.bin");//load the mapros::spin();// Stop all threadsSLAM.Shutdown();SLAM.SaveMap("map.bin"); //save the map// Save camera trajectorySLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");]]></content>
+      <categories>
+        <category>slam</category>
+      </categories>
+      <tags>
+        <tag>slam实现</tag>
       </tags>
   </entry>
   <entry>
@@ -133,20 +144,20 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[修改默认打开方式]]></title>
-    <url>%2F2019%2F08%2F21%2F%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%89%93%E5%BC%80%E6%96%B9%E5%BC%8F%2F</url>
-    <content type="text"><![CDATA[刚装上Typaro时markdown文件没有默认用它打开，而且打开方式中也找不到，可以采用以下方法 个人的打开方式保存在~/.local/share/applications/mimeapps.list 1sudo gedit ~/.local/share/applications/mimeapps.list 修改mimeapps.list 文件，在文件末尾添加 1text/markdown=typora.desktop 完成。]]></content>
-      <categories>
-        <category>问题解决</category>
-      </categories>
-      <tags>
-        <tag>Ubuntu系统</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[激光雷达安装步骤]]></title>
     <url>%2F2019%2F08%2F21%2F%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4%2F</url>
     <content type="text"><![CDATA[1. 安装SDK1.1 下载相关文件 网址：http://go.slamtec.com/rplidar/a3/download 我已将相关文件下载至思岚雷达文件夹 后续工作可以按照我的说明，不必去看SDK说明，里面包含Windows、macos等安装，很杂。 1.2 编译SDK 解压SDK压缩包至根目录，重命名为rplidar_sdk cd ~/rplidar_sdk/sdk make 1.3 交叉编译 我没有进行这一步骤，因为目前不知道是否需要 透过交叉编译特性,SDK 的编译系统支持编译产生其他平台/系统的二进制可执行文件。注意: 该功能仅针对使用 Makefile 的环境.交叉编译特性将通过调用 cross_compile.sh 脚本激活。该脚本的调用语法如下:CROSS_COMPILE_PREFIX= ./cross_compile.sh例如: CROSS_COMPILE_PREFIX=arm-linux-gnueabihf ./cross_compile.sh 2. 连接雷达和PC 直接接电脑即可 3. 运行DEMO3.1 ultra_simple 该示例程序演示 PC 通过串口与 RPLIDAR 进行连接，并不断的将 RPLIDAR 扫描数据输出的最简单过程。 ls /dev/ttyUSB* ##这个命令可以检测你的雷达USB编号，看你雷达连上没 cd ~/rplidar_sdk/sdk/output/Linux/Release ./ultra_simple /dev/ttyUSB0 能转起来就说明安装好了]]></content>
+      <categories>
+        <category>slam</category>
+      </categories>
+      <tags>
+        <tag>slam实现</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[激光雷达和ROS结合]]></title>
+    <url>%2F2019%2F08%2F21%2F%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE%E5%92%8CROS%E7%BB%93%E5%90%88%2F</url>
+    <content type="text"><![CDATA[网址：https://github.com/slamtec/rplidar_ros 1 下载整个rplidar_ros包 cd catkin_ws/src ##到你的工作空间的src git clone https://github.com/Slamtec/rplidar_ros.git cd .. catkin_make source ./devel/setup.bash 2 运行rplidar_ros包###每次雷达重新连接电脑时，需要进行2.1前的步骤，如果USB口不是USB0，需要改动launch文件中的 param name=”serial_port” type=”string” value=”/dev/rplidar”/ ls -l /dev |grep ttyUSB #检查雷达的USB口 sudo chmod 666 /dev/ttyUSB0 #赋予权限 2.1在rviz中显示 roslaunch rplidar_ros view_rplidar_a3.launch 2.2在终端显示 roslaunch rplidar_ros rplidar_a3.launch #启动雷达 rosrun rplidar_ros rplidarNodeClient #在另外一个终端打开]]></content>
       <categories>
         <category>slam</category>
       </categories>
@@ -166,14 +177,14 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[激光雷达和ROS结合]]></title>
-    <url>%2F2019%2F08%2F21%2F%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE%E5%92%8CROS%E7%BB%93%E5%90%88%2F</url>
-    <content type="text"><![CDATA[网址：https://github.com/slamtec/rplidar_ros 1 下载整个rplidar_ros包 cd catkin_ws/src ##到你的工作空间的src git clone https://github.com/Slamtec/rplidar_ros.git cd .. catkin_make source ./devel/setup.bash 2 运行rplidar_ros包###每次雷达重新连接电脑时，需要进行2.1前的步骤，如果USB口不是USB0，需要改动launch文件中的 param name=”serial_port” type=”string” value=”/dev/rplidar”/ ls -l /dev |grep ttyUSB #检查雷达的USB口 sudo chmod 666 /dev/ttyUSB0 #赋予权限 2.1在rviz中显示 roslaunch rplidar_ros view_rplidar_a3.launch 2.2在终端显示 roslaunch rplidar_ros rplidar_a3.launch #启动雷达 rosrun rplidar_ros rplidarNodeClient #在另外一个终端打开]]></content>
+    <title><![CDATA[修改默认打开方式]]></title>
+    <url>%2F2019%2F08%2F21%2F%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%89%93%E5%BC%80%E6%96%B9%E5%BC%8F%2F</url>
+    <content type="text"><![CDATA[刚装上Typaro时markdown文件没有默认用它打开，而且打开方式中也找不到，可以采用以下方法 个人的打开方式保存在~/.local/share/applications/mimeapps.list 1sudo gedit ~/.local/share/applications/mimeapps.list 修改mimeapps.list 文件，在文件末尾添加 1text/markdown=typora.desktop 完成。]]></content>
       <categories>
-        <category>slam</category>
+        <category>问题解决</category>
       </categories>
       <tags>
-        <tag>slam实现</tag>
+        <tag>Ubuntu系统</tag>
       </tags>
   </entry>
 </search>

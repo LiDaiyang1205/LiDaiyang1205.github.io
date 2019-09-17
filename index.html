@@ -168,6 +168,94 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-ORB_SLAM2 程序解读（3）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/16/ORB_SLAM2 程序解读（3）/">ORB_SLAM2 程序解读（3）-- ORB特征提取 ORBextractor.cc</a>
+    </h1>
+  
+
+        
+        <a href="/2019/09/16/ORB_SLAM2 程序解读（3）/" class="archive-article-date">
+  	<time datetime="2019-09-15T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-16</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-ORB-特征点"><a href="#1-ORB-特征点" class="headerlink" title="1 ORB 特征点"></a>1 ORB 特征点</h2><p>特征点由关键点（Key-point）和描述子（Descriptor）两部分组成。ORB特征点（Oriented FAST and Rotated BRIEF）是由Oriented FAST角点和 BRIEF （Binary Robust Independent Elementary Features）描述子构成，其计算速度是sift特征点的100倍，是surf特征点的10倍。</p>
+<p>FAST和BRIEF在SLAM十四讲里都有介绍，这里主要说一下尺度不变性和旋转特性。</p>
+        
+          <a class="article-more-a" href="/2019/09/16/ORB_SLAM2 程序解读（3）/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">slam实现</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/09/16/ORB_SLAM2 程序解读（3）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-ORB_SLAM2 程序解读（2）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -226,94 +314,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/09/11/ORB_SLAM2 程序解读（2）/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-ORB_SLAM2 程序解读（1）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/10/ORB_SLAM2 程序解读（1）/">ORB_SLAM2 程序解读（1）-- 概述与ros_rgbd.cc</a>
-    </h1>
-  
-
-        
-        <a href="/2019/09/10/ORB_SLAM2 程序解读（1）/" class="archive-article-date">
-  	<time datetime="2019-09-09T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="0-概述"><a href="#0-概述" class="headerlink" title="0 概述"></a>0 概述</h2><p>ORB-SLAM是由Raul Mur-Artal，J. M. M. Montiel和Juan D. Tardos于2015年发表在IEEE Transactions on Robotics。代码主页网址为：<a href="https://github.com/raulmur/ORB_SLAM2" target="_blank" rel="noopener">https://github.com/raulmur/ORB_SLAM2</a> 。</p>
-<p>我之所以选择ORB_SLAM2，是因为之前在研究<a href="https://lidaiyang1205.github.io/2019/08/22/回环检测/">回环检测</a>，回环检测涉及到特征点的采集和处理，ORB就是特征点最常用的采集方法。为了实现ORB_SLAM2 的使用，我从安装依赖项到运行测试都写了<a href="https://lidaiyang1205.github.io/2019/08/24/ORB_SLAM2%20%E5%AE%9E%E7%8E%B0/">完整的文档</a>。实现ORBSLAM2的运行后，我发现这个包建图没问题，但是没有保存地图和加载地图的功能，于是又通过看博客改源码，实现了<a href="https://lidaiyang1205.github.io/2019/08/26/ORB_SLAM2地图保存与加载（1）/">地图保存</a>和<a href="https://lidaiyang1205.github.io/2019/08/27/ORB_SLAM2地图保存与加载（2）/">地图加载</a>。之前都是看着别人的博客改，自己对这个包一知半解，所以这里系统学习一下这个库。</p>
-        
-          <a class="article-more-a" href="/2019/09/10/ORB_SLAM2 程序解读（1）/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">slam实现</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/09/10/ORB_SLAM2 程序解读（1）/">展开全文 >></a>
         </p>
       
 
@@ -407,6 +407,94 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/09/10/C++学习（4）.md/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-ORB_SLAM2 程序解读（1）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/10/ORB_SLAM2 程序解读（1）/">ORB_SLAM2 程序解读（1）-- 概述与ros_rgbd.cc</a>
+    </h1>
+  
+
+        
+        <a href="/2019/09/10/ORB_SLAM2 程序解读（1）/" class="archive-article-date">
+  	<time datetime="2019-09-09T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0-概述"><a href="#0-概述" class="headerlink" title="0 概述"></a>0 概述</h2><p>ORB-SLAM是由Raul Mur-Artal，J. M. M. Montiel和Juan D. Tardos于2015年发表在IEEE Transactions on Robotics。代码主页网址为：<a href="https://github.com/raulmur/ORB_SLAM2" target="_blank" rel="noopener">https://github.com/raulmur/ORB_SLAM2</a> 。</p>
+<p>我之所以选择ORB_SLAM2，是因为之前在研究<a href="https://lidaiyang1205.github.io/2019/08/22/回环检测/">回环检测</a>，回环检测涉及到特征点的采集和处理，ORB就是特征点最常用的采集方法。为了实现ORB_SLAM2 的使用，我从安装依赖项到运行测试都写了<a href="https://lidaiyang1205.github.io/2019/08/24/ORB_SLAM2%20%E5%AE%9E%E7%8E%B0/">完整的文档</a>。实现ORBSLAM2的运行后，我发现这个包建图没问题，但是没有保存地图和加载地图的功能，于是又通过看博客改源码，实现了<a href="https://lidaiyang1205.github.io/2019/08/26/ORB_SLAM2地图保存与加载（1）/">地图保存</a>和<a href="https://lidaiyang1205.github.io/2019/08/27/ORB_SLAM2地图保存与加载（2）/">地图加载</a>。之前都是看着别人的博客改，自己对这个包一知半解，所以这里系统学习一下这个库。</p>
+        
+          <a class="article-more-a" href="/2019/09/10/ORB_SLAM2 程序解读（1）/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">slam实现</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/09/10/ORB_SLAM2 程序解读（1）/">展开全文 >></a>
         </p>
       
 
@@ -950,96 +1038,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/08/26/ORB_SLAM2地图保存与加载（1）/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yilia 主题一些问题解决" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/25/yilia 主题一些问题解决/">yilia 主题一些问题解决</a>
-    </h1>
-  
-
-        
-        <a href="/2019/08/25/yilia 主题一些问题解决/" class="archive-article-date">
-  	<time datetime="2019-08-24T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-公式无法显示"><a href="#1-公式无法显示" class="headerlink" title="1 公式无法显示"></a>1 公式无法显示</h2><p>yilia 目录下有一个_config.yml 编辑里面的</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#数学公式</span><br><span class="line"></span><br><span class="line">mathjax: false</span><br></pre></td></tr></table></figure>
-
-<p>将false 改为true即可</p>
-        
-          <a class="article-more-a" href="/2019/08/25/yilia 主题一些问题解决/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">hexo</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/问题解决//" class="article-tag-list-link color5">问题解决</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/25/yilia 主题一些问题解决/">展开全文 >></a>
         </p>
       
 
