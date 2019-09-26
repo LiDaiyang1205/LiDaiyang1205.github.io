@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://LiDaiyang1205.github.io">
-  <title>Tag: Ubuntu系统 | LDY_blog</title>
+  <title>C++学习（5）--数组、指针与字符串 | LDY_blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="LDY_blog">
-<meta property="og:url" content="http://LiDaiyang1205.github.io/tags/Ubuntu系统/index.html">
+  <meta name="description" content="1 数组数组是具有一定顺序关系的若干对象的集合体，组成数组的对象称为该数组的元素。 每个元素有 n 个下标的数组称为 n 维数组。">
+<meta name="keywords" content="C++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++学习（5）--数组、指针与字符串">
+<meta property="og:url" content="http://LiDaiyang1205.github.io/2019/09/25/C++学习（5）/index.html">
 <meta property="og:site_name" content="LDY_blog">
+<meta property="og:description" content="1 数组数组是具有一定顺序关系的若干对象的集合体，组成数组的对象称为该数组的元素。 每个元素有 n 个下标的数组称为 n 维数组。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-09-25T09:18:46.802Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LDY_blog">
+<meta name="twitter:title" content="C++学习（5）--数组、指针与字符串">
+<meta name="twitter:description" content="1 数组数组是具有一定顺序关系的若干对象的集合体，组成数组的对象称为该数组的元素。 每个元素有 n 个下标的数组称为 n 维数组。">
   
     <link rel="alternative" href="/atom.xml" title="LDY_blog" type="application/atom+xml">
   
@@ -166,120 +171,202 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-C++学习（5）" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/08/21/ubuntu系统备份为ISO文件/" class="archive-article-date">
-  	<time datetime="2019-08-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-21</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/08/21/ubuntu系统备份为ISO文件/">ubuntu系统备份为ISO文件</a>
+    <h1 class="article-title" itemprop="name">
+      C++学习（5）--数组、指针与字符串
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2019/09/25/C++学习（5）/" class="archive-article-date">
+  	<time datetime="2019-09-24T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-数组"><a href="#1-数组" class="headerlink" title="1 数组"></a>1 数组</h2><p>数组是具有一定顺序关系的若干对象的集合体，组成数组的对象称为该数组的元素。</p>
+<p>每个元素有 n 个下标的数组称为 n 维数组。</p>
+<a id="more"></a>
+
+<h3 id="1-1-数组的声明与使用"><a href="#1-1-数组的声明与使用" class="headerlink" title="1.1 数组的声明与使用"></a>1.1 数组的声明与使用</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> a[<span class="number">10</span>],b[<span class="number">10</span>];</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">		a[i]=i*<span class="number">2</span><span class="number">-1</span>;</span><br><span class="line">		b[<span class="number">10</span>-i<span class="number">-1</span>]=a[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="string">"a["</span>&lt;&lt;i&lt;&lt;<span class="string">"]="</span>&lt;&lt;a[i]&lt;&lt;<span class="string">"  "</span>;</span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="string">"b["</span>&lt;&lt;i&lt;&lt;<span class="string">"]="</span>&lt;&lt;b[i]&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-数组的存储与初始化"><a href="#1-2-数组的存储与初始化" class="headerlink" title="1.2 数组的存储与初始化"></a>1.2 数组的存储与初始化</h3><p>数组元素在内存中是顺序、连续存储的。</p>
+<p>数组的初始化就是在声明数组时给部分或全部元素赋初值。</p>
+<h3 id="1-3-数组作为函数参数"><a href="#1-3-数组作为函数参数" class="headerlink" title="1.3 数组作为函数参数"></a>1.3 数组作为函数参数</h3><p>使用数组名传递数据时，传递的是地址。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//使用数组名作为函数参数</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">rowSum</span><span class="params">(<span class="keyword">int</span> a[][<span class="number">4</span>],<span class="keyword">int</span> nRow)</span></span>&#123;  <span class="comment">//计算二维数组a每行元素的值的和，nRow是行数</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;nRow;i++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;<span class="number">4</span>;j++)</span><br><span class="line">            a[i][<span class="number">0</span>]+=a[i][j];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;                                <span class="comment">//主函数 </span></span><br><span class="line">    <span class="keyword">int</span> table[<span class="number">3</span>][<span class="number">4</span>]=&#123;&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>&#125;,&#123;<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;,&#123;<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>&#125;&#125;;    <span class="comment">//声明并初始化数组</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">3</span>;i++)&#123;                               <span class="comment">//输出数组元素</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;<span class="number">4</span>;j++)</span><br><span class="line">            <span class="built_in">cout</span>&lt;&lt;table[i][j]&lt;&lt;<span class="string">" "</span>;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    rowSum(table,<span class="number">3</span>);                                    <span class="comment">//调用子函数，计算各行和</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">3</span>;i++)                                <span class="comment">//输出计算结果</span></span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">"Sum of row "</span>&lt;&lt;i&lt;&lt;<span class="string">" is "</span>&lt;&lt;table[i][<span class="number">0</span>]&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-4-对象数组"><a href="#1-4-对象数组" class="headerlink" title="1.4  对象数组"></a>1.4  对象数组</h3><p>声明一个一维对象数组的语句形式是:<br>类名      数组名[常量表达式];</p>
+<p>每个数组元素都是一个对象，通过这个对象，便可以访问到它的公有成员，一般形式是:<br>数组名[下标表达式].成员名</p>
+<p>举例：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//Point.h</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> LEARN_POINT_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LEARN_POINT_H</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span>&#123;</span>                             <span class="comment">//类的定义</span></span><br><span class="line"><span class="keyword">public</span>:                              <span class="comment">//外部接口</span></span><br><span class="line">    Point();</span><br><span class="line">    Point(<span class="keyword">int</span> x,<span class="keyword">int</span> y);</span><br><span class="line">    ~Point();</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">move</span><span class="params">(<span class="keyword">int</span> newX,<span class="keyword">int</span> newY)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getX</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;<span class="keyword">return</span> x;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getY</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;<span class="keyword">return</span> y;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">showCount</span><span class="params">()</span></span>;        <span class="comment">//静态函数成员</span></span><br><span class="line"><span class="keyword">private</span>:                             <span class="comment">//私有数据成员</span></span><br><span class="line">    <span class="keyword">int</span> x,y;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> count;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">//LEARN_POINT_H</span></span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Point.cpp</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"Point.h"</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line">Point::Point()&#123;</span><br><span class="line">    x=y=<span class="number">0</span>;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"Default Constructor called."</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    count++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Point::Point(<span class="keyword">int</span> x,<span class="keyword">int</span> y):x(x),y(y)&#123;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"Constructor called."</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Point::~Point()&#123;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"Destructor called."</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    count--;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Point::move(<span class="keyword">int</span> newX,<span class="keyword">int</span> newY)&#123;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"Moving the point to ("</span>&lt;&lt;newX&lt;&lt;<span class="string">","</span>&lt;&lt;newY&lt;&lt;<span class="string">")"</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    x=newX;</span><br><span class="line">    y=newY;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Point::showCount()&#123;</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; <span class="string">"the number of points = "</span>&lt;&lt;count&lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//对象数组应用举例</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"Point.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> Point::count=<span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"Entering main..."</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    Point a[<span class="number">2</span>];</span><br><span class="line">    Point::showCount();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">2</span>;i++)</span><br><span class="line">        a[i].move(i+<span class="number">10</span>,i+<span class="number">20</span>);</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"Exiting main..."</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>CMakeLists.txt</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION <span class="number">3.14</span>)</span><br><span class="line">project(learn)</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span>(CMAKE_CXX_STANDARD <span class="number">14</span>)</span><br><span class="line">add_library(point Point.cpp)</span><br><span class="line">add_executable(learn main.cpp)</span><br><span class="line">target_link_libraries( learn point )</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-指针"><a href="#2-指针" class="headerlink" title="2 指针"></a>2 指针</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//指针基础</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;                    <span class="comment">//定义int型数i</span></span><br><span class="line">    <span class="keyword">int</span> *ptr=&amp;i;              <span class="comment">//声明指针ptr,并取i的地址赋给ptr  相当于int *ptr; ptr=&amp;i;</span></span><br><span class="line">    i=<span class="number">10</span>;                     <span class="comment">//int型数赋初值</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"i="</span>&lt;&lt;i&lt;&lt;<span class="built_in">endl</span>;      <span class="comment">//输出int型数的值</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"*ptr="</span>&lt;&lt;*ptr&lt;&lt;<span class="built_in">endl</span>; <span class="comment">//输出int型指针所指地址的内容</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">i=10</span><br><span class="line">*ptr=10</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 指针处理数组</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> a[<span class="number">10</span>]=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">0</span>&#125;;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> *p=a;p&lt;(a+<span class="number">10</span>);p++)</span><br><span class="line">	    <span class="built_in">cout</span>&lt;&lt;*p&lt;&lt;<span class="string">" "</span>;</span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//指针数组  二维数组举例</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> array2[<span class="number">3</span>][<span class="number">3</span>]=&#123;&#123;<span class="number">11</span>,<span class="number">12</span>,<span class="number">13</span>&#125;,&#123;<span class="number">21</span>,<span class="number">22</span>,<span class="number">23</span>&#125;,&#123;<span class="number">31</span>,<span class="number">32</span>,<span class="number">33</span>&#125;&#125;;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">3</span>;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;<span class="number">3</span>;j++)</span><br><span class="line">		    <span class="built_in">cout</span>&lt;&lt;*(*(array2+i)+j)&lt;&lt;<span class="string">" "</span>;      <span class="comment">//逐个输出二维数组第i行元素值 </span></span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//指针作为函数参数</span></span><br><span class="line"><span class="comment">//读入3个浮点数，将整数部分和小数部分分别输出</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//将实数x分成整数部分和小数部分，形参intPart、fracPart是指针</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">splitFloat</span><span class="params">(<span class="keyword">float</span> x,<span class="keyword">int</span> *intPart,<span class="keyword">float</span> *fracPart)</span></span>&#123;</span><br><span class="line">    *intPart=<span class="keyword">static_cast</span>&lt;<span class="keyword">int</span>&gt;(x);                         <span class="comment">//取x的整数部分</span></span><br><span class="line">    *fracPart=x-*intPart;                                 <span class="comment">//取x的小数部分</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"Enter 3 float point numbers:"</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">3</span>;i++)&#123;</span><br><span class="line">        <span class="keyword">float</span> x,f;</span><br><span class="line">        <span class="keyword">int</span> n;</span><br><span class="line">        <span class="built_in">cin</span>&gt;&gt;x;</span><br><span class="line">        splitFloat(x,&amp;n,&amp;f);                              <span class="comment">//变量地址作为实参</span></span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">"Integer Part="</span>&lt;&lt;n&lt;&lt;<span class="string">" Fraction Part="</span>&lt;&lt;f&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//指向函数的指针实例</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printStuff</span><span class="params">(<span class="keyword">float</span>)</span></span>&#123;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"This is the print stuff function."</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printMessage</span><span class="params">(<span class="keyword">float</span> data)</span></span>&#123;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"The data to be listed is "</span>&lt;&lt;data&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printFloat</span><span class="params">(<span class="keyword">float</span> data)</span></span>&#123;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"The data to be printed is "</span>&lt;&lt;data&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">float</span> PI=<span class="number">3.14159f</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">float</span> TWO_PI=PI*<span class="number">2.0f</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;                             <span class="comment">//主函数</span></span><br><span class="line">    <span class="keyword">void</span> (*functionPointer)(<span class="keyword">float</span>);     <span class="comment">//函数指针</span></span><br><span class="line">    printStuff(PI);</span><br><span class="line">    functionPointer=printStuff;         <span class="comment">//函数指针指向printStuff</span></span><br><span class="line">    functionPointer(PI);                <span class="comment">//函数指针调用</span></span><br><span class="line">    functionPointer=printMessage;       <span class="comment">//函数指针指向printMessage</span></span><br><span class="line">    functionPointer(TWO_PI);            <span class="comment">//函数指针调用</span></span><br><span class="line">    functionPointer(<span class="number">13.0</span>);              <span class="comment">//函数指针调用</span></span><br><span class="line">    functionPointer=printFloat;         <span class="comment">//函数指针指向printFloat</span></span><br><span class="line">    functionPointer(PI);                <span class="comment">//函数指针调用</span></span><br><span class="line">    printFloat(PI);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//访问对象的公有成员函数的不同方式</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span>&#123;</span>                               <span class="comment">//类的定义</span></span><br><span class="line"><span class="keyword">public</span>:                                <span class="comment">//外部接口</span></span><br><span class="line">    Point(<span class="keyword">int</span> x=<span class="number">0</span>,<span class="keyword">int</span> y=<span class="number">0</span>):x(x),y(y)&#123;&#125; <span class="comment">//构造函数</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getX</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;<span class="keyword">return</span> x;&#125;       <span class="comment">//返回x</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getY</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;<span class="keyword">return</span> y;&#125;       <span class="comment">//返回y</span></span><br><span class="line"><span class="keyword">private</span>:                               <span class="comment">//私有数据</span></span><br><span class="line">    <span class="keyword">int</span> x,y;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;                                <span class="comment">//主函数</span></span><br><span class="line">    <span class="function">Point <span class="title">a</span><span class="params">(<span class="number">4</span>,<span class="number">5</span>)</span></span>;                          <span class="comment">//定义对象a</span></span><br><span class="line">    Point *p1=&amp;a;                          <span class="comment">//定义对象指针并初始化</span></span><br><span class="line">    <span class="keyword">int</span> (Point::*funcPtr)() <span class="keyword">const</span>=&amp;Point::getX;  <span class="comment">//定义成员函数指针并初始化</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;(a.*funcPtr)()&lt;&lt;<span class="built_in">endl</span>;           <span class="comment">//（1）使用成员函数指针和对象名访问成员函数</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;(p1-&gt;*funcPtr)()&lt;&lt;<span class="built_in">endl</span>;         <span class="comment">//（2）使用成员函数指针和对象指针访问成员函数</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;a.getX()&lt;&lt;<span class="built_in">endl</span>;                 <span class="comment">//（3）使用对象名访问成员函数</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;p1-&gt;getX()&lt;&lt;<span class="built_in">endl</span>;               <span class="comment">//（4）使用对象指针访问成员函数</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Ubuntu系统</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/问题解决//" class="article-tag-list-link color5">问题解决</a>
+        			<a href="/categories/语言学习//" class="article-tag-list-link color5">语言学习</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/08/21/修改默认打开方式/" class="archive-article-date">
-  	<time datetime="2019-08-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-21</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2019/09/26/20190926-opencv-添加-viz-模块/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          opencv 添加 viz 模块
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/09/16/ORB_SLAM2 程序解读（3）/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">ORB_SLAM2 程序解读（3）-- ORB特征提取 ORBextractor.cc</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/08/21/修改默认打开方式/">修改默认打开方式</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Ubuntu系统</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/问题解决//" class="article-tag-list-link color5">问题解决</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-数组"><span class="toc-number">1.</span> <span class="toc-text">1 数组</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-数组的声明与使用"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 数组的声明与使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-数组的存储与初始化"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 数组的存储与初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-数组作为函数参数"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 数组作为函数参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-对象数组"><span class="toc-number">1.4.</span> <span class="toc-text">1.4  对象数组</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-指针"><span class="toc-number">2.</span> <span class="toc-text">2 指针</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
   
-    </div></section>
   
 
-    
+  
+
+  
+
+  
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
+<script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  id: "http://LiDaiyang1205.github.io/2019/09/25/C++学习（5）/",
+  owner: 'LiDaiyang1205',
+  repo: 'lidaiyang1205.github.io',
+  oauth: {
+    client_id: '475216e46d30d7abf884',
+    client_secret: 'b2579e07ba6a95e1297e8c153a08c2c218ee067b',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
+  
 
 
           </div>
@@ -302,9 +389,9 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,

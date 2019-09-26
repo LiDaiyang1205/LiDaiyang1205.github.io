@@ -168,6 +168,187 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-ORB_SLAM2地图保存与加载（2）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/27/ORB_SLAM2地图保存与加载（2）/">ORB_SLAM2地图保存与加载（2）</a>
+    </h1>
+  
+
+        
+        <a href="/2019/08/27/ORB_SLAM2地图保存与加载（2）/" class="archive-article-date">
+  	<time datetime="2019-08-26T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文记录了ORB_SLAM2中地图加载的过程。<br>参考博客：<br><a href="https://blog.csdn.net/qq_34254510/article/details/79969046" target="_blank" rel="noopener">https://blog.csdn.net/qq_34254510/article/details/79969046</a><br><a href="http://www.cnblogs.com/mafuqiang/p/6972841.html" target="_blank" rel="noopener">http://www.cnblogs.com/mafuqiang/p/6972841.html</a><br><a href="https://blog.csdn.net/felaim/article/details/79667635" target="_blank" rel="noopener">https://blog.csdn.net/felaim/article/details/79667635</a><br><a href="https://blog.csdn.net/u014709760/article/details/86319090" target="_blank" rel="noopener">https://blog.csdn.net/u014709760/article/details/86319090</a></p>
+<h2 id="2-地图加载"><a href="#2-地图加载" class="headerlink" title="2 地图加载"></a>2 地图加载</h2><h3 id="2-1-源码修改"><a href="#2-1-源码修改" class="headerlink" title="2.1 源码修改"></a>2.1 源码修改</h3><p>地图加载部分需要修改的较多，所以按所需修改的文件来进行说明。</p>
+<h4 id="（1）Map相关文件修改"><a href="#（1）Map相关文件修改" class="headerlink" title="（1）Map相关文件修改"></a>（1）Map相关文件修改</h4><p>在Map.h文件中声明地图加载函数、地图点加载函数和关键帧加载函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//加载地图信息</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Load</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span> &amp;filename,SystemSetting* mySystemSetting)</span></span>;</span><br><span class="line">    <span class="function">MapPoint* <span class="title">LoadMapPoint</span><span class="params">(ifstream &amp;f)</span></span>;</span><br><span class="line">    <span class="function">KeyFrame* <span class="title">LoadKeyFrame</span><span class="params">(ifstream &amp;f,SystemSetting* mySystemSetting)</span></span>;</span><br></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2019/08/27/ORB_SLAM2地图保存与加载（2）/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">slam实现</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/08/27/ORB_SLAM2地图保存与加载（2）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-ORB_SLAM2地图保存与加载（1）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/26/ORB_SLAM2地图保存与加载（1）/">ORB_SLAM2地图保存与加载（1）</a>
+    </h1>
+  
+
+        
+        <a href="/2019/08/26/ORB_SLAM2地图保存与加载（1）/" class="archive-article-date">
+  	<time datetime="2019-08-25T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文记录了ORB_SLAM2中地图保存的过程。<br>参考博客：<br><a href="https://blog.csdn.net/qq_34254510/article/details/79969046" target="_blank" rel="noopener">https://blog.csdn.net/qq_34254510/article/details/79969046</a><br><a href="http://www.cnblogs.com/mafuqiang/p/6972841.html" target="_blank" rel="noopener">http://www.cnblogs.com/mafuqiang/p/6972841.html</a><br><a href="https://blog.csdn.net/felaim/article/details/79667635" target="_blank" rel="noopener">https://blog.csdn.net/felaim/article/details/79667635</a><br><a href="https://blog.csdn.net/u014709760/article/details/86319090" target="_blank" rel="noopener">https://blog.csdn.net/u014709760/article/details/86319090</a></p>
+<h2 id="1-地图保存"><a href="#1-地图保存" class="headerlink" title="1 地图保存"></a>1 地图保存</h2><h3 id="1-1-地图元素分析"><a href="#1-1-地图元素分析" class="headerlink" title="1.1 地图元素分析"></a>1.1 地图元素分析</h3><p>所谓地图保存，就是保存地图“Map”中的各个元素，以及它们之间的关系，凡是跟踪过程中需要用到的东西自然也就是需要保存的对象。地图主要包含<strong>关键帧</strong>、<strong>3D地图点</strong>、<strong>BoW向量</strong>、<strong>共视图</strong>、<strong>生长树</strong>等，在跟踪过程中有三种跟踪模型和局部地图跟踪等过程，局部地图跟踪需要用到3D地图点、共视关系等元素，参考帧模型需要用到关键帧的BoW向量，重定位需要用到BoW向量、3D点等。所以基本上述元素都需要保存。</p>
+<p>另一方面，关键帧也是一个抽象的概念（一个类），我们看看具体包含什么（其实都在关键帧类里面了），关键帧是从普通帧来的，所以得到视频帧后首先需要做的就是检测特征点，计算描述符，还有当前帧的相机位姿。成为关键帧之后需要有对应的ID编号，以及特征点进行三角化之后的3D地图点等。</p>
+<p>关于3D地图点需要保存的就只有世界坐标了，至于其它的关联关系可以从关键帧获得。需要单独说的是在关键帧类中包含了特征点和描述符，所以BoW向量是不需要保存的（也没办法保存），只需要在加载了关键帧之后利用特征描述符重新计算即可。</p>
+<p>所以现在需要保存的东西包括<strong>关键帧</strong>、<strong>3D地图点</strong>、<strong>共视图</strong>、<strong>生长树</strong>。</p>
+        
+          <a class="article-more-a" href="/2019/08/26/ORB_SLAM2地图保存与加载（1）/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">slam实现</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/08/26/ORB_SLAM2地图保存与加载（1）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yilia 主题一些问题解决" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -439,6 +620,103 @@
 
 
   
+    <article id="post-激光雷达和ROS结合" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/21/激光雷达和ROS结合/">激光雷达和ROS结合</a>
+    </h1>
+  
+
+        
+        <a href="/2019/08/21/激光雷达和ROS结合/" class="archive-article-date">
+  	<time datetime="2019-08-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>网址：<a href="https://github.com/slamtec/rplidar_ros" target="_blank" rel="noopener">https://github.com/slamtec/rplidar_ros</a></strong></p>
+<h2 id="1-下载整个rplidar-ros包"><a href="#1-下载整个rplidar-ros包" class="headerlink" title="1 下载整个rplidar_ros包"></a>1 下载整个rplidar_ros包</h2><ul>
+<li><p>cd catkin_ws/src    ##到你的工作空间的src</p>
+</li>
+<li><p>git clone <a href="https://github.com/Slamtec/rplidar_ros.git" target="_blank" rel="noopener">https://github.com/Slamtec/rplidar_ros.git</a></p>
+</li>
+<li><p>cd ..</p>
+</li>
+<li><p>catkin_make</p>
+</li>
+<li><p>source ./devel/setup.bash</p></li></ul>
+        
+          <a class="article-more-a" href="/2019/08/21/激光雷达和ROS结合/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">slam实现</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/08/21/激光雷达和ROS结合/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-ubuntu系统备份为ISO文件" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -593,103 +871,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/08/21/修改默认打开方式/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-激光雷达和ROS结合" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/21/激光雷达和ROS结合/">激光雷达和ROS结合</a>
-    </h1>
-  
-
-        
-        <a href="/2019/08/21/激光雷达和ROS结合/" class="archive-article-date">
-  	<time datetime="2019-08-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>网址：<a href="https://github.com/slamtec/rplidar_ros" target="_blank" rel="noopener">https://github.com/slamtec/rplidar_ros</a></strong></p>
-<h2 id="1-下载整个rplidar-ros包"><a href="#1-下载整个rplidar-ros包" class="headerlink" title="1 下载整个rplidar_ros包"></a>1 下载整个rplidar_ros包</h2><ul>
-<li><p>cd catkin_ws/src    ##到你的工作空间的src</p>
-</li>
-<li><p>git clone <a href="https://github.com/Slamtec/rplidar_ros.git" target="_blank" rel="noopener">https://github.com/Slamtec/rplidar_ros.git</a></p>
-</li>
-<li><p>cd ..</p>
-</li>
-<li><p>catkin_make</p>
-</li>
-<li><p>source ./devel/setup.bash</p></li></ul>
-        
-          <a class="article-more-a" href="/2019/08/21/激光雷达和ROS结合/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">slam实现</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/21/激光雷达和ROS结合/">展开全文 >></a>
         </p>
       
 
@@ -935,6 +1116,10 @@ MathJax.Hub.Queue(function() {
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">opencv</a>
+              </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">C++</a>
