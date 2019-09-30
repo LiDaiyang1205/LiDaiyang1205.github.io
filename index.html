@@ -168,6 +168,102 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-搭建自己的slam前端" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/30/搭建自己的slam前端/">搭建slam前端</a>
+    </h1>
+  
+
+        
+        <a href="/2019/09/30/搭建自己的slam前端/" class="archive-article-date">
+  	<time datetime="2019-09-29T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-30</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-搭建VO框架"><a href="#1-搭建VO框架" class="headerlink" title="1 搭建VO框架"></a>1 搭建VO框架</h2><h3 id="1-1-确定程序框架"><a href="#1-1-确定程序框架" class="headerlink" title="1.1 确定程序框架"></a>1.1 确定程序框架</h3><p>挑选一个工程目录，在它下面建立这些文件夹来组织代码文件：</p>
+<ol>
+<li>bin 用来存放可执行的二进制；</li>
+<li>include/myslam 存放 slam 模块的头文件，主要是.h。这种做法的理由是，当你把包含目录设到 include 时，在引用自己的头文件时，需要写 include ”myslam/xxx.h”，这样不容易和别的库混淆。</li>
+<li>src 存放源代码文件，主要是 cpp;</li>
+<li>test 存放测试用的文件，也是 cpp;</li>
+<li>lib 存放编译好的库文件;</li>
+<li>config 存放配置文件;</li>
+<li>cmake_modules 第三方库的 cmake 文件，在使用 g2o 之类的库中会用到它。</li>
+</ol>
+        
+          <a class="article-more-a" href="/2019/09/30/搭建自己的slam前端/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">vo实现</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/09/30/搭建自己的slam前端/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-20190926-opencv-添加-viz-模块" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -522,6 +618,94 @@
 
 
   
+    <article id="post-ORB_SLAM2 程序解读（1）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/10/ORB_SLAM2 程序解读（1）/">ORB_SLAM2 程序解读（1）-- 概述与ros_rgbd.cc</a>
+    </h1>
+  
+
+        
+        <a href="/2019/09/10/ORB_SLAM2 程序解读（1）/" class="archive-article-date">
+  	<time datetime="2019-09-09T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0-概述"><a href="#0-概述" class="headerlink" title="0 概述"></a>0 概述</h2><p>ORB-SLAM是由Raul Mur-Artal，J. M. M. Montiel和Juan D. Tardos于2015年发表在IEEE Transactions on Robotics。代码主页网址为：<a href="https://github.com/raulmur/ORB_SLAM2" target="_blank" rel="noopener">https://github.com/raulmur/ORB_SLAM2</a> 。</p>
+<p>我之所以选择ORB_SLAM2，是因为之前在研究<a href="https://lidaiyang1205.github.io/2019/08/22/回环检测/">回环检测</a>，回环检测涉及到特征点的采集和处理，ORB就是特征点最常用的采集方法。为了实现ORB_SLAM2 的使用，我从安装依赖项到运行测试都写了<a href="https://lidaiyang1205.github.io/2019/08/24/ORB_SLAM2%20%E5%AE%9E%E7%8E%B0/">完整的文档</a>。实现ORBSLAM2的运行后，我发现这个包建图没问题，但是没有保存地图和加载地图的功能，于是又通过看博客改源码，实现了<a href="https://lidaiyang1205.github.io/2019/08/26/ORB_SLAM2地图保存与加载（1）/">地图保存</a>和<a href="https://lidaiyang1205.github.io/2019/08/27/ORB_SLAM2地图保存与加载（2）/">地图加载</a>。之前都是看着别人的博客改，自己对这个包一知半解，所以这里系统学习一下这个库。</p>
+        
+          <a class="article-more-a" href="/2019/09/10/ORB_SLAM2 程序解读（1）/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">slam实现</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/09/10/ORB_SLAM2 程序解读（1）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-C++学习（4）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -586,94 +770,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/09/10/C++学习（4）/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-ORB_SLAM2 程序解读（1）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/10/ORB_SLAM2 程序解读（1）/">ORB_SLAM2 程序解读（1）-- 概述与ros_rgbd.cc</a>
-    </h1>
-  
-
-        
-        <a href="/2019/09/10/ORB_SLAM2 程序解读（1）/" class="archive-article-date">
-  	<time datetime="2019-09-09T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="0-概述"><a href="#0-概述" class="headerlink" title="0 概述"></a>0 概述</h2><p>ORB-SLAM是由Raul Mur-Artal，J. M. M. Montiel和Juan D. Tardos于2015年发表在IEEE Transactions on Robotics。代码主页网址为：<a href="https://github.com/raulmur/ORB_SLAM2" target="_blank" rel="noopener">https://github.com/raulmur/ORB_SLAM2</a> 。</p>
-<p>我之所以选择ORB_SLAM2，是因为之前在研究<a href="https://lidaiyang1205.github.io/2019/08/22/回环检测/">回环检测</a>，回环检测涉及到特征点的采集和处理，ORB就是特征点最常用的采集方法。为了实现ORB_SLAM2 的使用，我从安装依赖项到运行测试都写了<a href="https://lidaiyang1205.github.io/2019/08/24/ORB_SLAM2%20%E5%AE%9E%E7%8E%B0/">完整的文档</a>。实现ORBSLAM2的运行后，我发现这个包建图没问题，但是没有保存地图和加载地图的功能，于是又通过看博客改源码，实现了<a href="https://lidaiyang1205.github.io/2019/08/26/ORB_SLAM2地图保存与加载（1）/">地图保存</a>和<a href="https://lidaiyang1205.github.io/2019/08/27/ORB_SLAM2地图保存与加载（2）/">地图加载</a>。之前都是看着别人的博客改，自己对这个包一知半解，所以这里系统学习一下这个库。</p>
-        
-          <a class="article-more-a" href="/2019/09/10/ORB_SLAM2 程序解读（1）/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">slam实现</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/09/10/ORB_SLAM2 程序解读（1）/">展开全文 >></a>
         </p>
       
 
@@ -971,100 +1067,6 @@
 
 
   
-    <article id="post-C++学习（1）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/29/C++学习（1）/">C++学习（1）--基础</a>
-    </h1>
-  
-
-        
-        <a href="/2019/08/29/C++学习（1）/" class="archive-article-date">
-  	<time datetime="2019-08-28T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-命名空间"><a href="#1-命名空间" class="headerlink" title="1 命名空间"></a>1 命名空间</h2><p>避免命名冲突</p>
-<p>std是C++标准库的命名空间（ namespace）名</p>
-<p>using namespace std表示打开std命名空间</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">     <span class="built_in">cout</span> &lt;&lt; <span class="string">"Hello!"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">     <span class="built_in">cout</span> &lt;&lt; <span class="string">"Welcome to c++!"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">     <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>运行结果：</strong></p>
-<p>Hello!</p>
-<p>Welcome to c++！</p>
-        
-          <a class="article-more-a" href="/2019/08/29/C++学习（1）/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/语言学习//" class="article-tag-list-link color5">语言学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/29/C++学习（1）/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1204,6 +1206,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">slam理论</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">vo实现</a>
               </li>
             
             <div class="clearfix"></div>
