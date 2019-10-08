@@ -6,20 +6,15 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://LiDaiyang1205.github.io">
-  <title>激光雷达和ROS结合 | LDY_blog</title>
+  <title>Archives: 2019/10 | LDY_blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="网址：https://github.com/slamtec/rplidar_ros 1 下载整个rplidar_ros包 cd catkin_ws/src    ##到你的工作空间的src  git clone https://github.com/Slamtec/rplidar_ros.git  cd ..  catkin_make  source ./devel/setup.bash">
-<meta name="keywords" content="slam实现">
-<meta property="og:type" content="article">
-<meta property="og:title" content="激光雷达和ROS结合">
-<meta property="og:url" content="http://LiDaiyang1205.github.io/2019/08/21/激光雷达和ROS结合/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="LDY_blog">
+<meta property="og:url" content="http://LiDaiyang1205.github.io/archives/2019/10/index.html">
 <meta property="og:site_name" content="LDY_blog">
-<meta property="og:description" content="网址：https://github.com/slamtec/rplidar_ros 1 下载整个rplidar_ros包 cd catkin_ws/src    ##到你的工作空间的src  git clone https://github.com/Slamtec/rplidar_ros.git  cd ..  catkin_make  source ./devel/setup.bash">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-02T03:30:22.981Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="激光雷达和ROS结合">
-<meta name="twitter:description" content="网址：https://github.com/slamtec/rplidar_ros 1 下载整个rplidar_ros包 cd catkin_ws/src    ##到你的工作空间的src  git clone https://github.com/Slamtec/rplidar_ros.git  cd ..  catkin_make  source ./devel/setup.bash">
+<meta name="twitter:title" content="LDY_blog">
   
     <link rel="alternative" href="/atom.xml" title="LDY_blog" type="application/atom+xml">
   
@@ -171,96 +166,48 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-激光雷达和ROS结合" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      激光雷达和ROS结合
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2019" class="archive-year">2019</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2019/10/08/搭建自己的slam前端/" class="archive-article-date">
+  	<time datetime="2019-10-07T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-08</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2019/10/08/搭建自己的slam前端/">搭建slam前端</a>
     </h1>
   
 
-        
-        <a href="/2019/08/21/激光雷达和ROS结合/" class="archive-article-date">
-  	<time datetime="2019-08-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>网址：<a href="https://github.com/slamtec/rplidar_ros" target="_blank" rel="noopener">https://github.com/slamtec/rplidar_ros</a></strong></p>
-<h2 id="1-下载整个rplidar-ros包"><a href="#1-下载整个rplidar-ros包" class="headerlink" title="1 下载整个rplidar_ros包"></a>1 下载整个rplidar_ros包</h2><ul>
-<li><p>cd catkin_ws/src    ##到你的工作空间的src</p>
-</li>
-<li><p>git clone <a href="https://github.com/Slamtec/rplidar_ros.git" target="_blank" rel="noopener">https://github.com/Slamtec/rplidar_ros.git</a></p>
-</li>
-<li><p>cd ..</p>
-</li>
-<li><p>catkin_make</p>
-</li>
-<li><p>source ./devel/setup.bash</p>
-<a id="more"></a>
-
-</li>
-</ul>
-<h2 id="2-运行rplidar-ros包"><a href="#2-运行rplidar-ros包" class="headerlink" title="2 运行rplidar_ros包"></a>2 运行rplidar_ros包</h2><p>###每次雷达重新连接电脑时，需要进行2.1前的步骤，如果USB口不是USB0，需要改动launch文件中的  <strong>param name=”serial_port” type=”string” value=”/dev/rplidar”/</strong> </p>
-<ul>
-<li>ls -l /dev |grep ttyUSB   #检查雷达的USB口 </li>
-<li>sudo chmod 666 /dev/ttyUSB0    #赋予权限   </li>
-</ul>
-<h3 id="2-1在rviz中显示"><a href="#2-1在rviz中显示" class="headerlink" title="2.1在rviz中显示"></a>2.1在rviz中显示</h3><ul>
-<li>roslaunch rplidar_ros view_rplidar_a3.launch</li>
-</ul>
-<h3 id="2-2在终端显示"><a href="#2-2在终端显示" class="headerlink" title="2.2在终端显示"></a>2.2在终端显示</h3><ul>
-<li><p>roslaunch rplidar_ros rplidar_a3.launch    #启动雷达</p>
-</li>
-<li><p>rosrun rplidar_ros rplidarNodeClient     #在另外一个终端打开</p>
-</li>
-</ul>
-
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">slam实现</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">vo实现</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -273,86 +220,17 @@
 	</div>
 
 
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
+        </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2019/08/21/激光雷达安装步骤/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          激光雷达安装步骤
-        
-      </div>
-    </a>
   
   
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-        <div class="toc-container tooltip-left">
-            <i class="icon-font icon-category"></i>
-            <div class="tooltip tooltip-east">
-                <span class="tooltip-item">
-                </span>
-                <span class="tooltip-content">
-                    <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-下载整个rplidar-ros包"><span class="toc-number">1.</span> <span class="toc-text">1 下载整个rplidar_ros包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-运行rplidar-ros包"><span class="toc-number">2.</span> <span class="toc-text">2 运行rplidar_ros包</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1在rviz中显示"><span class="toc-number">2.1.</span> <span class="toc-text">2.1在rviz中显示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2在终端显示"><span class="toc-number">2.2.</span> <span class="toc-text">2.2在终端显示</span></a></li></ol></li></ol>
-                    </div>
-                </span>
-            </div>
-        </div>
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
-  <div id="gitment-ctn"></div> 
-<link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
-<script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-var gitment = new Gitment({
-  id: "http://LiDaiyang1205.github.io/2019/08/21/激光雷达和ROS结合/",
-  owner: 'LiDaiyang1205',
-  repo: 'lidaiyang1205.github.io',
-  oauth: {
-    client_id: '475216e46d30d7abf884',
-    client_secret: 'b2579e07ba6a95e1297e8c153a08c2c218ee067b',
-  },
-})
-gitment.render('gitment-ctn')
-</script>
-  
+    
 
 
           </div>
@@ -375,8 +253,8 @@ gitment.render('gitment-ctn')
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

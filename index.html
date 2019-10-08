@@ -175,31 +175,23 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/30/搭建自己的slam前端/">搭建slam前端</a>
+      <a class="article-title" href="/2019/10/08/搭建自己的slam前端/">搭建slam前端</a>
     </h1>
   
 
         
-        <a href="/2019/09/30/搭建自己的slam前端/" class="archive-article-date">
-  	<time datetime="2019-09-29T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-30</time>
+        <a href="/2019/10/08/搭建自己的slam前端/" class="archive-article-date">
+  	<time datetime="2019-10-07T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-08</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="1-搭建VO框架"><a href="#1-搭建VO框架" class="headerlink" title="1 搭建VO框架"></a>1 搭建VO框架</h2><h3 id="1-1-确定程序框架"><a href="#1-1-确定程序框架" class="headerlink" title="1.1 确定程序框架"></a>1.1 确定程序框架</h3><p>挑选一个工程目录，在它下面建立这些文件夹来组织代码文件：</p>
-<ol>
-<li>bin 用来存放可执行的二进制；</li>
-<li>include/myslam 存放 slam 模块的头文件，主要是.h。这种做法的理由是，当你把包含目录设到 include 时，在引用自己的头文件时，需要写 include ”myslam/xxx.h”，这样不容易和别的库混淆。</li>
-<li>src 存放源代码文件，主要是 cpp;</li>
-<li>test 存放测试用的文件，也是 cpp;</li>
-<li>lib 存放编译好的库文件;</li>
-<li>config 存放配置文件;</li>
-<li>cmake_modules 第三方库的 cmake 文件，在使用 g2o 之类的库中会用到它。</li>
-</ol>
+        <h2 id="0-简介"><a href="#0-简介" class="headerlink" title="0 简介"></a>0 简介</h2><p>这个文档参考于视觉slam14讲的第九讲。</p>
+<p>按照高博的做法，同样是一步一步搭建，由浅入深比较容易理解，当然这也带来了一些反复的修改的工作，如果想直接看最终版本，可以到<a href="https://github.com/LiDaiyang1205/vo_project" target="_blank" rel="noopener">这里</a>看最终版。</p>
         
-          <a class="article-more-a" href="/2019/09/30/搭建自己的slam前端/#more">more >></a>
+          <a class="article-more-a" href="/2019/10/08/搭建自己的slam前端/#more">more >></a>
         
       
 
@@ -234,7 +226,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/09/30/搭建自己的slam前端/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/08/搭建自己的slam前端/">展开全文 >></a>
         </p>
       
 
