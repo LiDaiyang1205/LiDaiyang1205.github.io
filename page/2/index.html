@@ -982,19 +982,19 @@
 
 
   
-    <article id="post-激光雷达安装步骤" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-激光雷达和ROS结合" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/21/激光雷达安装步骤/">激光雷达安装步骤</a>
+      <a class="article-title" href="/2019/08/21/激光雷达和ROS结合/">激光雷达和ROS结合</a>
     </h1>
   
 
         
-        <a href="/2019/08/21/激光雷达安装步骤/" class="archive-article-date">
+        <a href="/2019/08/21/激光雷达和ROS结合/" class="archive-article-date">
   	<time datetime="2019-08-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-21</time>
 </a>
         
@@ -1002,22 +1002,19 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="1-安装SDK"><a href="#1-安装SDK" class="headerlink" title="1. 安装SDK"></a>1. 安装SDK</h2><h3 id="1-1-下载相关文件"><a href="#1-1-下载相关文件" class="headerlink" title="1.1 下载相关文件"></a>1.1 下载相关文件</h3><ul>
-<li>网址：<a href="http://go.slamtec.com/rplidar/a3/download" target="_blank" rel="noopener">http://go.slamtec.com/rplidar/a3/download</a></li>
-<li>我已将相关文件下载至<strong>思岚雷达</strong>文件夹</li>
-<li>后续工作可以按照我的说明，不必去看SDK说明，里面包含Windows、macos等安装，很杂。</li>
-</ul>
-<h3 id="1-2-编译SDK"><a href="#1-2-编译SDK" class="headerlink" title="1.2 编译SDK"></a>1.2 编译SDK</h3><ol>
-<li>解压SDK压缩包至根目录，重命名为<strong>rplidar_sdk</strong></li>
-<li>cd ~/rplidar_sdk/sdk</li>
-<li>make</li>
-</ol>
-<h3 id="1-3-交叉编译"><a href="#1-3-交叉编译" class="headerlink" title="1.3 交叉编译"></a>1.3 交叉编译</h3><ul>
-<li><p>我没有进行这一步骤，因为目前不知道是否需要</p>
+        <p><strong>网址：<a href="https://github.com/slamtec/rplidar_ros" target="_blank" rel="noopener">https://github.com/slamtec/rplidar_ros</a></strong></p>
+<h2 id="1-下载整个rplidar-ros包"><a href="#1-下载整个rplidar-ros包" class="headerlink" title="1 下载整个rplidar_ros包"></a>1 下载整个rplidar_ros包</h2><ul>
+<li><p>cd catkin_ws/src    ##到你的工作空间的src</p>
 </li>
-<li><p>透过交叉编译特性,SDK 的编译系统支持编译产生其他平台/系统的二进制可<br>执行文件。<br>注意: 该功能仅针对使用 Makefile 的环境.<br>交叉编译特性将通过调用 cross_compile.sh 脚本激活。该脚本的调用语法如<br>下:<br>CROSS_COMPILE_PREFIX=<compile_prefix> ./cross_compile.sh<br>例如: CROSS_COMPILE_PREFIX=arm-linux-gnueabihf ./cross_compile.sh</compile_prefix></p></li></ul>
+<li><p>git clone <a href="https://github.com/Slamtec/rplidar_ros.git" target="_blank" rel="noopener">https://github.com/Slamtec/rplidar_ros.git</a></p>
+</li>
+<li><p>cd ..</p>
+</li>
+<li><p>catkin_make</p>
+</li>
+<li><p>source ./devel/setup.bash</p></li></ul>
         
-          <a class="article-more-a" href="/2019/08/21/激光雷达安装步骤/#more">more >></a>
+          <a class="article-more-a" href="/2019/08/21/激光雷达和ROS结合/#more">more >></a>
         
       
 
@@ -1052,7 +1049,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/21/激光雷达安装步骤/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/08/21/激光雷达和ROS结合/">展开全文 >></a>
         </p>
       
 
@@ -1200,6 +1197,10 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">opencv</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
              
@@ -1217,10 +1218,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hexo</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">opencv</a>
               </li>
              
               <li class="article-tag-list-item">
