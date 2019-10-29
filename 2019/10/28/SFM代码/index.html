@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://LiDaiyang1205.github.io">
-  <title>LDY_blog</title>
+  <title>SFM资料 | LDY_blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="LDY_blog">
-<meta property="og:url" content="http://LiDaiyang1205.github.io/page/3/index.html">
+  <meta name="description" content="1. OpenSfMOpenSfM is a Structure from Motion library written in Python. The library serves as a processing pipeline for reconstructing camera poses and 3D scenes from multiple images. It consists of b">
+<meta name="keywords" content="资料">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SFM资料">
+<meta property="og:url" content="http://LiDaiyang1205.github.io/2019/10/28/SFM代码/index.html">
 <meta property="og:site_name" content="LDY_blog">
+<meta property="og:description" content="1. OpenSfMOpenSfM is a Structure from Motion library written in Python. The library serves as a processing pipeline for reconstructing camera poses and 3D scenes from multiple images. It consists of b">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-28T06:42:48.391Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LDY_blog">
+<meta name="twitter:title" content="SFM资料">
+<meta name="twitter:description" content="1. OpenSfMOpenSfM is a Structure from Motion library written in Python. The library serves as a processing pipeline for reconstructing camera poses and 3D scenes from multiple images. It consists of b">
   
     <link rel="alternative" href="/atom.xml" title="LDY_blog" type="application/atom+xml">
   
@@ -166,44 +171,78 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-激光雷达和ROS结合" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-SFM代码" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/21/激光雷达和ROS结合/">激光雷达和ROS结合</a>
+    <h1 class="article-title" itemprop="name">
+      SFM资料
     </h1>
   
 
         
-        <a href="/2019/08/21/激光雷达和ROS结合/" class="archive-article-date">
-  	<time datetime="2019-08-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-21</time>
+        <a href="/2019/10/28/SFM代码/" class="archive-article-date">
+  	<time datetime="2019-10-27T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-28</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>网址：<a href="https://github.com/slamtec/rplidar_ros" target="_blank" rel="noopener">https://github.com/slamtec/rplidar_ros</a></strong></p>
-<h2 id="1-下载整个rplidar-ros包"><a href="#1-下载整个rplidar-ros包" class="headerlink" title="1 下载整个rplidar_ros包"></a>1 下载整个rplidar_ros包</h2><ul>
-<li><p>cd catkin_ws/src    ##到你的工作空间的src</p>
-</li>
-<li><p>git clone <a href="https://github.com/Slamtec/rplidar_ros.git" target="_blank" rel="noopener">https://github.com/Slamtec/rplidar_ros.git</a></p>
-</li>
-<li><p>cd ..</p>
-</li>
-<li><p>catkin_make</p>
-</li>
-<li><p>source ./devel/setup.bash</p></li></ul>
-        
-          <a class="article-more-a" href="/2019/08/21/激光雷达和ROS结合/#more">more >></a>
-        
+        <h2 id="1-OpenSfM"><a href="#1-OpenSfM" class="headerlink" title="1. OpenSfM"></a>1. OpenSfM</h2><p><a href="https://github.com/mapillary/OpenSfM" target="_blank" rel="noopener">OpenSfM</a> is a Structure from Motion library written in Python. The library serves as a processing pipeline for reconstructing camera poses and 3D scenes from multiple images. It consists of basic modules for Structure from Motion (feature detection/matching, minimal solvers) with a focus on building a robust and scalable reconstruction pipeline. It also integrates external sensor (e.g. GPS, accelerometer) measurements for geographical alignment and robustness. A JavaScript viewer is provided to preview the models and debug the pipeline.</p>
+<a id="more"></a>
+
+<h2 id="2-SFM-AR-Visual-SLAM"><a href="#2-SFM-AR-Visual-SLAM" class="headerlink" title="2. SFM-AR-Visual-SLAM"></a>2. SFM-AR-Visual-SLAM</h2><p>这是一个各种资源汇总的<a href="https://github.com/marknabil/SFM-Visual-SLAM" target="_blank" rel="noopener">链接</a>。</p>
+<h2 id="3-GMS-Feature-Matcher"><a href="#3-GMS-Feature-Matcher" class="headerlink" title="3. GMS-Feature-Matcher"></a>3. GMS-Feature-Matcher</h2><p>GMS: Grid-based Motion Statistics for Fast, Ultra-robust Feature Correspondence</p>
+<p><a href="https://github.com/JiawangBian/GMS-Feature-Matcher" target="_blank" rel="noopener">链接</a></p>
+<h2 id="4-SFM-example"><a href="#4-SFM-example" class="headerlink" title="4. SFM_example"></a>4. SFM_example</h2><p>This is an example code showing a simple SFM pipeline using OpenCV + GTSAM + PMVS2. OpenCV is used for feature matching, motion recovery and triangulation. GTSAM is used for bundle adjustment. The code output files for consumption by PMVS2, which does dense 3d point reconstruction. The code assumes the images are taken sequentialy apart by the same camera, with no change in zoom.</p>
+<p>This code is meant to be educational so no attempts have been made to make it production friendly.</p>
+<p><a href="https://github.com/nghiaho12/SFM_example" target="_blank" rel="noopener">链接</a></p>
+<h2 id="5-OpenMVG"><a href="#5-OpenMVG" class="headerlink" title="5. OpenMVG"></a>5. OpenMVG</h2><p><strong>OpenMVG</strong> (open Multiple View Geometry)：开源多视角立体几何库，这是一个cv届处理多视角立体几何的著名开源库，信奉“简单，可维护”，提供了一套强大的接口，每个模块都被测试过，尽力提供一致可靠的体验。</p>
+<p>openMVG能够：</p>
+<ol>
+<li>解决多视角立体几何的精准匹配问题；</li>
+<li>提供一系列SfM需要用到的特征提取和匹配方法；</li>
+<li>完整的SfM工具链（校正，参估，重建，表面处理等）；</li>
+</ol>
+<p><a href="https://github.com/openMVG/openMVG" target="_blank" rel="noopener">链接</a></p>
+<h2 id="6-数据集"><a href="#6-数据集" class="headerlink" title="6. 数据集"></a>6. 数据集</h2><p><a href="https://github.com/AIBluefisher/ComputerVisionDatasets" target="_blank" rel="noopener">Datasets for Computer Vision</a></p>
+<p>includes:</p>
+<ul>
+<li>3d reconstruction (SfM, MVS)</li>
+<li>semantic segmentation</li>
+<li>feature &amp; descriptor learning</li>
+<li>depth estimation</li>
+<li>pose estimation</li>
+</ul>
+<h2 id="7-open3D"><a href="#7-open3D" class="headerlink" title="7. open3D"></a>7. open3D</h2><p><a href="https://github.com/intel-isl/Open3D" target="_blank" rel="noopener">Open3D</a> is an open-source library that supports rapid development of software that deals with 3D data. The Open3D frontend exposes a set of carefully selected data structures and algorithms in both C++ and Python. The backend is highly optimized and is set up for parallelization.</p>
+<p>这个库很新，是intel开发的，还在不断更新中，最大的亮点在于能用Python编程，入门更加简单。</p>
+
       
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
       
     </div>
     <div class="article-info article-info-index">
@@ -214,7 +253,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">slam实现</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">资料</a>
         		</li>
       		
 		</ul>
@@ -234,16 +273,33 @@
 
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/21/激光雷达和ROS结合/">展开全文 >></a>
-        </p>
-      
 
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2019/10/28/open3d学习/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          open3d学习
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/10/23/硕博论文参考/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">硕博论文参考</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -258,200 +314,48 @@
         </div>
         
         
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-ubuntu系统备份为ISO文件" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/21/ubuntu系统备份为ISO文件/">ubuntu系统备份为ISO文件</a>
-    </h1>
-  
-
-        
-        <a href="/2019/08/21/ubuntu系统备份为ISO文件/" class="archive-article-date">
-  	<time datetime="2019-08-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-安装systemback"><a href="#1-安装systemback" class="headerlink" title="1 安装systemback"></a>1 安装systemback</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:nemh/systemback</span><br><span class="line"></span><br><span class="line">sudo apt-get update</span><br><span class="line"></span><br><span class="line">sudo apt-get install systemback unionfs-fuse</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2019/08/21/ubuntu系统备份为ISO文件/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Ubuntu系统</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/问题解决//" class="article-tag-list-link color5">问题解决</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/21/ubuntu系统备份为ISO文件/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-OpenSfM"><span class="toc-number">1.</span> <span class="toc-text">1. OpenSfM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-SFM-AR-Visual-SLAM"><span class="toc-number">2.</span> <span class="toc-text">2. SFM-AR-Visual-SLAM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-GMS-Feature-Matcher"><span class="toc-number">3.</span> <span class="toc-text">3. GMS-Feature-Matcher</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-SFM-example"><span class="toc-number">4.</span> <span class="toc-text">4. SFM_example</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-OpenMVG"><span class="toc-number">5.</span> <span class="toc-text">5. OpenMVG</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-数据集"><span class="toc-number">6.</span> <span class="toc-text">6. 数据集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-open3D"><span class="toc-number">7.</span> <span class="toc-text">7. open3D</span></a></li></ol>
+                    </div>
+                </span>
             </div>
         </div>
         
-        
     </div>
 </aside>
 
 
 
-
-  
-    <article id="post-修改默认打开方式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/21/修改默认打开方式/">修改默认打开方式</a>
-    </h1>
-  
-
-        
-        <a href="/2019/08/21/修改默认打开方式/" class="archive-article-date">
-  	<time datetime="2019-08-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>刚装上Typaro时markdown文件没有默认用它打开，而且打开方式中也找不到，可以采用以下方法</li>
-<li>个人的打开方式保存在~/.local/share/applications/mimeapps.list</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gedit ~/.local/share/applications/mimeapps.list</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>修改<code>mimeapps.list</code> 文件，在文件末尾添加</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">text/markdown=typora.desktop</span><br></pre></td></tr></table></figure>
-
-<p>完成。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Ubuntu系统</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/问题解决//" class="article-tag-list-link color5">问题解决</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/21/修改默认打开方式/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
   
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
-    </nav>
+  
+
+  
+
+  
+
+  
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
+<script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  id: "http://LiDaiyang1205.github.io/2019/10/28/SFM代码/",
+  owner: 'LiDaiyang1205',
+  repo: 'lidaiyang1205.github.io',
+  oauth: {
+    client_id: '475216e46d30d7abf884',
+    client_secret: 'b2579e07ba6a95e1297e8c153a08c2c218ee067b',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
   
 
 
@@ -474,8 +378,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

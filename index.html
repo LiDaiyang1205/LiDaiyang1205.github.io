@@ -168,6 +168,249 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-open3d学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/28/open3d学习/">open3d学习</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/28/open3d学习/" class="archive-article-date">
+  	<time datetime="2019-10-27T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>三维重建的官方文档在<a href="http://www.open3d.org/docs/release/tutorial/ReconstructionSystem/index.html" target="_blank" rel="noopener">这里</a>。</p>
+<p>该库参考的文献</p>
+<p>Choi, Q.-Y. Zhou, and V. Koltun, Robust Reconstruction of Indoor Scenes, CVPR, 2015.</p>
+<p>J. Park, Q.-Y. Zhou, and V. Koltun, Colored Point Cloud Registration Revisited, ICCV, 2017.</p>
+<p>我的github库 在<a href="https://github.com/LiDaiyang1205/vision3d" target="_blank" rel="noopener">这里</a> ，里面包含说明文档、代码、数据集等等。</p>
+<h2 id="0-概述"><a href="#0-概述" class="headerlink" title="0 概述"></a>0 概述</h2><p>整个三维重建系统分为4步：</p>
+<p>（1）创建片段(fragment)：从输入的RGBD序列的短子序列构建局部几何表面（称为片段）。</p>
+<p>（2）片段配准(Register fragments)：片段在全局空间中对齐以检测循环闭合。</p>
+<p>（3）优化配准：将粗略的对齐方式变得更紧密。</p>
+<p>（4）整合场景：整合RGB-D图像以生成场景的网格模型。</p>
+<h2 id="1-创建片段"><a href="#1-创建片段" class="headerlink" title="1 创建片段"></a>1 创建片段</h2><h3 id="1-1-输入参数"><a href="#1-1-输入参数" class="headerlink" title="1.1 输入参数"></a>1.1 输入参数</h3><p>这部分内容通过  <em>python run_system.py [config] –make</em>  运行。</p>
+<p>在 <code>config</code> 中，[“path_dataset”]应有<code>image</code> 和<code>depth</code>两个文件夹，且里面的rgb图和深度图应已经同步且配准。如果open3d没有你的数据集的json文件，那么<code>config</code>中的各项参数需要自己写好。</p>
+<h3 id="1-2-RGBD图像对的配准"><a href="#1-2-RGBD图像对的配准" class="headerlink" title="1.2 RGBD图像对的配准"></a>1.2 RGBD图像对的配准</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># /ReconstructionSystem/make_fragments.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">register_one_rgbd_pair</span><span class="params">(s, t, color_files, depth_files, intrinsic,</span></span></span><br><span class="line"><span class="function"><span class="params">                           with_opencv, config)</span>:</span></span><br><span class="line">    source_rgbd_image = read_rgbd_image(color_files[s], depth_files[s], <span class="literal">True</span>,</span><br><span class="line">                                        config)</span><br><span class="line">    target_rgbd_image = read_rgbd_image(color_files[t], depth_files[t], <span class="literal">True</span>,</span><br><span class="line">                                        config)</span><br><span class="line"></span><br><span class="line">    option = o3d.odometry.OdometryOption()</span><br><span class="line">    option.max_depth_diff = config[<span class="string">"max_depth_diff"</span>]</span><br><span class="line">    <span class="keyword">if</span> abs(s - t) <span class="keyword">is</span> <span class="keyword">not</span> <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">if</span> with_opencv:</span><br><span class="line">            success_5pt, odo_init = pose_estimation(source_rgbd_image,</span><br><span class="line">                                                    target_rgbd_image,</span><br><span class="line">                                                    intrinsic, <span class="literal">False</span>)</span><br><span class="line">            <span class="keyword">if</span> success_5pt:</span><br><span class="line">                [success, trans, info] = o3d.odometry.compute_rgbd_odometry(</span><br><span class="line">                    source_rgbd_image, target_rgbd_image, intrinsic, odo_init,</span><br><span class="line">                    o3d.odometry.RGBDOdometryJacobianFromHybridTerm(), option)</span><br><span class="line">                <span class="keyword">return</span> [success, trans, info]</span><br><span class="line">        <span class="keyword">return</span> [<span class="literal">False</span>, np.identity(<span class="number">4</span>), np.identity(<span class="number">6</span>)]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        odo_init = np.identity(<span class="number">4</span>)</span><br><span class="line">        [success, trans, info] = o3d.odometry.compute_rgbd_odometry(</span><br><span class="line">            source_rgbd_image, target_rgbd_image, intrinsic, odo_init,</span><br><span class="line">            o3d.odometry.RGBDOdometryJacobianFromHybridTerm(), option)</span><br><span class="line">        <span class="keyword">return</span> [success, trans, info]</span><br></pre></td></tr></table></figure>
+
+<p>该函数从<code>source_rgbd_image</code>读取一对RGBD图像，将其配准到<code>target_rgbd_image</code>。调用Open3D函数<code>compute_rgbd_odometry</code>以配准RGBD图像。</p>
+<p>对于相邻的RGBD图像，使用单位矩阵作为初始化。对于非相邻的RGBD图像，用宽基线匹配来初始化。特别地，<code>pose_estimation</code>函数计算OpenCV ORB特征以匹配宽基线图像上的稀疏特征，然后使用5点RANSAC来估计粗配准，将结果作为<code>compute_rgbd_odometry</code>的初值。</p>
+<h3 id="1-3-多路配准"><a href="#1-3-多路配准" class="headerlink" title="1.3 多路配准"></a>1.3 多路配准</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># examples/Python/ReconstructionSystem/make_fragments.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_posegraph_for_fragment</span><span class="params">(path_dataset, sid, eid, color_files,</span></span></span><br><span class="line"><span class="function"><span class="params">                                depth_files, fragment_id, n_fragments,</span></span></span><br><span class="line"><span class="function"><span class="params">                                intrinsic, with_opencv, config)</span>:</span></span><br><span class="line">    o3d.utility.set_verbosity_level(o3d.utility.VerbosityLevel.Error)</span><br><span class="line">    pose_graph = o3d.registration.PoseGraph()</span><br><span class="line">    trans_odometry = np.identity(<span class="number">4</span>)</span><br><span class="line">    pose_graph.nodes.append(o3d.registration.PoseGraphNode(trans_odometry))</span><br><span class="line">    <span class="keyword">for</span> s <span class="keyword">in</span> range(sid, eid):</span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> range(s + <span class="number">1</span>, eid):</span><br><span class="line">            <span class="comment"># odometry</span></span><br><span class="line">            <span class="keyword">if</span> t == s + <span class="number">1</span>:</span><br><span class="line">                print(</span><br><span class="line">                    <span class="string">"Fragment %03d / %03d :: RGBD matching between frame : %d and %d"</span></span><br><span class="line">                    % (fragment_id, n_fragments - <span class="number">1</span>, s, t))</span><br><span class="line">                [success, trans,</span><br><span class="line">                 info] = register_one_rgbd_pair(s, t, color_files, depth_files,</span><br><span class="line">                                                intrinsic, with_opencv, config)</span><br><span class="line">                trans_odometry = np.dot(trans, trans_odometry)</span><br><span class="line">                trans_odometry_inv = np.linalg.inv(trans_odometry)</span><br><span class="line">                pose_graph.nodes.append(</span><br><span class="line">                    o3d.registration.PoseGraphNode(trans_odometry_inv))</span><br><span class="line">                pose_graph.edges.append(</span><br><span class="line">                    o3d.registration.PoseGraphEdge(s - sid,</span><br><span class="line">                                                   t - sid,</span><br><span class="line">                                                   trans,</span><br><span class="line">                                                   info,</span><br><span class="line">                                                   uncertain=<span class="literal">False</span>))</span><br><span class="line"></span><br><span class="line">            <span class="comment"># keyframe loop closure</span></span><br><span class="line">            <span class="keyword">if</span> s % config[<span class="string">'n_keyframes_per_n_frame'</span>] == <span class="number">0</span> \</span><br><span class="line">                    <span class="keyword">and</span> t % config[<span class="string">'n_keyframes_per_n_frame'</span>] == <span class="number">0</span>:</span><br><span class="line">                print(</span><br><span class="line">                    <span class="string">"Fragment %03d / %03d :: RGBD matching between frame : %d and %d"</span></span><br><span class="line">                    % (fragment_id, n_fragments - <span class="number">1</span>, s, t))</span><br><span class="line">                [success, trans,</span><br><span class="line">                 info] = register_one_rgbd_pair(s, t, color_files, depth_files,</span><br><span class="line">                                                intrinsic, with_opencv, config)</span><br><span class="line">                <span class="keyword">if</span> success:</span><br><span class="line">                    pose_graph.edges.append(</span><br><span class="line">                        o3d.registration.PoseGraphEdge(s - sid,</span><br><span class="line">                                                       t - sid,</span><br><span class="line">                                                       trans,</span><br><span class="line">                                                       info,</span><br><span class="line">                                                       uncertain=<span class="literal">True</span>))</span><br><span class="line">    o3d.io.write_pose_graph(</span><br><span class="line">        join(path_dataset, config[<span class="string">"template_fragment_posegraph"</span>] % fragment_id),</span><br><span class="line">        pose_graph)</span><br></pre></td></tr></table></figure>
+
+<p>该脚本使用 <a href="http://www.open3d.org/docs/release/tutorial/Advanced/multiway_registration.html#multiway-registration" target="_blank" rel="noopener">Multiway registration</a>演示的技术。函数<code>make_posegraph_for_fragment</code>为该序列中的所有RGBD图像的多路配准建立一个位姿图。每个图形节点代表一个RGBD图像及其位姿，该位姿将几何图形转换为全局片段空间。为了提高效率，仅使用关键帧。</p>
+<p>创建位姿图后，可通过调用<code>optimize_posegraph_for_fragment</code>函数进行多路配准优化。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># examples/Python/ReconstructionSystem/optimize_posegraph.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run_posegraph_optimization</span><span class="params">(pose_graph_name, pose_graph_optimized_name,</span></span></span><br><span class="line"><span class="function"><span class="params">                               max_correspondence_distance,</span></span></span><br><span class="line"><span class="function"><span class="params">                               preference_loop_closure)</span>:</span></span><br><span class="line">    <span class="comment"># to display messages from o3d.registration.global_optimization</span></span><br><span class="line">    o3d.utility.set_verbosity_level(o3d.utility.VerbosityLevel.Debug)</span><br><span class="line">    method = o3d.registration.GlobalOptimizationLevenbergMarquardt()</span><br><span class="line">    criteria = o3d.registration.GlobalOptimizationConvergenceCriteria()</span><br><span class="line">    option = o3d.registration.GlobalOptimizationOption(</span><br><span class="line">        max_correspondence_distance=max_correspondence_distance,</span><br><span class="line">        edge_prune_threshold=<span class="number">0.25</span>,</span><br><span class="line">        preference_loop_closure=preference_loop_closure,</span><br><span class="line">        reference_node=<span class="number">0</span>)</span><br><span class="line">    pose_graph = o3d.io.read_pose_graph(pose_graph_name)</span><br><span class="line">    o3d.registration.global_optimization(pose_graph, method, criteria, option)</span><br><span class="line">    o3d.io.write_pose_graph(pose_graph_optimized_name, pose_graph)</span><br><span class="line">    o3d.utility.set_verbosity_level(o3d.utility.VerbosityLevel.Error)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">optimize_posegraph_for_fragment</span><span class="params">(path_dataset, fragment_id, config)</span>:</span></span><br><span class="line">    pose_graph_name = join(path_dataset,</span><br><span class="line">                           config[<span class="string">"template_fragment_posegraph"</span>] % fragment_id)</span><br><span class="line">    pose_graph_optimized_name = join(</span><br><span class="line">        path_dataset,</span><br><span class="line">        config[<span class="string">"template_fragment_posegraph_optimized"</span>] % fragment_id)</span><br><span class="line">    run_posegraph_optimization(pose_graph_name, pose_graph_optimized_name,</span><br><span class="line">            max_correspondence_distance = config[<span class="string">"max_depth_diff"</span>],</span><br><span class="line">            preference_loop_closure = \</span><br><span class="line">            config[<span class="string">"preference_loop_closure_odometry"</span>])</span><br></pre></td></tr></table></figure>
+
+<p>此函数调用<code>global_optimization</code>以优化RGBD图像的估计位姿。</p>
+<h3 id="1-4-创建一个片段"><a href="#1-4-创建一个片段" class="headerlink" title="1.4 创建一个片段"></a>1.4 创建一个片段</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># examples/Python/ReconstructionSystem/make_fragments.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">integrate_rgb_frames_for_fragment</span><span class="params">(color_files, depth_files, fragment_id,</span></span></span><br><span class="line"><span class="function"><span class="params">                                      n_fragments, pose_graph_name, intrinsic,</span></span></span><br><span class="line"><span class="function"><span class="params">                                      config)</span>:</span></span><br><span class="line">    pose_graph = o3d.io.read_pose_graph(pose_graph_name)</span><br><span class="line">    volume = o3d.integration.ScalableTSDFVolume(</span><br><span class="line">        voxel_length=config[<span class="string">"tsdf_cubic_size"</span>] / <span class="number">512.0</span>,</span><br><span class="line">        sdf_trunc=<span class="number">0.04</span>,</span><br><span class="line">        color_type=o3d.integration.TSDFVolumeColorType.RGB8)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(pose_graph.nodes)):</span><br><span class="line">        i_abs = fragment_id * config[<span class="string">'n_frames_per_fragment'</span>] + i</span><br><span class="line">        print(</span><br><span class="line">            <span class="string">"Fragment %03d / %03d :: integrate rgbd frame %d (%d of %d)."</span> %</span><br><span class="line">            (fragment_id, n_fragments - <span class="number">1</span>, i_abs, i + <span class="number">1</span>, len(pose_graph.nodes)))</span><br><span class="line">        rgbd = read_rgbd_image(color_files[i_abs], depth_files[i_abs], <span class="literal">False</span>,</span><br><span class="line">                               config)</span><br><span class="line">        pose = pose_graph.nodes[i].pose</span><br><span class="line">        volume.integrate(rgbd, intrinsic, np.linalg.inv(pose))</span><br><span class="line">    mesh = volume.extract_triangle_mesh()</span><br><span class="line">    mesh.compute_vertex_normals()</span><br><span class="line">    <span class="keyword">return</span> mesh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_pointcloud_for_fragment</span><span class="params">(path_dataset, color_files, depth_files,</span></span></span><br><span class="line"><span class="function"><span class="params">                                 fragment_id, n_fragments, intrinsic, config)</span>:</span></span><br><span class="line">    mesh = integrate_rgb_frames_for_fragment(</span><br><span class="line">        color_files, depth_files, fragment_id, n_fragments,</span><br><span class="line">        join(path_dataset,</span><br><span class="line">             config[<span class="string">"template_fragment_posegraph_optimized"</span>] % fragment_id),</span><br><span class="line">        intrinsic, config)</span><br><span class="line">    pcd = o3d.geometry.PointCloud()</span><br><span class="line">    pcd.points = mesh.vertices</span><br><span class="line">    pcd.colors = mesh.vertex_colors</span><br><span class="line">    pcd_name = join(path_dataset,</span><br><span class="line">                    config[<span class="string">"template_fragment_pointcloud"</span>] % fragment_id)</span><br><span class="line">    o3d.io.write_point_cloud(pcd_name, pcd, <span class="literal">False</span>, <span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<p>一旦估计了位姿，就可以使用<a href="http://www.open3d.org/docs/release/tutorial/Advanced/rgbd_integration.html#rgbd-integration" target="_blank" rel="noopener">RGBD integration</a>从每个RGBD序列中重建一个彩色片段。</p>
+<h3 id="1-5-批处理"><a href="#1-5-批处理" class="headerlink" title="1.5 批处理"></a>1.5 批处理</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># examples/Python/ReconstructionSystem/make_fragments.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(config)</span>:</span></span><br><span class="line">    print(<span class="string">"making fragments from RGBD sequence."</span>)</span><br><span class="line">    make_clean_folder(join(config[<span class="string">"path_dataset"</span>], config[<span class="string">"folder_fragment"</span>]))</span><br><span class="line">    [color_files, depth_files] = get_rgbd_file_lists(config[<span class="string">"path_dataset"</span>])</span><br><span class="line">    n_files = len(color_files)</span><br><span class="line">    n_fragments = int(math.ceil(float(n_files) / \</span><br><span class="line">            config[<span class="string">'n_frames_per_fragment'</span>]))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> config[<span class="string">"python_multi_threading"</span>]:</span><br><span class="line">        <span class="keyword">from</span> joblib <span class="keyword">import</span> Parallel, delayed</span><br><span class="line">        <span class="keyword">import</span> multiprocessing</span><br><span class="line">        <span class="keyword">import</span> subprocess</span><br><span class="line">        MAX_THREAD = min(multiprocessing.cpu_count(), n_fragments)</span><br><span class="line">        Parallel(n_jobs=MAX_THREAD)(delayed(process_single_fragment)(</span><br><span class="line">            fragment_id, color_files, depth_files, n_files, n_fragments, config)</span><br><span class="line">                                    <span class="keyword">for</span> fragment_id <span class="keyword">in</span> range(n_fragments))</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">for</span> fragment_id <span class="keyword">in</span> range(n_fragments):</span><br><span class="line">            process_single_fragment(fragment_id, color_files, depth_files,</span><br><span class="line">                                    n_files, n_fragments, config)</span><br></pre></td></tr></table></figure>
+
+<p>主函数调用上述每个单独的函数。</p>
+<h2 id="2-片段配准"><a href="#2-片段配准" class="headerlink" title="2 片段配准"></a>2 片段配准</h2><p>创建场景的片段后，下一步就是将它们在全局空间中配准。</p>
+<h3 id="2-1-输入参数"><a href="#2-1-输入参数" class="headerlink" title="2.1 输入参数"></a>2.1 输入参数</h3><p>这部分内容通过  <em>python run_system.py [config] –register</em>  运行。</p>
+<p>在 <code>config</code> 中，[“path_dataset”]应有<code>fragment</code>文件夹，里面存有 <code>.ply</code> 格式的片段和<code>.json</code> 格式的位姿文件。</p>
+<p>主要运行<code>make_posegraph_for_scene</code>和<code>optimize_posegraph_for_scene</code>两个函数。第一个函数执行成对配准。第二个函数执行多路配准。</p>
+<h3 id="2-2-预处理点云"><a href="#2-2-预处理点云" class="headerlink" title="2.2 预处理点云"></a>2.2 预处理点云</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># examples/Python/ReconstructionSystem/register_fragments.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">preprocess_point_cloud</span><span class="params">(pcd, config)</span>:</span></span><br><span class="line">    voxel_size = config[<span class="string">"voxel_size"</span>]</span><br><span class="line">    pcd_down = pcd.voxel_down_sample(voxel_size)</span><br><span class="line">    pcd_down.estimate_normals(</span><br><span class="line">        o3d.geometry.KDTreeSearchParamHybrid(radius=voxel_size * <span class="number">2.0</span>,</span><br><span class="line">                                             max_nn=<span class="number">30</span>))</span><br><span class="line">    pcd_fpfh = o3d.registration.compute_fpfh_feature(</span><br><span class="line">        pcd_down,</span><br><span class="line">        o3d.geometry.KDTreeSearchParamHybrid(radius=voxel_size * <span class="number">5.0</span>,</span><br><span class="line">                                             max_nn=<span class="number">100</span>))</span><br><span class="line">    <span class="keyword">return</span> (pcd_down, pcd_fpfh)</span><br></pre></td></tr></table></figure>
+
+<p>此功能对点云进行下采样以使点云稀疏并有规律地分布。法线和FPFH特征已预先计算。</p>
+<h3 id="2-3-计算初始配准"><a href="#2-3-计算初始配准" class="headerlink" title="2.3 计算初始配准"></a>2.3 计算初始配准</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># examples/Python/ReconstructionSystem/register_fragments.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">compute_initial_registration</span><span class="params">(s, t, source_down, target_down, source_fpfh,</span></span></span><br><span class="line"><span class="function"><span class="params">                                 target_fpfh, path_dataset, config)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> t == s + <span class="number">1</span>:  <span class="comment"># odometry case</span></span><br><span class="line">        print(<span class="string">"Using RGBD odometry"</span>)</span><br><span class="line">        pose_graph_frag = o3d.io.read_pose_graph(</span><br><span class="line">            join(path_dataset,</span><br><span class="line">                 config[<span class="string">"template_fragment_posegraph_optimized"</span>] % s))</span><br><span class="line">        n_nodes = len(pose_graph_frag.nodes)</span><br><span class="line">        transformation_init = np.linalg.inv(pose_graph_frag.nodes[n_nodes -</span><br><span class="line">                                                                  <span class="number">1</span>].pose)</span><br><span class="line">        (transformation, information) = \</span><br><span class="line">                multiscale_icp(source_down, target_down,</span><br><span class="line">                [config[<span class="string">"voxel_size"</span>]], [<span class="number">50</span>], config, transformation_init)</span><br><span class="line">    <span class="keyword">else</span>:  <span class="comment"># loop closure case</span></span><br><span class="line">        (success, transformation,</span><br><span class="line">         information) = register_point_cloud_fpfh(source_down, target_down,</span><br><span class="line">                                                  source_fpfh, target_fpfh,</span><br><span class="line">                                                  config)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> success:</span><br><span class="line">            print(<span class="string">"No resonable solution. Skip this pair"</span>)</span><br><span class="line">            <span class="keyword">return</span> (<span class="literal">False</span>, np.identity(<span class="number">4</span>), np.zeros((<span class="number">6</span>, <span class="number">6</span>)))</span><br><span class="line">    print(transformation)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> config[<span class="string">"debug_mode"</span>]:</span><br><span class="line">        draw_registration_result(source_down, target_down, transformation)</span><br><span class="line">    <span class="keyword">return</span> (<span class="literal">True</span>, transformation, information)</span><br></pre></td></tr></table></figure>
+
+<p>此函数计算两个片段之间的粗略对准。如果片段是相邻片段，粗对准则是通过第1部分获得的RGBD里程计确定的。否则，<code>register_point_cloud_fpfh</code>将被用于全局配准。请注意，根据Choi2015，全局配准的可靠性较低。</p>
+<h3 id="2-4-成对全局配准"><a href="#2-4-成对全局配准" class="headerlink" title="2.4 成对全局配准"></a>2.4 成对全局配准</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># examples/Python/ReconstructionSystem/register_fragments.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">register_point_cloud_fpfh</span><span class="params">(source, target, source_fpfh, target_fpfh, config)</span>:</span></span><br><span class="line">    distance_threshold = config[<span class="string">"voxel_size"</span>] * <span class="number">1.4</span></span><br><span class="line">    <span class="keyword">if</span> config[<span class="string">"global_registration"</span>] == <span class="string">"fgr"</span>:</span><br><span class="line">        result = o3d.registration.registration_fast_based_on_feature_matching(</span><br><span class="line">            source, target, source_fpfh, target_fpfh,</span><br><span class="line">            o3d.registration.FastGlobalRegistrationOption(</span><br><span class="line">                maximum_correspondence_distance=distance_threshold))</span><br><span class="line">    <span class="keyword">if</span> config[<span class="string">"global_registration"</span>] == <span class="string">"ransac"</span>:</span><br><span class="line">        result = o3d.registration.registration_ransac_based_on_feature_matching(</span><br><span class="line">            source, target, source_fpfh, target_fpfh, distance_threshold,</span><br><span class="line">            o3d.registration.TransformationEstimationPointToPoint(<span class="literal">False</span>), <span class="number">4</span>, [</span><br><span class="line">                o3d.registration.CorrespondenceCheckerBasedOnEdgeLength(<span class="number">0.9</span>),</span><br><span class="line">                o3d.registration.CorrespondenceCheckerBasedOnDistance(</span><br><span class="line">                    distance_threshold)</span><br><span class="line">            ], o3d.registration.RANSACConvergenceCriteria(<span class="number">4000000</span>, <span class="number">500</span>))</span><br><span class="line">    <span class="keyword">if</span> (result.transformation.trace() == <span class="number">4.0</span>):</span><br><span class="line">        <span class="keyword">return</span> (<span class="literal">False</span>, np.identity(<span class="number">4</span>), np.zeros((<span class="number">6</span>, <span class="number">6</span>)))</span><br><span class="line">    information = o3d.registration.get_information_matrix_from_point_clouds(</span><br><span class="line">        source, target, distance_threshold, result.transformation)</span><br><span class="line">    <span class="keyword">if</span> information[<span class="number">5</span>, <span class="number">5</span>] / min(len(source.points), len(target.points)) &lt; <span class="number">0.3</span>:</span><br><span class="line">        <span class="keyword">return</span> (<span class="literal">False</span>, np.identity(<span class="number">4</span>), np.zeros((<span class="number">6</span>, <span class="number">6</span>)))</span><br><span class="line">    <span class="keyword">return</span> (<span class="literal">True</span>, result.transformation, information)</span><br></pre></td></tr></table></figure>
+
+<p>该函数通过<a href="http://www.open3d.org/docs/release/tutorial/Advanced/global_registration.html#feature-matching" target="_blank" rel="noopener">RANSAC</a>和<a href="http://www.open3d.org/docs/release/tutorial/Advanced/fast_global_registration.html#fast-global-registration" target="_blank" rel="noopener">Fast global registration</a>实现成对的全局配准</p>
+<h3 id="2-5-多路配准"><a href="#2-5-多路配准" class="headerlink" title="2.5 多路配准"></a>2.5 多路配准</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># examples/Python/ReconstructionSystem/register_fragments.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_posegrph_for_scene</span><span class="params">(s, t, transformation, information, odometry,</span></span></span><br><span class="line"><span class="function"><span class="params">                              pose_graph)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> t == s + <span class="number">1</span>:  <span class="comment"># odometry case</span></span><br><span class="line">        odometry = np.dot(transformation, odometry)</span><br><span class="line">        odometry_inv = np.linalg.inv(odometry)</span><br><span class="line">        pose_graph.nodes.append(o3d.registration.PoseGraphNode(odometry_inv))</span><br><span class="line">        pose_graph.edges.append(</span><br><span class="line">            o3d.registration.PoseGraphEdge(s,</span><br><span class="line">                                           t,</span><br><span class="line">                                           transformation,</span><br><span class="line">                                           information,</span><br><span class="line">                                           uncertain=<span class="literal">False</span>))</span><br><span class="line">    <span class="keyword">else</span>:  <span class="comment"># loop closure case</span></span><br><span class="line">        pose_graph.edges.append(</span><br><span class="line">            o3d.registration.PoseGraphEdge(s,</span><br><span class="line">                                           t,</span><br><span class="line">                                           transformation,</span><br><span class="line">                                           information,</span><br><span class="line">                                           uncertain=<span class="literal">True</span>))</span><br><span class="line">    <span class="keyword">return</span> (odometry, pose_graph)</span><br></pre></td></tr></table></figure>
+
+<p>该脚本使用1.3中的技术。函数<code>update_posegrph_for_scene</code>建立一个位姿图，用于所有片段的多路配准。每个图节点代表一个片段及其位姿，该片段将几何图形转换为全局空间。</p>
+<p>构建位姿图后，将调用<code>optimize_posegraph_for_scene</code>函数进行多路配准优化。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># examples/Python/ReconstructionSystem/optimize_posegraph.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">optimize_posegraph_for_scene</span><span class="params">(path_dataset, config)</span>:</span></span><br><span class="line">    pose_graph_name = join(path_dataset, config[<span class="string">"template_global_posegraph"</span>])</span><br><span class="line">    pose_graph_optimized_name = join(</span><br><span class="line">        path_dataset, config[<span class="string">"template_global_posegraph_optimized"</span>])</span><br><span class="line">    run_posegraph_optimization(pose_graph_name, pose_graph_optimized_name,</span><br><span class="line">            max_correspondence_distance = config[<span class="string">"voxel_size"</span>] * <span class="number">1.4</span>,</span><br><span class="line">            preference_loop_closure = \</span><br><span class="line">            config[<span class="string">"preference_loop_closure_registration"</span>])</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-6-主配准循环"><a href="#2-6-主配准循环" class="headerlink" title="2.6 主配准循环"></a>2.6 主配准循环</h3><p>下面的函数<code>make_posegraph_for_scene</code>调用上面介绍的所有函数。主要工作流程为：成对全局配准-&gt;多路配准。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># examples/Python/ReconstructionSystem/register_fragments.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_posegraph_for_scene</span><span class="params">(ply_file_names, config)</span>:</span></span><br><span class="line">    pose_graph = o3d.registration.PoseGraph()</span><br><span class="line">    odometry = np.identity(<span class="number">4</span>)</span><br><span class="line">    pose_graph.nodes.append(o3d.registration.PoseGraphNode(odometry))</span><br><span class="line"></span><br><span class="line">    n_files = len(ply_file_names)</span><br><span class="line">    matching_results = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> s <span class="keyword">in</span> range(n_files):</span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> range(s + <span class="number">1</span>, n_files):</span><br><span class="line">            matching_results[s * n_files + t] = matching_result(s, t)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> config[<span class="string">"python_multi_threading"</span>]:</span><br><span class="line">        <span class="keyword">from</span> joblib <span class="keyword">import</span> Parallel, delayed</span><br><span class="line">        <span class="keyword">import</span> multiprocessing</span><br><span class="line">        <span class="keyword">import</span> subprocess</span><br><span class="line">        MAX_THREAD = min(multiprocessing.cpu_count(),</span><br><span class="line">                         max(len(matching_results), <span class="number">1</span>))</span><br><span class="line">        results = Parallel(n_jobs=MAX_THREAD)(delayed(</span><br><span class="line">            register_point_cloud_pair)(ply_file_names, matching_results[r].s,</span><br><span class="line">                                       matching_results[r].t, config)</span><br><span class="line">                                              <span class="keyword">for</span> r <span class="keyword">in</span> matching_results)</span><br><span class="line">        <span class="keyword">for</span> i, r <span class="keyword">in</span> enumerate(matching_results):</span><br><span class="line">            matching_results[r].success = results[i][<span class="number">0</span>]</span><br><span class="line">            matching_results[r].transformation = results[i][<span class="number">1</span>]</span><br><span class="line">            matching_results[r].information = results[i][<span class="number">2</span>]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">for</span> r <span class="keyword">in</span> matching_results:</span><br><span class="line">            (matching_results[r].success, matching_results[r].transformation,</span><br><span class="line">                    matching_results[r].information) = \</span><br><span class="line">                    register_point_cloud_pair(ply_file_names,</span><br><span class="line">                    matching_results[r].s, matching_results[r].t, config)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> r <span class="keyword">in</span> matching_results:</span><br><span class="line">        <span class="keyword">if</span> matching_results[r].success:</span><br><span class="line">            (odometry, pose_graph) = update_posegrph_for_scene(</span><br><span class="line">                matching_results[r].s, matching_results[r].t,</span><br><span class="line">                matching_results[r].transformation,</span><br><span class="line">                matching_results[r].information, odometry, pose_graph)</span><br><span class="line">    o3d.io.write_pose_graph(</span><br><span class="line">        join(config[<span class="string">"path_dataset"</span>], config[<span class="string">"template_global_posegraph"</span>]),</span><br><span class="line">        pose_graph)</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-优化配准"><a href="#3-优化配准" class="headerlink" title="3 优化配准"></a>3 优化配准</h2><h3 id="3-1-输入参数"><a href="#3-1-输入参数" class="headerlink" title="3.1 输入参数"></a>3.1 输入参数</h3><p>这部分内容通过  <em>python run_system.py [config] –refine</em>  运行。</p>
+<p>在 <code>config</code> 中，[“path_dataset”]应有<code>fragment</code>文件夹，里面存有 <code>.ply</code> 格式的片段和<code>.json</code> 格式的位姿文件。</p>
+<p>主要运行<code>local_refinement</code>和<code>optimize_posegraph_for_scene</code>两个函数。第一个函数对第2部分检测出的配准对完成成对配准。第二个函数执行多路配准。</p>
+<h3 id="3-2-细粒配准"><a href="#3-2-细粒配准" class="headerlink" title="3.2 细粒配准"></a>3.2 细粒配准</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># examples/Python/ReconstructionSystem/refine_registration.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">multiscale_icp</span><span class="params">(source,</span></span></span><br><span class="line"><span class="function"><span class="params">                   target,</span></span></span><br><span class="line"><span class="function"><span class="params">                   voxel_size,</span></span></span><br><span class="line"><span class="function"><span class="params">                   max_iter,</span></span></span><br><span class="line"><span class="function"><span class="params">                   config,</span></span></span><br><span class="line"><span class="function"><span class="params">                   init_transformation=np.identity<span class="params">(<span class="number">4</span>)</span>)</span>:</span></span><br><span class="line">    current_transformation = init_transformation</span><br><span class="line">    <span class="keyword">for</span> i, scale <span class="keyword">in</span> enumerate(range(len(max_iter))):  <span class="comment"># multi-scale approach</span></span><br><span class="line">        iter = max_iter[scale]</span><br><span class="line">        distance_threshold = config[<span class="string">"voxel_size"</span>] * <span class="number">1.4</span></span><br><span class="line">        print(<span class="string">"voxel_size %f"</span> % voxel_size[scale])</span><br><span class="line">        source_down = source.voxel_down_sample(voxel_size[scale])</span><br><span class="line">        target_down = target.voxel_down_sample(voxel_size[scale])</span><br><span class="line">        <span class="keyword">if</span> config[<span class="string">"icp_method"</span>] == <span class="string">"point_to_point"</span>:</span><br><span class="line">            result_icp = o3d.registration.registration_icp(</span><br><span class="line">                source_down, target_down, distance_threshold,</span><br><span class="line">                current_transformation,</span><br><span class="line">                o3d.registration.TransformationEstimationPointToPoint(),</span><br><span class="line">                o3d.registration.ICPConvergenceCriteria(max_iteration=iter))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            source_down.estimate_normals(</span><br><span class="line">                o3d.geometry.KDTreeSearchParamHybrid(radius=voxel_size[scale] *</span><br><span class="line">                                                     <span class="number">2.0</span>,</span><br><span class="line">                                                     max_nn=<span class="number">30</span>))</span><br><span class="line">            target_down.estimate_normals(</span><br><span class="line">                o3d.geometry.KDTreeSearchParamHybrid(radius=voxel_size[scale] *</span><br><span class="line">                                                     <span class="number">2.0</span>,</span><br><span class="line">                                                     max_nn=<span class="number">30</span>))</span><br><span class="line">            <span class="keyword">if</span> config[<span class="string">"icp_method"</span>] == <span class="string">"point_to_plane"</span>:</span><br><span class="line">                result_icp = o3d.registration.registration_icp(</span><br><span class="line">                    source_down, target_down, distance_threshold,</span><br><span class="line">                    current_transformation,</span><br><span class="line">                    o3d.registration.TransformationEstimationPointToPlane(),</span><br><span class="line">                    o3d.registration.ICPConvergenceCriteria(max_iteration=iter))</span><br><span class="line">            <span class="keyword">if</span> config[<span class="string">"icp_method"</span>] == <span class="string">"color"</span>:</span><br><span class="line">                result_icp = o3d.registration.registration_colored_icp(</span><br><span class="line">                    source_down, target_down, voxel_size[scale],</span><br><span class="line">                    current_transformation,</span><br><span class="line">                    o3d.registration.ICPConvergenceCriteria(</span><br><span class="line">                        relative_fitness=<span class="number">1e-6</span>,</span><br><span class="line">                        relative_rmse=<span class="number">1e-6</span>,</span><br><span class="line">                        max_iteration=iter))</span><br><span class="line">        current_transformation = result_icp.transformation</span><br><span class="line">        <span class="keyword">if</span> i == len(max_iter) - <span class="number">1</span>:</span><br><span class="line">            information_matrix = o3d.registration.get_information_matrix_from_point_clouds(</span><br><span class="line">                source_down, target_down, voxel_size[scale] * <span class="number">1.4</span>,</span><br><span class="line">                result_icp.transformation)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> config[<span class="string">"debug_mode"</span>]:</span><br><span class="line">        draw_registration_result_original_color(source, target,</span><br><span class="line">                                                result_icp.transformation)</span><br><span class="line">    <span class="keyword">return</span> (result_icp.transformation, information_matrix)</span><br></pre></td></tr></table></figure>
+
+<p>细粒配准有两种选择。建议使用<code>color</code>选项，因为它使用颜色信息来防止漂移。有关详细信息，请参见<a href="http://www.open3d.org/docs/release/tutorial/reference.html#park2017" target="_blank" rel="noopener">[Park2017]</a>。</p>
+<h3 id="3-3-多路配准"><a href="#3-3-多路配准" class="headerlink" title="3.3 多路配准"></a>3.3 多路配准</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># examples/Python/ReconstructionSystem/refine_registration.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_posegrph_for_scene</span><span class="params">(s, t, transformation, information, odometry,</span></span></span><br><span class="line"><span class="function"><span class="params">                              pose_graph)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> t == s + <span class="number">1</span>:  <span class="comment"># odometry case</span></span><br><span class="line">        odometry = np.dot(transformation, odometry)</span><br><span class="line">        odometry_inv = np.linalg.inv(odometry)</span><br><span class="line">        pose_graph.nodes.append(o3d.registration.PoseGraphNode(odometry_inv))</span><br><span class="line">        pose_graph.edges.append(</span><br><span class="line">            o3d.registration.PoseGraphEdge(s,</span><br><span class="line">                                           t,</span><br><span class="line">                                           transformation,</span><br><span class="line">                                           information,</span><br><span class="line">                                           uncertain=<span class="literal">False</span>))</span><br><span class="line">    <span class="keyword">else</span>:  <span class="comment"># loop closure case</span></span><br><span class="line">        pose_graph.edges.append(</span><br><span class="line">            o3d.registration.PoseGraphEdge(s,</span><br><span class="line">                                           t,</span><br><span class="line">                                           transformation,</span><br><span class="line">                                           information,</span><br><span class="line">                                           uncertain=<span class="literal">True</span>))</span><br><span class="line">    <span class="keyword">return</span> (odometry, pose_graph)</span><br></pre></td></tr></table></figure>
+
+<p>该脚本使用1.3中的技术。函数<code>update_posegrph_for_scene</code>建立一个位姿图，用于所有片段的多路配准。每个图节点代表一个片段及其位姿，该片段将几何图形转换为全局空间。</p>
+<p>构建位姿图后，将调用<code>optimize_posegraph_for_scene</code>函数进行多路配准优化。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># examples/Python/ReconstructionSystem/optimize_posegraph.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">optimize_posegraph_for_scene</span><span class="params">(path_dataset, config)</span>:</span></span><br><span class="line">    pose_graph_name = join(path_dataset, config[<span class="string">"template_global_posegraph"</span>])</span><br><span class="line">    pose_graph_optimized_name = join(</span><br><span class="line">        path_dataset, config[<span class="string">"template_global_posegraph_optimized"</span>])</span><br><span class="line">    run_posegraph_optimization(pose_graph_name, pose_graph_optimized_name,</span><br><span class="line">            max_correspondence_distance = config[<span class="string">"voxel_size"</span>] * <span class="number">1.4</span>,</span><br><span class="line">            preference_loop_closure = \</span><br><span class="line">            config[<span class="string">"preference_loop_closure_registration"</span>])</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-4-主配准循环"><a href="#3-4-主配准循环" class="headerlink" title="3.4 主配准循环"></a>3.4 主配准循环</h3><p>下面的<code>make_posegraph_for_refined_scene</code>函数调用上面介绍的所有函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># examples/Python/ReconstructionSystem/refine_registration.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_posegraph_for_refined_scene</span><span class="params">(ply_file_names, config)</span>:</span></span><br><span class="line">    pose_graph = o3d.io.read_pose_graph(</span><br><span class="line">        join(config[<span class="string">"path_dataset"</span>],</span><br><span class="line">             config[<span class="string">"template_global_posegraph_optimized"</span>]))</span><br><span class="line"></span><br><span class="line">    n_files = len(ply_file_names)</span><br><span class="line">    matching_results = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> edge <span class="keyword">in</span> pose_graph.edges:</span><br><span class="line">        s = edge.source_node_id</span><br><span class="line">        t = edge.target_node_id</span><br><span class="line">        matching_results[s * n_files + t] = \</span><br><span class="line">                matching_result(s, t, edge.transformation)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> config[<span class="string">"python_multi_threading"</span>]:</span><br><span class="line">        <span class="keyword">from</span> joblib <span class="keyword">import</span> Parallel, delayed</span><br><span class="line">        <span class="keyword">import</span> multiprocessing</span><br><span class="line">        <span class="keyword">import</span> subprocess</span><br><span class="line">        MAX_THREAD = min(multiprocessing.cpu_count(),</span><br><span class="line">                         max(len(pose_graph.edges), <span class="number">1</span>))</span><br><span class="line">        results = Parallel(n_jobs=MAX_THREAD)(</span><br><span class="line">            delayed(register_point_cloud_pair)(</span><br><span class="line">                ply_file_names, matching_results[r].s, matching_results[r].t,</span><br><span class="line">                matching_results[r].transformation, config)</span><br><span class="line">            <span class="keyword">for</span> r <span class="keyword">in</span> matching_results)</span><br><span class="line">        <span class="keyword">for</span> i, r <span class="keyword">in</span> enumerate(matching_results):</span><br><span class="line">            matching_results[r].transformation = results[i][<span class="number">0</span>]</span><br><span class="line">            matching_results[r].information = results[i][<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">for</span> r <span class="keyword">in</span> matching_results:</span><br><span class="line">            (matching_results[r].transformation,</span><br><span class="line">                    matching_results[r].information) = \</span><br><span class="line">                    register_point_cloud_pair(ply_file_names,</span><br><span class="line">                    matching_results[r].s, matching_results[r].t,</span><br><span class="line">                    matching_results[r].transformation, config)</span><br><span class="line"></span><br><span class="line">    pose_graph_new = o3d.registration.PoseGraph()</span><br><span class="line">    odometry = np.identity(<span class="number">4</span>)</span><br><span class="line">    pose_graph_new.nodes.append(o3d.registration.PoseGraphNode(odometry))</span><br><span class="line">    <span class="keyword">for</span> r <span class="keyword">in</span> matching_results:</span><br><span class="line">        (odometry, pose_graph_new) = update_posegrph_for_scene(</span><br><span class="line">            matching_results[r].s, matching_results[r].t,</span><br><span class="line">            matching_results[r].transformation, matching_results[r].information,</span><br><span class="line">            odometry, pose_graph_new)</span><br><span class="line">    print(pose_graph_new)</span><br><span class="line">    o3d.io.write_pose_graph(</span><br><span class="line">        join(config[<span class="string">"path_dataset"</span>], config[<span class="string">"template_refined_posegraph"</span>]),</span><br><span class="line">        pose_graph_new)</span><br></pre></td></tr></table></figure>
+
+<p>主要工作流程是：逐对局部优化-&gt;多路配准。</p>
+<h2 id="4-整合场景"><a href="#4-整合场景" class="headerlink" title="4 整合场景"></a>4 整合场景</h2><h3 id="4-1-输入参数"><a href="#4-1-输入参数" class="headerlink" title="4.1 输入参数"></a>4.1 输入参数</h3><p>这部分内容通过  <em>python run_system.py [config] –integrate</em>  运行。</p>
+<p>在 <code>config</code> 中，[“path_dataset”]应有<code>image</code> 和<code>depth</code>两个文件夹，且里面的rgb图和深度图应已经同步且配准。如果open3d没有你的数据集的json文件，那么<code>config</code>中的各项参数需要自己写好。</p>
+<h3 id="4-2-整合RGBD帧"><a href="#4-2-整合RGBD帧" class="headerlink" title="4.2 整合RGBD帧"></a>4.2 整合RGBD帧</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># examples/Python/ReconstructionSystem/integrate_scene.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">scalable_integrate_rgb_frames</span><span class="params">(path_dataset, intrinsic, config)</span>:</span></span><br><span class="line">    poses = []</span><br><span class="line">    [color_files, depth_files] = get_rgbd_file_lists(path_dataset)</span><br><span class="line">    n_files = len(color_files)</span><br><span class="line">    n_fragments = int(math.ceil(float(n_files) / \</span><br><span class="line">            config[<span class="string">'n_frames_per_fragment'</span>]))</span><br><span class="line">    volume = o3d.integration.ScalableTSDFVolume(</span><br><span class="line">        voxel_length=config[<span class="string">"tsdf_cubic_size"</span>] / <span class="number">512.0</span>,</span><br><span class="line">        sdf_trunc=<span class="number">0.04</span>,</span><br><span class="line">        color_type=o3d.integration.TSDFVolumeColorType.RGB8)</span><br><span class="line"></span><br><span class="line">    pose_graph_fragment = o3d.io.read_pose_graph(</span><br><span class="line">        join(path_dataset, config[<span class="string">"template_refined_posegraph_optimized"</span>]))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> fragment_id <span class="keyword">in</span> range(len(pose_graph_fragment.nodes)):</span><br><span class="line">        pose_graph_rgbd = o3d.io.read_pose_graph(</span><br><span class="line">            join(path_dataset,</span><br><span class="line">                 config[<span class="string">"template_fragment_posegraph_optimized"</span>] % fragment_id))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> frame_id <span class="keyword">in</span> range(len(pose_graph_rgbd.nodes)):</span><br><span class="line">            frame_id_abs = fragment_id * \</span><br><span class="line">                    config[<span class="string">'n_frames_per_fragment'</span>] + frame_id</span><br><span class="line">            print(</span><br><span class="line">                <span class="string">"Fragment %03d / %03d :: integrate rgbd frame %d (%d of %d)."</span> %</span><br><span class="line">                (fragment_id, n_fragments - <span class="number">1</span>, frame_id_abs, frame_id + <span class="number">1</span>,</span><br><span class="line">                 len(pose_graph_rgbd.nodes)))</span><br><span class="line">            rgbd = read_rgbd_image(color_files[frame_id_abs],</span><br><span class="line">                                   depth_files[frame_id_abs], <span class="literal">False</span>, config)</span><br><span class="line">            pose = np.dot(pose_graph_fragment.nodes[fragment_id].pose,</span><br><span class="line">                          pose_graph_rgbd.nodes[frame_id].pose)</span><br><span class="line">            volume.integrate(rgbd, intrinsic, np.linalg.inv(pose))</span><br><span class="line">            poses.append(pose)</span><br><span class="line"></span><br><span class="line">    mesh = volume.extract_triangle_mesh()</span><br><span class="line">    mesh.compute_vertex_normals()</span><br><span class="line">    <span class="keyword">if</span> config[<span class="string">"debug_mode"</span>]:</span><br><span class="line">        o3d.visualization.draw_geometries([mesh])</span><br></pre></td></tr></table></figure>
+
+<p>此函数首先从第1部分和第2部分读取配准结果，然后计算全局空间中每个RGBD图像的位姿。之后，集成RGBD图像。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">三维重建</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/28/open3d学习/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-SFM代码" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/28/SFM代码/">SFM资料</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/28/SFM代码/" class="archive-article-date">
+  	<time datetime="2019-10-27T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-OpenSfM"><a href="#1-OpenSfM" class="headerlink" title="1. OpenSfM"></a>1. OpenSfM</h2><p><a href="https://github.com/mapillary/OpenSfM" target="_blank" rel="noopener">OpenSfM</a> is a Structure from Motion library written in Python. The library serves as a processing pipeline for reconstructing camera poses and 3D scenes from multiple images. It consists of basic modules for Structure from Motion (feature detection/matching, minimal solvers) with a focus on building a robust and scalable reconstruction pipeline. It also integrates external sensor (e.g. GPS, accelerometer) measurements for geographical alignment and robustness. A JavaScript viewer is provided to preview the models and debug the pipeline.</p>
+        
+          <a class="article-more-a" href="/2019/10/28/SFM代码/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">资料</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/28/SFM代码/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-硕博论文参考" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -700,99 +943,6 @@
 
 
   
-    <article id="post-C++学习（4）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/10/C++学习（4）/">C++学习（4）--数据的共享与保护</a>
-    </h1>
-  
-
-        
-        <a href="/2019/09/10/C++学习（4）/" class="archive-article-date">
-  	<time datetime="2019-09-09T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-标识符的作用域与可见性"><a href="#1-标识符的作用域与可见性" class="headerlink" title="1 标识符的作用域与可见性"></a>1 标识符的作用域与可见性</h2><h3 id="1-1-作用域"><a href="#1-1-作用域" class="headerlink" title="1.1 作用域"></a>1.1 作用域</h3><p>作用域是一个标识符在程序正文中有效的区域。</p>
-<p><strong>(1) 函数原型作用域</strong></p>
-<p>在函数原型声明时形式参数的作用范围就是函数原型作用域。</p>
-<p><strong>(2) 局部作用域</strong></p>
-<p>函数形参列表中形参的作用域，从形参列表中的声明处开始，到整个函数体结束之处为止。</p>
-<p>函数体内声明的变量，其作用域从声明处开始，一直到声明所在的块结束的大括号为止。</p>
-<p>具有局部作用域的变堡也称为<strong>局部变量</strong>。</p>
-        
-          <a class="article-more-a" href="/2019/09/10/C++学习（4）/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/语言学习//" class="article-tag-list-link color5">语言学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/09/10/C++学习（4）/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-ORB_SLAM2 程序解读（1）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -881,123 +1031,35 @@
 
 
   
-    <article id="post-ORBSLAM2论文" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-C++学习（4）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/09/ORBSLAM2论文/">ORBSLAM2 论文</a>
+      <a class="article-title" href="/2019/09/10/C++学习（4）/">C++学习（4）--数据的共享与保护</a>
     </h1>
   
 
         
-        <a href="/2019/09/09/ORBSLAM2论文/" class="archive-article-date">
-  	<time datetime="2019-09-08T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-09</time>
+        <a href="/2019/09/10/C++学习（4）/" class="archive-article-date">
+  	<time datetime="2019-09-09T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-10</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>论文下载：<a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7946260" target="_blank" rel="noopener">https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7946260</a></p>
-<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>ORB-SLAM2是基于单目、双目和RGB-D相机的一套完整的SLAM方案。它能够实现地图重用、回环检测和重新定位的功能。无论是在室内的小型手持设备，还是到工厂环境的无人机和城市里驾驶的汽车，ORB-SLAM2都能够在标准的CPU上进行实时工作。ORB-SLAM2在<strong>后端</strong>上采用的是<strong>基于单目和双目的光束法平差优化（BA）</strong>的方式，这个方法允许”米“级别的轨迹精确度评估。此外，ORB-SLAM2包含一个轻量级的定位模式，该模式能够在允许零点漂移的条件下，利用视觉里程计来追踪未建图的区域并且匹配特征点。</p>
-<p>我们用29个广泛使用的公共数据测试的结果显示，在大多数情况下，本文方案比此前方案精度更高，此外，我们开源了ORB-SLAM2源代码，不仅仅是为了整个SLAM领域，同时也希望能够为其他领域研究者提供一套SLAM的解决方案。</p>
+        <h2 id="1-标识符的作用域与可见性"><a href="#1-标识符的作用域与可见性" class="headerlink" title="1 标识符的作用域与可见性"></a>1 标识符的作用域与可见性</h2><h3 id="1-1-作用域"><a href="#1-1-作用域" class="headerlink" title="1.1 作用域"></a>1.1 作用域</h3><p>作用域是一个标识符在程序正文中有效的区域。</p>
+<p><strong>(1) 函数原型作用域</strong></p>
+<p>在函数原型声明时形式参数的作用范围就是函数原型作用域。</p>
+<p><strong>(2) 局部作用域</strong></p>
+<p>函数形参列表中形参的作用域，从形参列表中的声明处开始，到整个函数体结束之处为止。</p>
+<p>函数体内声明的变量，其作用域从声明处开始，一直到声明所在的块结束的大括号为止。</p>
+<p>具有局部作用域的变堡也称为<strong>局部变量</strong>。</p>
         
-          <a class="article-more-a" href="/2019/09/09/ORBSLAM2论文/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">slam理论</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/slam//" class="article-tag-list-link color5">slam</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/09/09/ORBSLAM2论文/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-C++学习（3）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/05/C++学习（3）/">C++学习（3）--类与对象</a>
-    </h1>
-  
-
-        
-        <a href="/2019/09/05/C++学习（3）/" class="archive-article-date">
-  	<time datetime="2019-09-04T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-面向对象程序设计的基本特点"><a href="#1-面向对象程序设计的基本特点" class="headerlink" title="1 面向对象程序设计的基本特点"></a>1 面向对象程序设计的基本特点</h2><ul>
-<li>抽象：解释类与对象之间关系的词。类与对象之间的关系就是抽象的关系。一句话来说明：类是对象的抽象，而对象则是类得特例，即类的具体表现形式。</li>
-<li>封装：封装是面向对象编程的核心思想。将对象的属性和行为封装起来,其载体就是类,类通常会对客户隐藏其实现细节,这就是封装的思想。</li>
-<li>继承：子类继承父类，可以继承父类原有的属性和方法，也可以增加其他的属性和方法，可以直接重写父类中的某些方法。</li>
-<li>多态：多态性一般是指在父类中定义的方法被子类继承后，可以表现出不同的行为。这使得同一个方法在父类及其各个子类中具有不同的语义。</li>
-</ul>
-        
-          <a class="article-more-a" href="/2019/09/05/C++学习（3）/#more">more >></a>
+          <a class="article-more-a" href="/2019/09/10/C++学习（4）/#more">more >></a>
         
       
 
@@ -1032,7 +1094,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/09/05/C++学习（3）/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/09/10/C++学习（4）/">展开全文 >></a>
         </p>
       
 
@@ -1180,15 +1242,15 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">opencv</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">slam实现</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">资料</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1200,7 +1262,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">opencv</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">slam理论</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">三维重建</a>
               </li>
              
               <li class="article-tag-list-item">
